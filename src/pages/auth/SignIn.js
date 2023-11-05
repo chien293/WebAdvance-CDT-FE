@@ -1,35 +1,63 @@
 import React from 'react'
 import Link from "next/link"
-import "bootstrap/dist/css/bootstrap.min.css";
+import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
+import {useForm} from "react-hook-form";
+
 const SignIn = () => {
+    const {register, handleSubmit} = useForm();
+  const onSubmit = (d) => {
+    alert(JSON.stringify(d));
+  }
+  
     return (
-        <div className='login template d-flex justify-content-center align-items-center 100-w vh-100 bg-primary'>
-            <div className='40-w p-5 bg-white'>
-                <form>
-                    <h3>Sign in</h3>
-                    <div className='mb-2'>
-                        <label htmlFor='email'>Email</label>
-                        <input type='email' placeholder='Enter Email' className='form-control' />
-                    </div>
-                    <div className='mb-2'>
-                        <label htmlFor='password'>Password</label>
-                        <input type='password' placeholder='Enter Password' className='form-control' />
-                    </div>
-                    <div className='mb-2'>
-                        <input type='checkbox' className='custom-control custom-checkbox' id='check' />
-                        <label htmlFor='check' className='custom-input-label'>Remember me</label>
-                    </div>
-                    <div className='d-grip'>
-                        <button className='btn btn-primary'>Sign In</button>
-                    </div>
-                    <p>
-                        <a href='#'>Forgot Password?</a>
+        <div>
+            <Container>
+                <Row className="vh-100 d-flex justify-content-center align-items-center">
+                    <Col md={8} lg={6} xs={12}>
+               
+                        <Card className="shadow">
+                            <Card.Body>
+                                <div className="mb-3 mt-md-4">
+                                    <h2 className="fw-bold mb-2 text-uppercase ">Sign In</h2>
+                                    <p className=" mb-5">Please enter your login and password!</p>
+                                    <div className="mb-3">
+                                        <Form onSubmit={handleSubmit(onSubmit)}>
+                                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                <Form.Label className="text-center">
+                                                    Email address
+                                                </Form.Label>
+                                                <Form.Control type="email" placeholder="Enter email" {...register("email")} />
+                                            </Form.Group>
 
-                    </p>
-                    <Link href="/auth/SignUp">Sign Up</Link>
-                </form>
-            </div>
+                                            <Form.Group
+                                                className="mb-3"
+                                                controlId="formBasicPassword"
+                                            >
+                                                <Form.Label>Password</Form.Label>
+                                                <Form.Control type="password" placeholder="Password" {...register("password")} />
+                                            </Form.Group>
 
+                                            <div className="d-grid">
+                                                <Button variant="primary" type="submit">
+                                                    Sign In
+                                                </Button>
+                                            </div>
+                                        </Form>
+                                        <div className="mt-3">
+                                            <p className="mb-0  text-center">
+                                                Don't have an account?{" "}
+                                                <Link href="/auth/SignUp" className="text-primary fw-bold">
+                                                    Sign Up
+                                                </Link>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
         </div>
     )
 }
