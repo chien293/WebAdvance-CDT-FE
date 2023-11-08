@@ -1,6 +1,7 @@
 import { Nav } from "@/components/landing-page/Nav";
 import { Link } from "@nextui-org/link";
 import { Head } from "./head";
+import Footer from "./foot";
 
 export default function DefaultLayout({ children }) {
   return (
@@ -10,7 +11,7 @@ export default function DefaultLayout({ children }) {
       <main className="container mx-auto max-w-7xl px-6 flex-grow">
         {children}
       </main>
-      <footer className="w-full flex items-center justify-center py-3">
+      {/* <footer className="w-full flex items-center justify-center py-3">
         <Link
           isExternal
           className="flex items-center gap-1 text-current"
@@ -20,7 +21,8 @@ export default function DefaultLayout({ children }) {
           <span className="text-default-600">Powered by</span>
           <p className="text-primary">NextUI</p>
         </Link>
-      </footer>
+      </footer> */}
+      <Footer />
     </div>
   );
 }
