@@ -1,5 +1,4 @@
 import "@/styles/globals.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 //import "../styles/signup.module.css"
 import * as React from "react";
 import { NextUIProvider } from "@nextui-org/react";
