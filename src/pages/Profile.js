@@ -13,7 +13,7 @@ const user = {
 const Profile = () => {
   return (
     <div>
-      <ProfileBox user={user}/>
+      <ProfileBox user={user} />
     </div>
   );
 };
