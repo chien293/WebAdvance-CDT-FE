@@ -1,4 +1,4 @@
-import ProfileBox from "@/components/profile-page/profileBox";
+import ProfileBox from "@/components/profile-page/ProfileBox";
 import avt1 from "../assets/img/avt1.jpg";
 
 const user = {
