@@ -1,13 +1,14 @@
-import Link from "next/link"
-import "../../styles/signup.module.css"
+import Link from "next/link";
+import "../../styles/Signup.module.css";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
-import {useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function SignUp() {
-  const {register, handleSubmit} = useForm();
+  const { register, handleSubmit } = useForm();
   const onSubmit = (d) => {
     alert(JSON.stringify(d));
-  }
+  };
 
   return (
     <div>
@@ -25,14 +26,21 @@ export default function SignUp() {
                         <Form.Label className="text-center">
                           Email address
                         </Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" {...register("email")}/>
+                        <Form.Control
+                          type="email"
+                          placeholder="Enter email"
+                          {...register("email")}
+                        />
                       </Form.Group>
 
                       <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label className="text-center">
                           Full Name
                         </Form.Label>
-                        <Form.Control placeholder="Enter full name" {...register("fullName")}/>
+                        <Form.Control
+                          placeholder="Enter full name"
+                          {...register("fullName")}
+                        />
                       </Form.Group>
 
                       <Form.Group
@@ -40,7 +48,11 @@ export default function SignUp() {
                         controlId="formBasicPassword"
                       >
                         <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" placeholder="Password" {...register("password")} />
+                        <Form.Control
+                          type="password"
+                          placeholder="Password"
+                          {...register("password")}
+                        />
                       </Form.Group>
 
                       <Form.Group
@@ -51,7 +63,6 @@ export default function SignUp() {
                         <Form.Control type="password" placeholder="Password" />
                       </Form.Group>
 
-                    
                       <div className="d-grid">
                         <Button variant="primary" type="submit">
                           Sign Up
@@ -61,7 +72,10 @@ export default function SignUp() {
                     <div className="mt-3">
                       <p className="mb-0  text-center">
                         Don't have an account?{" "}
-                        <Link href="/auth/SignIn" className="text-primary fw-bold">
+                        <Link
+                          href="/auth/SignIn"
+                          className="text-primary fw-bold"
+                        >
                           Sign In
                         </Link>
                       </p>
@@ -74,5 +88,5 @@ export default function SignUp() {
         </Row>
       </Container>
     </div>
-  )
+  );
 }
