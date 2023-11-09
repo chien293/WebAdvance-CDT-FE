@@ -1,5 +1,4 @@
 import { Nav } from "@/components/landing-page/Nav";
-import { Link } from "@nextui-org/link";
 import { Head } from "./head";
 import Footer from "./foot";
 
