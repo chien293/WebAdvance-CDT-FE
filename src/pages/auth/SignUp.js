@@ -6,10 +6,9 @@ import axios from "axios";
 export default function SignUp() {
   const { register, handleSubmit } = useForm();
   const onSubmit = async (d) => {
-    console.log(d.toString);
     const { email, fullName, password } = d;
     const URL = 'http://localhost:5000/auth';
-    const data = await axios.post(`${URL}/signup}`, {
+    const data = await axios.post(`${URL}/signup`, {
       email, fullName, password
     })
   };

@@ -2,12 +2,28 @@ import React from "react";
 import Link from "next/link";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import useRouter from "next/router";
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
 
 const SignIn = () => {
   const { register, handleSubmit } = useForm();
-  const onSubmit = (d) => {
-    alert(JSON.stringify(d));
+  const router = useRouter;
+
+  const onSubmit = async (d) => {
+    const { email, password } = d;
+
+    const URL = 'http://localhost:5000/auth';
+    const data = await axios.post(`${URL}/login`, {
+      email, password
+    }).then(result =>{
+      console.log(result.data)
+      if(result.data === "Success"){
+        router.push({
+          pathname: '/'
+        })
+      }
+    })
   };
 
   return (
