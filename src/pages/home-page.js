@@ -74,7 +74,7 @@ const Drawer = styled(MuiDrawer, {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function Dashboard() {
+export default function HomePage() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -88,7 +88,8 @@ export default function Dashboard() {
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
-            }}>
+            }}
+          >
             <IconButton
               edge="start"
               color="inherit"
@@ -97,7 +98,8 @@ export default function Dashboard() {
               sx={{
                 marginRight: "36px",
                 ...(open && { display: "none" }),
-              }}>
+              }}
+            >
               <MenuIcon />
             </IconButton>
             <Typography
@@ -105,7 +107,8 @@ export default function Dashboard() {
               variant="h6"
               color="inherit"
               noWrap
-              sx={{ flexGrow: 1 }}>
+              sx={{ flexGrow: 1 }}
+            >
               Dashboard
             </Typography>
             <IconButton color="inherit">
@@ -122,7 +125,8 @@ export default function Dashboard() {
               alignItems: "center",
               justifyContent: "flex-end",
               px: [1],
-            }}>
+            }}
+          >
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
@@ -144,7 +148,8 @@ export default function Dashboard() {
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",
-          }}>
+          }}
+        >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
@@ -156,7 +161,8 @@ export default function Dashboard() {
                     display: "flex",
                     flexDirection: "column",
                     height: 240,
-                  }}>
+                  }}
+                >
                   <Chart />
                 </Paper>
               </Grid>
@@ -168,7 +174,8 @@ export default function Dashboard() {
                     display: "flex",
                     flexDirection: "column",
                     height: 240,
-                  }}>
+                  }}
+                >
                   <Deposits />
                 </Paper>
               </Grid>
@@ -178,7 +185,7 @@ export default function Dashboard() {
                   <Orders />
                 </Paper>
               </Grid>
-            </Grid>         
+            </Grid>
           </Container>
         </Box>
       </Box>

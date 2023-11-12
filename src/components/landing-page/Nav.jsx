@@ -123,7 +123,7 @@ export const Nav = () => {
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
 
         <NavbarItem className="md:flex">
-          <Link href="/auth/SignIn" className="text-base text-default-500">
+          <Link href="/auth/sign-in" className="text-base text-default-500">
             Login
           </Link>
         </NavbarItem>
@@ -131,7 +131,7 @@ export const Nav = () => {
           <Button
             className="text-base text-default-500"
             as={Link}
-            href="/auth/SignUp"
+            href="/auth/sign-up"
             variant="flat"
           >
             Sign Up
