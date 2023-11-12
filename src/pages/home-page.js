@@ -17,6 +17,8 @@ import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import Image, { Label }  from "@mui/icons-material";
+import AuthService from "./auth/auth-service";
 import {
   mainListItems,
   secondaryListItems,
@@ -75,7 +77,18 @@ const Drawer = styled(MuiDrawer, {
 const defaultTheme = createTheme();
 
 export default function HomePage() {
+  
+  
   const [open, setOpen] = React.useState(true);
+  const [currentUser, setCurrentUser] = React.useState("");
+  React.useEffect(() => {
+    const user = AuthService.getCurrentUser();
+    console.log(user)
+    if(user){
+      setCurrentUser(user.fullname)
+    }
+  })
+  
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -110,6 +123,9 @@ export default function HomePage() {
               sx={{ flexGrow: 1 }}
             >
               Dashboard
+            </Typography>
+            <Typography>
+              Hi {currentUser}
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
