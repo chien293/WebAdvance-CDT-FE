@@ -20,8 +20,9 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import Image, { Label }  from "@mui/icons-material";
 import AuthService from "./auth/auth-service";
 import {
-  mainListItems,
-  secondaryListItems,
+  middleListItems,
+  bottomListItems,
+  topListItems,
 } from "../components/dashboard-page/listItems";
 import Chart from "../components/dashboard-page/Chart";
 import Deposits from "../components/dashboard-page/Deposits";
@@ -101,8 +102,7 @@ export default function HomePage() {
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
-            }}
-          >
+            }}>
             <IconButton
               edge="start"
               color="inherit"
@@ -111,8 +111,7 @@ export default function HomePage() {
               sx={{
                 marginRight: "36px",
                 ...(open && { display: "none" }),
-              }}
-            >
+              }}>
               <MenuIcon />
             </IconButton>
             <Typography
@@ -120,13 +119,10 @@ export default function HomePage() {
               variant="h6"
               color="inherit"
               noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Dashboard
+              sx={{ flexGrow: 1 }}>
+              Classroom
             </Typography>
-            <Typography>
-              Hi {currentUser}
-            </Typography>
+            <Typography>Hi {currentUser}</Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
@@ -141,17 +137,18 @@ export default function HomePage() {
               alignItems: "center",
               justifyContent: "flex-end",
               px: [1],
-            }}
-          >
+            }}>
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
+            {topListItems}
             <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
+            {middleListItems}
+            <Divider sx={{ my: 1 }} />
+            {bottomListItems}
           </List>
         </Drawer>
         <Box
@@ -164,8 +161,7 @@ export default function HomePage() {
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",
-          }}
-        >
+          }}>
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
@@ -177,8 +173,7 @@ export default function HomePage() {
                     display: "flex",
                     flexDirection: "column",
                     height: 240,
-                  }}
-                >
+                  }}>
                   <Chart />
                 </Paper>
               </Grid>
@@ -190,8 +185,7 @@ export default function HomePage() {
                     display: "flex",
                     flexDirection: "column",
                     height: 240,
-                  }}
-                >
+                  }}>
                   <Deposits />
                 </Paper>
               </Grid>
