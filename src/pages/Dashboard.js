@@ -21,26 +21,9 @@ import {
   mainListItems,
   secondaryListItems,
 } from "../components/dashboard-page/listItems";
-import Chart from "./Chart";
+import Chart from "../components/dashboard-page/Chart";
 import Deposits from "../components/dashboard-page/Deposits";
 import Orders from "../components/dashboard-page/Orders";
-
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}>
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
 const drawerWidth = 240;
 
@@ -195,8 +178,7 @@ export default function Dashboard() {
                   <Orders />
                 </Paper>
               </Grid>
-            </Grid>
-            <Copyright sx={{ pt: 4 }} />
+            </Grid>         
           </Container>
         </Box>
       </Box>
