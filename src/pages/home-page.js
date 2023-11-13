@@ -21,6 +21,7 @@ import Image, { Label }  from "@mui/icons-material";
 import AuthService from "./auth/auth-service";
 import useRouter  from "next/router";
 import axios from "axios";
+import  jwt  from "jsonwebtoken";
 import {
   middleListItems,
   bottomListItems,
@@ -90,24 +91,20 @@ export default function HomePage() {
 
   const authCheck = async () => {
     const user = AuthService.getCurrentUser();
-
-    await axios.get("http://localhost:5000/" + "home-page", {
-      headers: {
-        Authorization: 'Bearer ' + user.accessToken
-      }
-    }).catch(res => {
-      console.log(res.response.data);
-      if (res.response.data == "You're not authenticated" || res.response.data == "Token is not valid") {
-        router.push({pathname: "/auth/sign-in"})
-        return null;
-      }
+    console.log(user);
+    if(isTokenExpired(user.accessToken) || !user.accessToken){
+      router.push({pathname: "/auth/sign-in"})
     }
-    )
     if (user) {
-      setCurrentUser(user.fullname)
+      setCurrentUser(user.user[0].fullname)
     }
   }
   
+  const isTokenExpired = (token) => {
+    const decodedToken = jwt.decode(token);
+    return decodedToken.exp * 1000 < Date.now();
+  };
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
