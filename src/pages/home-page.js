@@ -19,6 +19,8 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Image, { Label }  from "@mui/icons-material";
 import AuthService from "./auth/auth-service";
+import useRouter  from "next/router";
+import axios from "axios";
 import {
   middleListItems,
   bottomListItems,
@@ -79,16 +81,32 @@ const defaultTheme = createTheme();
 
 export default function HomePage() {
   
-  
+  const router = useRouter;
   const [open, setOpen] = React.useState(true);
-  const [currentUser, setCurrentUser] = React.useState("");
+  const [currentUser, setCurrentUser] = React.useState(null);
   React.useEffect(() => {
+    authCheck();
+  },[]);
+
+  const authCheck = async () => {
     const user = AuthService.getCurrentUser();
-    console.log(user)
-    if(user){
+
+    await axios.get("http://localhost:5000/" + "home-page", {
+      headers: {
+        Authorization: 'Bearer ' + user.accessToken
+      }
+    }).catch(res => {
+      console.log(res.response.data);
+      if (res.response.data == "You're not authenticated" || res.response.data == "Token is not valid") {
+        router.push({pathname: "/auth/sign-in"})
+        return null;
+      }
+    }
+    )
+    if (user) {
       setCurrentUser(user.fullname)
     }
-  })
+  }
   
   const toggleDrawer = () => {
     setOpen(!open);
