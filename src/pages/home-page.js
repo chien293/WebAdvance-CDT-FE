@@ -30,6 +30,8 @@ import {
 import Chart from "../components/dashboard-page/Chart";
 import Deposits from "../components/dashboard-page/Deposits";
 import Orders from "../components/dashboard-page/Orders";
+import { Button } from "@nextui-org/react";
+import authService from "@/auth/auth-service";
 
 const drawerWidth = 240;
 
@@ -90,7 +92,7 @@ export default function HomePage() {
 
   const authCheck = async () => {
     const user = AuthService.getCurrentUser();
-    console.log(user);
+
     if (isTokenExpired(user.accessToken) || !user.accessToken) {
       router.push({ pathname: "/auth/sign-in" });
     }
@@ -107,6 +109,11 @@ export default function HomePage() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const handleLogout = () => {
+    authService.logout();
+    router.push({ pathname: "/" });
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -140,6 +147,14 @@ export default function HomePage() {
               Classroom
             </Typography>
             <Typography>Hi {currentUser}</Typography>
+            <Typography variant="title" color="inherit" noWrap>
+              &nbsp;
+              &nbsp;
+              &nbsp;
+            </Typography>
+            <Button onClick={handleLogout}>
+              Logout
+            </Button>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />

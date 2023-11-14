@@ -18,6 +18,7 @@ import {
   SearchIcon,
 } from "./Icons.jsx";
 import NextLink from "next/link";
+import LinkNext from "next/link";
 import { link as linkStyles } from "@nextui-org/theme";
 import { siteConfig } from "../../config/site.js";
 import { SwitchTheme } from "./switch-theme/SwitchTheme.jsx";
@@ -123,14 +124,14 @@ export const Nav = () => {
         <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
 
         <NavbarItem className="md:flex">
-          <Link href="/auth/sign-in" className="text-base text-default-500">
+          <LinkNext href="/auth/sign-in" className="text-base text-default-500">
             Login
-          </Link>
+          </LinkNext>
         </NavbarItem>
         <NavbarItem>
           <Button
             className="text-base text-default-500"
-            as={Link}
+            as={LinkNext}
             href="/auth/sign-up"
             variant="flat"
           >
