@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import useRouter from "next/router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-import authService from "./auth-service";
+import authService from "@/auth/auth-service";
 
 const SignIn = () => {
   const { register, handleSubmit } = useForm();
@@ -14,16 +14,15 @@ const SignIn = () => {
   const onSubmit = async (d) => {
     const { email, password } = d;
 
-    const URL = 'http://localhost:5000/auth';
-    authService.login(email, password).then(data => {
-      console.log(data)
+    const URL = "http://localhost:5000/auth";
+    authService.login(email, password).then((data) => {
+      console.log(data);
       if (data) {
         router.push({
-          pathname: '/home-page'
-        })
+          pathname: "/home-page",
+        });
       }
-    }
-    )
+    });
   };
 
   return (

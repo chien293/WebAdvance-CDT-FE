@@ -3,17 +3,16 @@ import { useForm } from "react-hook-form";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
-import authService from "./auth-service";
+import authService from "@/auth/auth-service";
 
 export default function SignUp() {
   const { register, handleSubmit } = useForm();
   const onSubmit = async (d) => {
-    const { email, fullName, password } = d;
-    authService.register(email, fullName, password)
+    const { email, fullname, password } = d;
+    authService.register(email, fullname, password);
   };
 
   return (
-
     <div>
       <Container>
         <Row className="vh-100 d-flex justify-content-center align-items-center">
@@ -67,7 +66,6 @@ export default function SignUp() {
                         <Form.Control
                           type="password"
                           placeholder="Confirm Password"
-                          
                         />
                       </Form.Group>
 
@@ -96,6 +94,5 @@ export default function SignUp() {
         </Row>
       </Container>
     </div>
-
   );
 }

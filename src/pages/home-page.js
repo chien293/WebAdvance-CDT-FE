@@ -17,11 +17,11 @@ import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import Image, { Label }  from "@mui/icons-material";
-import AuthService from "./auth/auth-service";
-import useRouter  from "next/router";
+import Image, { Label } from "@mui/icons-material";
+import AuthService from "@/auth/auth-service";
+import useRouter from "next/router";
 import axios from "axios";
-import  jwt  from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import {
   middleListItems,
   bottomListItems,
@@ -81,25 +81,24 @@ const Drawer = styled(MuiDrawer, {
 const defaultTheme = createTheme();
 
 export default function HomePage() {
-  
   const router = useRouter;
   const [open, setOpen] = React.useState(true);
   const [currentUser, setCurrentUser] = React.useState(null);
   React.useEffect(() => {
     authCheck();
-  },[]);
+  }, []);
 
   const authCheck = async () => {
     const user = AuthService.getCurrentUser();
     console.log(user);
-    if(isTokenExpired(user.accessToken) || !user.accessToken){
-      router.push({pathname: "/auth/sign-in"})
+    if (isTokenExpired(user.accessToken) || !user.accessToken) {
+      router.push({ pathname: "/auth/sign-in" });
     }
     if (user) {
-      setCurrentUser(user.user[0].fullname)
+      setCurrentUser(user.user[0].fullname);
     }
-  }
-  
+  };
+
   const isTokenExpired = (token) => {
     const decodedToken = jwt.decode(token);
     return decodedToken.exp * 1000 < Date.now();
@@ -117,7 +116,8 @@ export default function HomePage() {
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
-            }}>
+            }}
+          >
             <IconButton
               edge="start"
               color="inherit"
@@ -126,7 +126,8 @@ export default function HomePage() {
               sx={{
                 marginRight: "36px",
                 ...(open && { display: "none" }),
-              }}>
+              }}
+            >
               <MenuIcon />
             </IconButton>
             <Typography
@@ -134,7 +135,8 @@ export default function HomePage() {
               variant="h6"
               color="inherit"
               noWrap
-              sx={{ flexGrow: 1 }}>
+              sx={{ flexGrow: 1 }}
+            >
               Classroom
             </Typography>
             <Typography>Hi {currentUser}</Typography>
@@ -152,7 +154,8 @@ export default function HomePage() {
               alignItems: "center",
               justifyContent: "flex-end",
               px: [1],
-            }}>
+            }}
+          >
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
@@ -176,7 +179,8 @@ export default function HomePage() {
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",
-          }}>
+          }}
+        >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
@@ -188,7 +192,8 @@ export default function HomePage() {
                     display: "flex",
                     flexDirection: "column",
                     height: 240,
-                  }}>
+                  }}
+                >
                   <Chart />
                 </Paper>
               </Grid>
@@ -200,7 +205,8 @@ export default function HomePage() {
                     display: "flex",
                     flexDirection: "column",
                     height: 240,
-                  }}>
+                  }}
+                >
                   <Deposits />
                 </Paper>
               </Grid>
