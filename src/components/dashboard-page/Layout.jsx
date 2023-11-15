@@ -10,10 +10,6 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -26,10 +22,7 @@ import {
   middleListItems,
   bottomListItems,
   topListItems,
-} from "../components/dashboard-page/listItems";
-import Chart from "../components/dashboard-page/Chart";
-import Deposits from "../components/dashboard-page/Deposits";
-import Orders from "../components/dashboard-page/Orders";
+} from "@/components/dashboard-page/listItems";
 import { Button } from "@nextui-org/react";
 import authService from "@/auth/auth-service";
 import LinkNext from "next/link";
@@ -82,30 +75,9 @@ const Drawer = styled(MuiDrawer, {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function HomePage() {
+export default function HomePage({ children, currentUser }) {
   const router = useRouter;
   const [open, setOpen] = React.useState(true);
-  const [currentUser, setCurrentUser] = React.useState(null);
-  React.useEffect(() => {
-    authCheck();
-  }, []);
-
-  const authCheck = async () => {
-    const user = AuthService.getCurrentUser();
-
-    if (isTokenExpired(user.accessToken) || !user.accessToken) {
-      router.push({ pathname: "/auth/sign-in" });
-    }
-    if (user) {
-      setCurrentUser(user.user[0].fullname);
-    }
-  };
-
-  const isTokenExpired = (token) => {
-    const decodedToken = jwt.decode(token);
-    return decodedToken.exp * 1000 < Date.now();
-  };
-
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -147,7 +119,7 @@ export default function HomePage() {
               Classroom
             </Typography>
             <LinkNext href="/profile">
-              <Typography>Hi {currentUser}</Typography>
+              <Typography>Hi {currentUser.fullname}</Typography>
             </LinkNext>
             <Typography variant="title" color="inherit" noWrap>
               &nbsp; &nbsp; &nbsp;
@@ -194,43 +166,7 @@ export default function HomePage() {
             overflow: "auto",
           }}
         >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  <Chart />
-                </Paper>
-              </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  <Deposits />
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <Orders />
-                </Paper>
-              </Grid>
-            </Grid>
-          </Container>
+          {children}
         </Box>
       </Box>
     </ThemeProvider>
