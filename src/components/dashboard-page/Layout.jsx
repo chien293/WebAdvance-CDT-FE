@@ -109,6 +109,7 @@ export default function HomePage({ children, currentUser }) {
             >
               <MenuIcon />
             </IconButton>
+
             <Typography
               component="h1"
               variant="h6"

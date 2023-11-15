@@ -7,15 +7,17 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HomeIcon from "@mui/icons-material/Home";
 import SchoolIcon from "@mui/icons-material/School";
-
+import Link from "next/link";
 export const topListItems = (
   <React.Fragment>
-    <ListItemButton>
-      <ListItemIcon>
-        <HomeIcon />
-      </ListItemIcon>
-      <ListItemText primary="Home" />
-    </ListItemButton>
+    <Link href="/home-page">
+      <ListItemButton>
+        <ListItemIcon>
+          <HomeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Home" />
+      </ListItemButton>
+    </Link>
     <ListItemButton>
       <ListItemIcon>
         <CalendarTodayIcon />
