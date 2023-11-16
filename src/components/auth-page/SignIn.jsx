@@ -70,6 +70,17 @@ const SignInComponent = () => {
                         )}
                       </Form.Group>
 
+                      <div className="mb-3">
+                        <p className="mb-0  text-right">
+                          <Link
+                            href="/auth/forgot-password"
+                            className="text-primary fw-bold"
+                          >
+                            Forgot your password ?
+                          </Link>
+                        </p>
+                      </div>
+
                       <div className="d-grid">
                         <Button variant="primary" type="submit">
                           Sign In
