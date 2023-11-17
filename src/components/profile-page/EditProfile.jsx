@@ -5,6 +5,7 @@ import { FaPhoneAlt } from "react-icons/fa";
 import axios from "axios";
 import clsx from "clsx";
 import authService from "@/auth/auth-service";
+
 function EditProfile({ user, onCancelClick, onUpdateData }) {
   const [name, setName] = useState(user.fullname);
   const [phone, setPhone] = useState("");

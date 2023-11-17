@@ -30,9 +30,9 @@ import {
 import Chart from "../components/dashboard-page/Chart";
 import Deposits from "../components/dashboard-page/Deposits";
 import Orders from "../components/dashboard-page/Orders";
-import { Button } from "@nextui-org/react";
 import authService from "@/auth/auth-service";
 import LinkNext from "next/link";
+import AvatarDropdown from "@/components/AvatarDropdown";
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -110,11 +110,6 @@ export default function HomePage() {
     setOpen(!open);
   };
 
-  const handleLogout = () => {
-    authService.logout();
-    router.push({ pathname: "/" });
-  };
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
@@ -123,8 +118,7 @@ export default function HomePage() {
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
-            }}
-          >
+            }}>
             <IconButton
               edge="start"
               color="inherit"
@@ -133,8 +127,7 @@ export default function HomePage() {
               sx={{
                 marginRight: "36px",
                 ...(open && { display: "none" }),
-              }}
-            >
+              }}>
               <MenuIcon />
             </IconButton>
             <Typography
@@ -142,17 +135,18 @@ export default function HomePage() {
               variant="h6"
               color="inherit"
               noWrap
-              sx={{ flexGrow: 1 }}
-            >
+              sx={{ flexGrow: 1 }}>
               Classroom
             </Typography>
-            <LinkNext href="/profile">
-              <Typography>Hi {currentUser}</Typography>
+            <LinkNext href="/">
+              <Typography sx={{ paddingRight: 5 }}>Hi {currentUser}</Typography>
             </LinkNext>
+            <AvatarDropdown></AvatarDropdown>
+
             <Typography variant="title" color="inherit" noWrap>
               &nbsp; &nbsp; &nbsp;
             </Typography>
-            <Button onClick={handleLogout}>Logout</Button>
+
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
@@ -167,8 +161,7 @@ export default function HomePage() {
               alignItems: "center",
               justifyContent: "flex-end",
               px: [1],
-            }}
-          >
+            }}>
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
@@ -192,8 +185,7 @@ export default function HomePage() {
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",
-          }}
-        >
+          }}>
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={3}>
@@ -205,8 +197,7 @@ export default function HomePage() {
                     display: "flex",
                     flexDirection: "column",
                     height: 240,
-                  }}
-                >
+                  }}>
                   <Chart />
                 </Paper>
               </Grid>
@@ -218,8 +209,7 @@ export default function HomePage() {
                     display: "flex",
                     flexDirection: "column",
                     height: 240,
-                  }}
-                >
+                  }}>
                   <Deposits />
                 </Paper>
               </Grid>
