@@ -10,7 +10,6 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
-import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -82,19 +81,19 @@ export default function HomePage() {
   const [open, setOpen] = React.useState(true);
   const [currentUser, setCurrentUser] = React.useState(null);
   React.useEffect(() => {
-    // authCheck();
+    authCheck();
   }, []);
 
-  // const authCheck = async () => {
-  //   const user = AuthService.getCurrentUser();
+  const authCheck = async () => {
+    const user = AuthService.getCurrentUser();
 
-  //   if (isTokenExpired(user.accessToken) || !user.accessToken) {
-  //     router.push({ pathname: "/auth/sign-in" });
-  //   }
-  //   if (user) {
-  //     setCurrentUser(user.user[0].fullname);
-  //   }
-  // };
+    if (isTokenExpired(user.accessToken) || !user.accessToken) {
+      router.push({ pathname: "/auth/sign-in" });
+    }
+    if (user) {
+      setCurrentUser(user.user[0].fullname);
+    }
+  };
 
   const isTokenExpired = (token) => {
     const decodedToken = jwt.decode(token);
