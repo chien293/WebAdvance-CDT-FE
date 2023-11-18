@@ -14,10 +14,12 @@ export default function Post({title, date}) {
             display: "flex",
             flexDirection: "row",
             height: 80,
+            cursor: "pointer",
+            ":hover": { backgroundColor: "#ebffef"}            
           }}>
           <div className="p-2 m-1 rounded-3xl bg-green-600">
             <ClassOutlinedIcon
-              style={{color:"white"}}
+              style={{ color: "white" }}
               // sx={{ display: "inline-flex" }}
             />
           </div>
