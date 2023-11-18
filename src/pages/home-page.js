@@ -10,9 +10,6 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -27,12 +24,10 @@ import {
   bottomListItems,
   topListItems,
 } from "../components/dashboard-page/listItems";
-import Chart from "../components/dashboard-page/Chart";
-import Deposits from "../components/dashboard-page/Deposits";
-import Orders from "../components/dashboard-page/Orders";
 import authService from "@/auth/auth-service";
 import LinkNext from "next/link";
 import AvatarDropdown from "@/components/AvatarDropdown";
+import Layout from "../components/dashboard-page/Layout";
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -87,19 +82,19 @@ export default function HomePage() {
   const [open, setOpen] = React.useState(true);
   const [currentUser, setCurrentUser] = React.useState(null);
   React.useEffect(() => {
-    authCheck();
+    // authCheck();
   }, []);
 
-  const authCheck = async () => {
-    const user = AuthService.getCurrentUser();
+  // const authCheck = async () => {
+  //   const user = AuthService.getCurrentUser();
 
-    if (isTokenExpired(user.accessToken) || !user.accessToken) {
-      router.push({ pathname: "/auth/sign-in" });
-    }
-    if (user) {
-      setCurrentUser(user.user[0].fullname);
-    }
-  };
+  //   if (isTokenExpired(user.accessToken) || !user.accessToken) {
+  //     router.push({ pathname: "/auth/sign-in" });
+  //   }
+  //   if (user) {
+  //     setCurrentUser(user.user[0].fullname);
+  //   }
+  // };
 
   const isTokenExpired = (token) => {
     const decodedToken = jwt.decode(token);
@@ -114,7 +109,7 @@ export default function HomePage() {
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open}>
+        <AppBar position="absolute" open={open} color="success">
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
@@ -175,53 +170,7 @@ export default function HomePage() {
             {bottomListItems}
           </List>
         </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
-          }}>
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}>
-                  <Chart />
-                </Paper>
-              </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}>
-                  <Deposits />
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <Orders />
-                </Paper>
-              </Grid>
-            </Grid>
-          </Container>
-        </Box>
+        <Layout />
       </Box>
     </ThemeProvider>
   );
