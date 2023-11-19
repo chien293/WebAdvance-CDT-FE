@@ -2,7 +2,8 @@ import React from 'react'
 import ForgotPassword from '@/components/auth-page/ForgotPassword'
 import DefaultLayout from "@/layouts/default";
 
-const fotgotPassword = () => {
+const ForgotPasswordPage = () => {
+
   return (
     <DefaultLayout>
       <ForgotPassword/>
@@ -10,4 +11,4 @@ const fotgotPassword = () => {
   )
 }
 
-export default fotgotPassword
+export default ForgotPasswordPage

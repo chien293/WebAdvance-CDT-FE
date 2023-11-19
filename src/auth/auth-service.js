@@ -26,12 +26,34 @@ class AuthService {
     });
   }
 
-  sentValidateEmail(email) {
-    axios.get(API_URL + "verifyAccount", {
+  async sentValidateEmail(email) {
+    return axios.get(API_URL + "forgot-password", {
       params: {
         email: email,
       },
     });
+  }
+
+  // sentForgotPassword(email) {
+  //   axios.get(API_URL + "forgot-assword", {
+  //     email
+  //   });
+  // }
+
+  async sentResetPassword(token, email, password) {
+    console.log(token)
+    return await axios.post(
+      API_URL + "forgot-password",
+      {
+        email,
+        password
+      },
+      {
+        headers: {
+          token: "Bearer " + token,
+        },
+      }
+    );
   }
 
   getCurrentUser() {

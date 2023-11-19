@@ -1,17 +1,19 @@
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
+import { Col, Button, Row, Container, Card, Form, InputGroup } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from 'react';
 import authService from "@/auth/auth-service";
 import useRouter from "next/router";
-import axios from "axios";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 export default function SignUpComponent() {
   const { register, handleSubmit } = useForm();
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter;
   const onSubmit = async (d) => {
     const { email, fullname, password } = d;
@@ -73,11 +75,16 @@ export default function SignUpComponent() {
                         controlId="formBasicPassword"
                       >
                         <Form.Label>Password</Form.Label>
-                        <Form.Control
-                          type="password"
-                          placeholder="Password"
-                          {...register("password")}
-                        />
+                        <InputGroup>
+                          <Form.Control
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Enter your new password"
+                            {...register("password")}
+                          />
+                          <Button onClick={() => setShowPassword(!showPassword)}>
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                          </Button>
+                        </InputGroup>
                       </Form.Group>
 
                       <Form.Group
@@ -85,12 +92,17 @@ export default function SignUpComponent() {
                         controlId="formBasicPassword"
                       >
                         <Form.Label>Confirm Password</Form.Label>
-                        <Form.Control
-                          type="password"
-                          placeholder="Confirm Password"
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                        />
+                        <InputGroup>
+                          <Form.Control
+                            type={showConfirmPassword ? "text" : "password"}
+                            placeholder="Confirm new password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                          />
+                          <Button onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                            {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                          </Button>
+                        </InputGroup>
 
                         {errorMessage && (
                           <div>
