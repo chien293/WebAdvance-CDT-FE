@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from 'react';
 import authService from "@/auth/auth-service";
 import useRouter from "next/router";
+import axios from "axios";
 
 export default function SignUpComponent() {
   const { register, handleSubmit } = useForm();
@@ -23,8 +24,9 @@ export default function SignUpComponent() {
         } else {
           setSuccessMessage('Đăng ký thành công');
           setTimeout(() => {
+            authService.sentValidateEmail(email);
             router.push({
-              pathname: "/auth/sign-in",
+              pathname: "/auth/validate-email",
             });
           }, 1000)
         }

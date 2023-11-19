@@ -21,9 +21,16 @@ const SignInComponent = () => {
         if (data == "Wrong password" || data == "No user found") {
           setErrorMessage("Tài khoản hoặc mật khẩu không tồn tại");
         } else {
-          router.push({
-            pathname: "/home-page",
-          });
+          if (data == "Email is not verified") {
+            router.push({
+              pathname: "/auth/not-verify",
+            });
+          }
+          else {
+            router.push({
+              pathname: "/home-page",
+            });
+          }
         }
 
       }

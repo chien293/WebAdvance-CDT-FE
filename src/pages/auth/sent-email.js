@@ -4,7 +4,7 @@ import DefaultLayout from "@/layouts/default";
 import { withRouter } from 'next/router'
 import { useRouter} from "next/router";
 
-const sentemail = ({prop}) => {
+const sentemail = () => {
   const router = useRouter();
   const [mail, setMail] = useState("");
 

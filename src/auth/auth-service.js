@@ -8,7 +8,6 @@ class AuthService {
       email,
       password,
     });
-    console.log(response.data);
     if (response.data.accessToken) {
       localStorage.setItem("user", JSON.stringify(response.data));
     }
@@ -20,11 +19,18 @@ class AuthService {
   }
 
   async register(email, fullname, password) {
-    console.log(email, fullname, password);
     return await axios.post(API_URL + "signup", {
       email,
       fullname,
       password,
+    });
+  }
+
+  sentValidateEmail(email) {
+    axios.get(API_URL + "verifyAccount", {
+      params: {
+        email: email,
+      },
     });
   }
 
