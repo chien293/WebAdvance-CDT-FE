@@ -42,14 +42,14 @@ export default function Layout() {
               }}>
               <div>
                 <img
-                  class="relative inline-block h-12 w-12 rounded-full border-2 border-white object-cover object-center hover:z-10 focus:z-10"
+                  class="relative inline-block h-12 w-12 rounded-full object-cover object-center hover:z-10 focus:z-10"
                   src="https://cdnphoto.dantri.com.vn/COm1qksauO2sqAC-gVVI2DdH_1I=/thumb_w/1020/2023/01/24/khoa-hocdocx-1674520013659.png"
                   alt="User dropdown"
                 />
               </div>
               <div className="ml-5">
                 <Typography sx={{ marginTop: 1.5 }}>
-                  Thông báo nội dung nào đó cho lớp học của bạn
+                  Announce something to your class
                 </Typography>
               </div>
             </Paper>

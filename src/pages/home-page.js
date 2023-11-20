@@ -81,19 +81,19 @@ export default function HomePage() {
   const [open, setOpen] = React.useState(true);
   const [currentUser, setCurrentUser] = React.useState(null);
   React.useEffect(() => {
-    authCheck();
+    // authCheck();
   }, []);
 
-  const authCheck = async () => {
-    const user = AuthService.getCurrentUser();
+  // const authCheck = async () => {
+  //   const user = AuthService.getCurrentUser();
 
-    if (isTokenExpired(user.accessToken) || !user.accessToken) {
-      router.push({ pathname: "/auth/sign-in" });
-    }
-    if (user) {
-      setCurrentUser(user.user[0].fullname);
-    }
-  };
+  //   if (isTokenExpired(user.accessToken) || !user.accessToken) {
+  //     router.push({ pathname: "/auth/sign-in" });
+  //   }
+  //   if (user) {
+  //     setCurrentUser(user.user[0].fullname);
+  //   }
+  // };
 
   const isTokenExpired = (token) => {
     const decodedToken = jwt.decode(token);
@@ -132,15 +132,13 @@ export default function HomePage() {
               sx={{ flexGrow: 1 }}>
               Classroom
             </Typography>
-            <LinkNext href="/">
-              <Typography sx={{ paddingRight: 5 }}>Hi {currentUser}</Typography>
-            </LinkNext>
-            <AvatarDropdown></AvatarDropdown>
-
+            {/* <LinkNext href="/">
+              <Typography sx={{ paddingRight: 5 }}> {currentUser}</Typography>
+            </LinkNext> */}
+            <AvatarDropdown user={currentUser}></AvatarDropdown>
             <Typography variant="title" color="inherit" noWrap>
               &nbsp; &nbsp; &nbsp;
             </Typography>
-
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
