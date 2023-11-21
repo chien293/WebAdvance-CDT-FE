@@ -25,25 +25,6 @@ import { SwitchTheme } from "./switch-theme/SwitchTheme.jsx";
 import clsx from "clsx";
 
 export const Nav = () => {
-  const searchInput = (
-    <Input
-      aria-label="Search"
-      classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
-      }}
-      endContent={
-        <Kbd className="hidden lg:inline-block" keys={["command"]}></Kbd>
-      }
-      labelPlacement="outside"
-      placeholder="Search..."
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-      }
-      type="search"
-    />
-  );
-
   return (
     <Navbar
       isBordered
@@ -73,10 +54,38 @@ export const Nav = () => {
             href="/"
           >
             <AcmeLogo />
-            <p className="font-bold text-inherit mb-0">ACME</p>
+            <p className="font-bold text-inherit mb-0">CDT</p>
           </NextLink>
         </NavbarBrand>
-        <div className=" hidden lg:flex gap-4 justify-start ml-2">
+        {/* <div className=" hidden lg:flex gap-4 justify-start ml-2">
+          {siteConfig.navItems.map((item) => (
+            <NavbarItem key={item.href}>
+              <NextLink
+                className={clsx(
+                  linkStyles({ color: "foreground" }),
+                  "data-[active=true]:text-primary data-[active=true]:font-medium"
+                )}
+                color="foreground"
+                href={item.href}
+              >
+                {item.label}
+              </NextLink>
+            </NavbarItem>
+          ))}
+        </div> */}
+      </NavbarContent>
+
+      {/* <NavbarContent
+        className="hidden sm:flex basis-1/5 sm:basis-full"
+        justify="end"
+      >
+        <NavbarItem className="hidden sm:flex gap-2">
+          <SwitchTheme />
+        </NavbarItem>
+      </NavbarContent> */}
+      <NavbarContent className="basis-1 pl-4" justify="center">
+        {/* <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem> */}
+        <div className=" hidden lg:flex gap-6 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
               <NextLink
@@ -93,36 +102,7 @@ export const Nav = () => {
           ))}
         </div>
       </NavbarContent>
-
-      <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
-        justify="end"
-      >
-        <NavbarItem className="hidden sm:flex gap-2">
-          <Link isExternal href={siteConfig.links.twitter}>
-            <TwitterIcon className="text-default-500" />
-          </Link>
-          <Link isExternal href={siteConfig.links.discord}>
-            <DiscordIcon className="text-default-500" />
-          </Link>
-          <Link isExternal href={siteConfig.links.github}>
-            <GithubIcon className="text-default-500" />
-          </Link>
-          <SwitchTheme />
-        </NavbarItem>
-      </NavbarContent>
-
-      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        <Link isExternal href={siteConfig.links.github}>
-          <GithubIcon className="text-default-500" />
-        </Link>
-        <SwitchTheme />
-        <NavbarMenuToggle />
-      </NavbarContent>
-
       <NavbarContent className="basis-1 pl-4" justify="end">
-        <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem>
-
         <NavbarItem className="md:flex">
           <LinkNext href="/auth/sign-in" className="text-base text-default-500">
             Login

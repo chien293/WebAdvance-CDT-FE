@@ -4,13 +4,13 @@ import Footer from "./foot";
 
 export default function DefaultLayout({ children }) {
   return (
-    <div className="relative flex flex-col h-screen">
+    <div className="relative flex flex-col h-screen bg-my bg-repeat">
       <Head />
       <Nav />
       <main className="container mx-auto max-w-7xl px-6 flex-grow">
         {children}
       </main>
-      
+
       <Footer />
     </div>
   );
