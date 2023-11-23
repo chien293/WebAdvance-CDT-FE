@@ -6,8 +6,7 @@ import { useRouter } from 'next/router';
 const ResetPasswordPage = () => {
   const router = useRouter();
   const { token, email } = router.query;
-  console.log(email);
-  console.log(router.query.email)
+
   return (
     <DefaultLayout>
       <ResetPassword token={token} email = {email}/>

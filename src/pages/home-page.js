@@ -15,7 +15,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Image, { Label } from "@mui/icons-material";
 import AuthService from "@/auth/auth-service";
-import useRouter from "next/router";
+import { useRouter } from "next/router";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import {
@@ -77,12 +77,46 @@ const Drawer = styled(MuiDrawer, {
 const defaultTheme = createTheme();
 
 export default function HomePage() {
-  const router = useRouter;
+  const router = useRouter();
   const [open, setOpen] = React.useState(true);
   const [currentUser, setCurrentUser] = React.useState(null);
   React.useEffect(() => {
     // authCheck();
-  }, []);
+    const fetchData = async () => {
+      if (router.isReady) {
+        try {
+          console.log(router.query)
+          const userParam = router.query.user;
+          const tokenParam = router.query.token;
+          if (userParam && tokenParam) {
+            const user = JSON.parse(decodeURI(userParam));
+            console.log(user.displayName + " Sau khi decode")
+            setCurrentUser(user.displayName);
+          } else setCurrentUser("SAI ROI")
+          // Fetch user data and token from the server after successful authentication
+          // const response = await axios.get("http://localhost:5000/auth/google/success");
+          // console.log(response.data)
+          // if (response.data) {
+          //   setCurrentUser(response.data.user);
+          //   // Save the token to localStorage or cookies for subsequent requests
+          //   // localStorage.setItem('token', response.data.token);
+          // }
+
+          // if (!currentUser) {
+          //   // Redirect to login page or handle unauthenticated user
+          //   router.push({ pathname: 'http://localhost:3000/auth/sign-in' });
+          //   return null;
+          // }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+
+    fetchData();
+
+  }, [router.isReady]);
+
 
   // const authCheck = async () => {
   //   const user = AuthService.getCurrentUser();
@@ -132,10 +166,11 @@ export default function HomePage() {
               sx={{ flexGrow: 1 }}>
               Classroom
             </Typography>
-            {/* <LinkNext href="/">
-              <Typography sx={{ paddingRight: 5 }}> {currentUser}</Typography>
-            </LinkNext> */}
-            <AvatarDropdown user={currentUser}></AvatarDropdown>
+            <LinkNext href="/">
+              <Typography sx={{ paddingRight: 5 } }>{currentUser} </Typography>
+            </LinkNext>
+            
+            <AvatarDropdown ></AvatarDropdown>
             <Typography variant="title" color="inherit" noWrap>
               &nbsp; &nbsp; &nbsp;
             </Typography>

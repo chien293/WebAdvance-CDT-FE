@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import useRouter from "next/router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from 'react';
+import { FaEye, FaEyeSlash, FaFacebook, FaGoogle } from 'react-icons/fa';
 import authService from "@/auth/auth-service";
 
 const SignInComponent = () => {
@@ -36,6 +37,14 @@ const SignInComponent = () => {
       }
     });
   };
+
+  const handleFacebookLogin = (d) => {
+
+  }
+  const handleGoogleLogin = (d) => {
+    console.log("GOOGLE CLICK")
+    authService.loginGoogle()
+  }
 
   return (
     <div>
@@ -104,6 +113,20 @@ const SignInComponent = () => {
                           Sign Up
                         </Link>
                       </p>
+                    </div>
+                    <div className="divider d-flex align-items-center my-4">
+                      <p className="text-center fw-semi-bold mx-3 mb-0 text-muted">OR</p>
+                    </div>
+                    <div className="text-center flex items-center justify-center">
+                      <span className="mr-3">
+                        Sign in with
+                      </span>
+                      <span className="mx-3">
+                        <FaFacebook size={40} color="#3b5998" onClick={handleFacebookLogin}/>
+                      </span>
+                      <span>
+                        <FaGoogle size={40} color="#dd4b39" onClick={handleGoogleLogin}/>
+                      </span>
                     </div>
                   </div>
                 </div>

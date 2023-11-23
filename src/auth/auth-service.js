@@ -14,6 +14,38 @@ class AuthService {
     return response.data;
   }
 
+  loginGoogle() {
+    window.open("http://localhost:5000/auth/google", "_self");
+    // if (response.data.accessToken) {
+    //   localStorage.setItem("user", JSON.stringify(response.data));
+    // }
+  }
+
+  async loginGoogleSuccess() {
+    return await axios.get(API_URL + "google/success").then((res) =>{
+      console.log(res.data)
+      if(res.data){
+        
+        return res.user;
+      }
+    });;
+
+    // if (response.data.accessToken) {
+    //   localStorage.setItem("user", JSON.stringify(response.data));
+    // }
+  }
+
+  async loginFacebook(email, password) {
+    const response = await axios.post(API_URL + "facebook", {
+      email,
+      password,
+    });
+    if (response.data.accessToken) {
+      localStorage.setItem("user", JSON.stringify(response.data));
+    }
+    return response.data;
+  }
+
   logout() {
     localStorage.removeItem("user");
   }
