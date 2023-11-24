@@ -84,40 +84,25 @@ export default function HomePage() {
   const [currentUser, setCurrentUser] = React.useState(null);
   React.useEffect(() => {
     // authCheck();
-    const fetchData = async () => {
-      if (router.isReady) {
-        try {
-          console.log(router.query)
-          const userParam = router.query.user;
-          const tokenParam = router.query.token;
-          if (userParam && tokenParam) {
-            const user = JSON.parse(decodeURI(userParam));
-            console.log(user.displayName + " Sau khi decode")
-            setCurrentUser(user.displayName);
-          } else setCurrentUser("SAI ROI")
-          // Fetch user data and token from the server after successful authentication
-          // const response = await axios.get("http://localhost:5000/auth/google/success");
-          // console.log(response.data)
-          // if (response.data) {
-          //   setCurrentUser(response.data.user);
-          //   // Save the token to localStorage or cookies for subsequent requests
-          //   // localStorage.setItem('token', response.data.token);
-          // }
-
-          // if (!currentUser) {
-          //   // Redirect to login page or handle unauthenticated user
-          //   router.push({ pathname: 'http://localhost:3000/auth/sign-in' });
-          //   return null;
-          // }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      }
-    };
-
     fetchData();
 
   }, [router.isReady]);
+
+  const fetchData = async () => {
+    if (router.isReady) {
+
+      console.log(router.query)
+      const userParam = router.query.user;
+      const tokenParam = router.query.token;
+      if (userParam && tokenParam) {
+        const user = JSON.parse(decodeURI(userParam));     
+        setCurrentUser(user.displayName);
+
+        router.replace('/home-page', undefined, { shallow: true });
+      } else setCurrentUser("Chua dang nhap")
+
+    }
+  };
 
 
   // const authCheck = async () => {

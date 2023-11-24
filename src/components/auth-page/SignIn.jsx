@@ -39,7 +39,7 @@ const SignInComponent = () => {
   };
 
   const handleFacebookLogin = (d) => {
-
+    window.open("http://localhost:5000/auth/facebook", "_self");
   }
   const handleGoogleLogin = (d) => {
     console.log("GOOGLE CLICK")
