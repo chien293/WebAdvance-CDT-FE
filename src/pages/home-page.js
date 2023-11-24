@@ -27,6 +27,8 @@ import authService from "@/auth/auth-service";
 import LinkNext from "next/link";
 import AvatarDropdown from "@/components/AvatarDropdown";
 import Layout from "../components/dashboard-page/Layout";
+import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
+
 const drawerWidth = 240;
 
 const AppBar = styled(MuiAppBar, {
@@ -165,12 +167,16 @@ export default function HomePage() {
               noWrap
               sx={{ flexGrow: 1 }}>
               Classroom
+              <Breadcrumbs>
+                <BreadcrumbItem></BreadcrumbItem>
+                <BreadcrumbItem>Advanced Web Programming</BreadcrumbItem>
+              </Breadcrumbs>
             </Typography>
             <LinkNext href="/">
-              <Typography sx={{ paddingRight: 5 } }>{currentUser} </Typography>
+              <Typography sx={{ paddingRight: 5 }}>{currentUser} </Typography>
             </LinkNext>
-            
-            <AvatarDropdown ></AvatarDropdown>
+
+            <AvatarDropdown></AvatarDropdown>
             <Typography variant="title" color="inherit" noWrap>
               &nbsp; &nbsp; &nbsp;
             </Typography>

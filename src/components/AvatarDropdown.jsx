@@ -46,15 +46,13 @@ const AvatarDropdown = ({ user }) => {
           setOpen(!open);
         }}>
         <img
-          class="relative inline-block h-12 w-12 rounded-full border-2 border-white object-cover object-center hover:z-10 focus:z-10 cursor-pointer"
+          className="relative inline-block h-12 w-12 rounded-full border-2 border-white object-cover object-center hover:z-10 focus:z-10 cursor-pointer"
           src="https://cdnphoto.dantri.com.vn/COm1qksauO2sqAC-gVVI2DdH_1I=/thumb_w/1020/2023/01/24/khoa-hocdocx-1674520013659.png"
           alt="User dropdown"
         />
-      </div>
-      {/* dark:border-2 dark:border-gray-100 dark:bg-gray-700 dark:divide-gray-400 */}
+      </div>    
       {open && (
-        <div className="z-10 absolute divide-y divide-gray-700 rounded-lg shadow-2xl w-44 bg-white dark:bg-black origin-top-right -translate-x-32">
-          {/* dark:text-white */}
+        <div className="z-10 absolute divide-y divide-gray-700 rounded-lg shadow-2xl w-44 bg-white dark:bg-black origin-top-right -translate-x-32">    
           <div className="px-4 py-3 text-sm">
             <div className="font-bold text-xl">{user}</div>
           </div>
