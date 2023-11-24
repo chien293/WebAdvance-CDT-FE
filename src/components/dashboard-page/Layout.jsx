@@ -15,6 +15,7 @@ import InfoContent from "./InfoContent";
 import TabContent from "./TabContent";
 import dynamic from "next/dynamic";
 import ParticipantContent from "./ParticipantContent";
+import CoursesList from "./CoursesList";
 
 export default function Layout() {
   const tabContents = [
@@ -45,14 +46,15 @@ export default function Layout() {
         overflow: "auto",
       }}>
       <Toolbar />
-      <TabNavigation />
+      {/* <TabNavigation /> */}
       {/* <InfoContent /> */}
       {/* {tabContents.map(({ id, component: TabContentComponent }) => (
         <TabContentComponent key={id} />
       ))} */}
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <ParticipantContent />
-      </div>
+      </div> */}
+      <CoursesList/>
     </Box>
   );
 }
