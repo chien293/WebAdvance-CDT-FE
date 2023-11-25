@@ -1,6 +1,6 @@
 import React from "react";
 
-const ParticipantContent = () => {
+const Exercise = () => {
   const teachers = [
     { id: 1, name: "Khanh Huy Nguyen" },
     { id: 2, name: "Tuan Mai Anh" },
@@ -38,4 +38,4 @@ const ParticipantContent = () => {
   );
 };
 
-export default ParticipantContent;
+export default Exercise;

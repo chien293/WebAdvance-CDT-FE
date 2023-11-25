@@ -1,38 +1,9 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import {
-  Container,
-  Grid,
-  Paper,
-  List,
-  Typography,
-  Divider,
-} from "@mui/material";
-
-import TabNavigation from "./TabNavigation";
-import InfoContent from "./InfoContent";
-import TabContent from "./TabContent";
-import dynamic from "next/dynamic";
-import ParticipantContent from "./ParticipantContent";
-import CoursesList from "./CoursesList";
+import Tabs from "./Tabs";
 
 export default function Layout() {
-  const tabContents = [
-    // {
-    //   id: "Infomation",
-    //   component: dynamic(() => import("./InfoContent")),
-    // },
-    // {
-    //   id: "Exercises",
-    //   component: dynamic(() => import("./ExercisesContent")),
-    // },
-    // {
-    //   id: "Participant",
-    //   component: dynamic(() => import("./ParticipantContent")),
-    // },
-  ];
-
   return (
     <Box
       component="main"
@@ -45,16 +16,8 @@ export default function Layout() {
         height: "100vh",
         overflow: "auto",
       }}>
-      <Toolbar />
-      {/* <TabNavigation /> */}
-      {/* <InfoContent /> */}
-      {/* {tabContents.map(({ id, component: TabContentComponent }) => (
-        <TabContentComponent key={id} />
-      ))} */}
-      {/* <div className="flex justify-center">
-        <ParticipantContent />
-      </div> */}
-      <CoursesList/>
+      <Toolbar />   
+      <Tabs/>      
     </Box>
   );
 }

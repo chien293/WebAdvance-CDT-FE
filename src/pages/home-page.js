@@ -3,16 +3,16 @@ import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import MuiDrawer from "@mui/material/Drawer";
 import Box from "@mui/material/Box";
+import Fab from "@mui/material/Fab";
 import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
+import { Popper, Fade, Paper, Modal, InputAdornment } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import Image, { Label } from "@mui/icons-material";
 import AuthService from "@/auth/auth-service";
 import { useRouter } from "next/router";
@@ -28,6 +28,7 @@ import LinkNext from "next/link";
 import AvatarDropdown from "@/components/AvatarDropdown";
 import Layout from "../components/dashboard-page/Layout";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
+import AddIcon from "@mui/icons-material/Add";
 
 const drawerWidth = 240;
 
@@ -85,25 +86,21 @@ export default function HomePage() {
   React.useEffect(() => {
     // authCheck();
     fetchData();
-
   }, [router.isReady]);
 
   const fetchData = async () => {
     if (router.isReady) {
-
-      console.log(router.query)
+      console.log(router.query);
       const userParam = router.query.user;
       const tokenParam = router.query.token;
       if (userParam && tokenParam) {
-        const user = JSON.parse(decodeURI(userParam));     
+        const user = JSON.parse(decodeURI(userParam));
         setCurrentUser(user.displayName);
 
-        router.replace('/home-page', undefined, { shallow: true });
-      } else setCurrentUser("Chua dang nhap")
-
+        router.replace("/home-page", undefined, { shallow: true });
+      } else setCurrentUser("Chua dang nhap");
     }
   };
-
 
   // const authCheck = async () => {
   //   const user = AuthService.getCurrentUser();
@@ -124,6 +121,32 @@ export default function HomePage() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [openAddCourseButton, setOpenAddCourseButton] = React.useState(false);
+  const [placement, setPlacement] = React.useState();
+
+  const handleClick = (newPlacement) => (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpenAddCourseButton((prev) => placement !== newPlacement || !prev);
+    setPlacement(newPlacement);
+  };
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const [openModal, setOpenModal] = React.useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -165,11 +188,41 @@ export default function HomePage() {
             <Typography variant="title" color="inherit" noWrap>
               &nbsp; &nbsp; &nbsp;
             </Typography>
-            <IconButton color="inherit">
+            {/* <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
+            {/* <div className="p-2 hover:bg-gray-400 rounded-full">
+              <AddIcon />
+            </div> */}
+            <Popper
+              open={openAddCourseButton}
+              anchorEl={anchorEl}
+              placement={placement}
+              transition>
+              {({ TransitionProps }) => (
+                <Fade {...TransitionProps} timeout={350}>
+                  <Paper>
+                    <div className="px-4 py-2 hover:bg-gray-100">
+                      Enroll Classroom
+                    </div>
+                    <div
+                      className="px-4 pb-2 hover:bg-gray-100"
+                      onClick={handleOpenModal}>
+                      Create Classroom
+                    </div>
+                  </Paper>
+                </Fade>
+              )}
+            </Popper>
+            <Fab
+              onClick={handleClick("bottom-end")}
+              size="small"
+              color="secondary"
+              aria-label="add">
+              <AddIcon />
+            </Fab>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -194,6 +247,21 @@ export default function HomePage() {
           </List>
         </Drawer>
         <Layout />
+        <Modal
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description">
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Create Classroom
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </Typography>
+            <InputAdornment></InputAdornment>
+          </Box>
+        </Modal>
       </Box>
     </ThemeProvider>
   );
