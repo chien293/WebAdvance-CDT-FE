@@ -7,15 +7,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-export default function FormCreateClass() {
-  const [open, setOpen] = React.useState(false);
+export default function FormCreateClass({ open, onClose, onCancel, onCreate }) {
 
   return (
-    <React.Fragment>
-      {/* <Button variant="outlined" onClick={() => setOpen(true)}>
-        Create Classroom
-      </Button> */}
-      <Dialog open={open} onClose={() => setOpen(false)}>
+    <React.Fragment>  
+      <Dialog
+        open={open}       
+        onClose={onClose}>
         <DialogTitle>Create Classroom</DialogTitle>
         <DialogContent>
           <TextField
@@ -25,7 +23,7 @@ export default function FormCreateClass() {
             label="Class name (required)"
             type="name"
             fullWidth
-            variant="standard"          
+            variant="standard"
           />
           <TextField
             autoFocus
@@ -56,8 +54,14 @@ export default function FormCreateClass() {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button onClick={() => setOpen(false)}>Create</Button>
+          <Button     
+            onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button
+            onClick={onCreate}>
+            Create
+          </Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

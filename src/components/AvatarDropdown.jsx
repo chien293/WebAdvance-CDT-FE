@@ -58,26 +58,23 @@ const AvatarDropdown = ({ user }) => {
           </div>
           <ul className="py-2 text-sm">
             <DropdownItem
-              icon={ClassOutlinedIcon}
+              // icon={ClassOutlinedIcon}
               href="/home-page"
               title="Dashboard"
             />
             <DropdownItem
-              icon={ClassOutlinedIcon}
+              // icon={ClassOutlinedIcon}
               href="/settings"
               title="Settings"
             />
             <DropdownItem
-              icon={ClassOutlinedIcon}
+              // icon={ClassOutlinedIcon}
               href="/profile"
               title="Edit Profile"
             />
-          </ul>
-          {/* <Button className="w-full" onClick={handleLogout}>
-            Logout
-          </Button> */}
+          </ul>        
           <DropdownItem
-            icon={ClassOutlinedIcon}
+            // icon={ClassOutlinedIcon}
             href="/logout"
             title="Logout"
             onClick={handleLogout}

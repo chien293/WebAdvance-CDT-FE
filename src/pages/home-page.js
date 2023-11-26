@@ -3,6 +3,7 @@ import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import {
+  Button,
   CssBaseline,
   Popper,
   Fade,
@@ -16,6 +17,8 @@ import {
   Toolbar,
   Fab,
   Box,
+  Menu,
+  MenuItem
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -139,21 +142,21 @@ export default function HomePage() {
     setPlacement(newPlacement);
   };
 
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
+  const [openForm, setOpenForm] = React.useState(false);
+
+  const handleCreateClass = () => {
+    // Implement logic for creating the classroom
+    setOpen(false);
   };
 
-  const [openModal, setOpenModal] = React.useState(false);
-  const handleOpenModal = () => setOpenModal(true);
-  const handleCloseModal = () => setOpenModal(false);
+  // const [anchorEl, setAnchorEl] = React.useState(null);
+  // const openMenu = Boolean(anchorEl);
+  // const handleClickAddIcon = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
+  // const handleCloseMenu = () => {
+  //   setAnchorEl(null);
+  // };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -194,6 +197,48 @@ export default function HomePage() {
               aria-label="add">
               <AddIcon />
             </Fab>
+            {/* <AddIcon
+              id="basic-button"
+              aria-controls={openMenu ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={openMenu ? "true" : undefined}
+              onClick={handleClickAddIcon}
+              sx={{
+                m: 1,
+                p: 0.6,
+                backgroundColor: "white",
+                borderRadius: 19,
+                color: "black",
+                fontSize: 38,
+                boxShadow: "10",
+                shadowColor: "#888888",
+                "&:hover": { cursor: "pointer" },
+                "&:active": { backgroundColor: "#bdbdbd" },
+                "&:focus": { backgroundColor: "#bdbdbd" },
+              }}></AddIcon>
+            <Menu
+              id="basic-menu"
+              sx={{
+                // transform: "translate(-7%, -1%)",
+                position: "fixed",
+                // boxShadow: "10",
+                shadowColor: "#888888",
+                top: -5,
+                right: -50,
+              }}
+              anchorEl={anchorEl}
+              open={openMenu}
+              onClose={handleCloseMenu}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}>
+              <MenuItem onClick={() => setOpenForm(true)}>
+                Enroll Classroom
+              </MenuItem>
+              <MenuItem onClick={() => setOpenForm(true)}>
+                Create Classroom
+              </MenuItem>
+            </Menu> */}
             <LinkNext href="/">
               <Typography sx={{ paddingRight: 5 }}>{currentUser} </Typography>
             </LinkNext>
@@ -202,27 +247,6 @@ export default function HomePage() {
             <Typography variant="title" color="inherit" noWrap>
               &nbsp; &nbsp; &nbsp;
             </Typography>
-            <Popper
-              open={openAddCourseButton}
-              anchorEl={anchorEl}
-              placement={placement}
-              sx={{ position: "absolute" }}
-              transition>
-              {({ TransitionProps }) => (
-                <Fade {...TransitionProps} timeout={350}>
-                  <Paper>
-                    <div className="px-4 py-2 hover:bg-gray-100">
-                      Enroll Classroom
-                    </div>
-                    <div
-                      className="px-4 pb-2 hover:bg-gray-100"
-                      onClick={handleOpenModal}>
-                      Create Classroom
-                    </div>
-                  </Paper>
-                </Fade>
-              )}
-            </Popper>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -258,24 +282,47 @@ export default function HomePage() {
             overflow: "auto",
           }}>
           <Toolbar />
-          <CoursesList/>
+          <Popper
+            open={openAddCourseButton}
+            anchorEl={anchorEl}
+            // placement={placement}
+            placement="bottom"
+            sx={{ position: "fixed", boxShadow: "10" }}
+            transition>
+            {({ TransitionProps }) => (
+              <Fade {...TransitionProps} timeout={350}>
+                <Paper>
+                  <div className="px-4 py-2 hover:bg-gray-100">
+                    <Button
+                      sx={{ border: "none" }}
+                      variant="outlined"
+                      // onClick={() => setOpen(true)}
+                    >
+                      Enroll Classroom
+                    </Button>
+                  </div>
+                  <div
+                    className="px-4 pb-2 hover:bg-gray-100"        
+                  >
+                    <Button
+                      sx={{ border: "none", textColor: "black" }}
+                      variant="outlined"
+                      onClick={() => setOpenForm(true)}>
+                      Create Classroom
+                    </Button>
+                  </div>
+                </Paper>
+              </Fade>
+            )}
+          </Popper>
+          <CoursesList />
         </Box>
-        {/* <Modal
-          open={openModal}
-          onClose={handleCloseModal}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description">
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Create Classroom
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
-            <InputAdornment></InputAdornment>
-          </Box>
-        </Modal> */}
-        {/* <FormCreateClass/> */}
+        <FormCreateClass
+          open={openForm}
+          onClose={() => setOpenForm(false)}
+          onCancel={() => setOpenForm(false)}
+          onCreate={handleCreateClass}
+        />
       </Box>
     </ThemeProvider>
   );
