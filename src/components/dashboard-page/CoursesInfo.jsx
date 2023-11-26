@@ -5,7 +5,7 @@ import AssignmentIndOutlinedIcon from "@mui/icons-material/AssignmentIndOutlined
 const CoursesInfo = ({ name, title, teacher }) => {
   return (
     <div className="flex flex-col relative h-80 w-80 border rounded-lg mt-5 ml-5 max-w-full overflow-hidden hover:drop-shadow-lg">
-      <div className="relative w-full h-1/3 bg-green-400">
+      <div className="relative w-full h-1/3 bg-green-600 text-white">
         <div className="pt-3 px-3">
           <div className="hover:underline truncate font-bold text-2xl">
             {name}

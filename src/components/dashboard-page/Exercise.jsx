@@ -1,4 +1,5 @@
 import React from "react";
+import SelectTopic from "./SelectTopic";
 
 const Exercise = () => {
   const teachers = [
@@ -13,27 +14,10 @@ const Exercise = () => {
 
   return (
     <div className="flex flex-col w-6/12 font-medium">
-      <div className="text-green-600 text-4xl p-5 border-b border-green-600">
-        Teacher
+      <div className="">
+        Your Exercise
       </div>
-      <ul>
-        {teachers.map((teacher) => (
-          <li className="border-b p-5" key={teacher.id}>
-            {teacher.name}
-          </li>
-        ))}
-      </ul>
-      <div className="flex flex-row text-green-600 p-5 border-b border-green-600 justify-between">
-        <div className="text-4xl">Student</div>
-        <div className="flex items-end">{students.length} student</div>
-      </div>
-      <ul>
-        {students.map((student) => (
-          <li className="border-b p-5" key={student.id}>
-            {student.name}
-          </li>
-        ))}
-      </ul>
+     <SelectTopic/>
     </div>
   );
 };
