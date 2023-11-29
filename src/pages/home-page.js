@@ -32,7 +32,6 @@ import {
   bottomListItems,
   topListItems,
 } from "../components/dashboard-page/listItems";
-import authService from "@/auth/auth-service";
 import LinkNext from "next/link";
 import AvatarDropdown from "@/components/AvatarDropdown";
 import Layout from "../components/dashboard-page/Layout";
@@ -94,34 +93,36 @@ export default function HomePage() {
   const [open, setOpen] = React.useState(true);
   const [currentUser, setCurrentUser] = React.useState(null);
   React.useEffect(() => {
-    // authCheck();
-    fetchData();
+    authCheck();
+    //fetchData();
   }, [router.isReady]);
 
   const fetchData = async () => {
     if (router.isReady) {
-      console.log(router.query);
-      const userParam = router.query.user;
-      const tokenParam = router.query.token;
-      if (userParam && tokenParam) {
-        const user = JSON.parse(decodeURI(userParam));
-        setCurrentUser(user.displayName);
+      if(!currentUser)
+      {
+        const userParam = router.query.user;
+        const tokenParam = router.query.token;
+        if (userParam && tokenParam) {
+          const user = JSON.parse(decodeURI(userParam));
+          setCurrentUser(user.displayName);
 
-        router.replace("/home-page", undefined, { shallow: true });
+          router.replace("/home-page", undefined, { shallow: true });
       } else setCurrentUser("Chua dang nhap");
+    }
     }
   };
 
-  // const authCheck = async () => {
-  //   const user = AuthService.getCurrentUser();
+  const authCheck = async () => {
+    const user = AuthService.getCurrentUser();
 
-  //   if (isTokenExpired(user.accessToken) || !user.accessToken) {
-  //     router.push({ pathname: "/auth/sign-in" });
-  //   }
-  //   if (user) {
-  //     setCurrentUser(user.user[0].fullname);
-  //   }
-  // };
+    if (isTokenExpired(user.accessToken) || !user.accessToken) {
+      router.push({ pathname: "/auth/sign-in" });
+    }
+    if (user) {
+      setCurrentUser(user.user[0].fullname);
+    }
+  };
 
   const isTokenExpired = (token) => {
     const decodedToken = jwt.decode(token);
