@@ -8,7 +8,7 @@ const AvatarDropdown = ({ user }) => {
 
   const handleLogout = () => {
     authService.logout();
-    router.push({ pathname: "/" });
+    router.push({ pathname: "/auth/sign-in" });
   };
 
   const closeDropdown = () => {

@@ -18,8 +18,9 @@ import axios from "axios";
 import AuthService from "@/auth/auth-service";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
+import withAuth from '@/auth/with-auth';
 
-const HomeAdmin = () => {
+const AdminHomePage = () => {
   const router = useRouter();
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -34,11 +35,11 @@ const HomeAdmin = () => {
 
   const takeUser = () => {
     const user = AuthService.getCurrentUser();
-  
+    console.log(user.accessToken)
     if (isTokenExpired(user.accessToken) || !user.accessToken) {
       router.push({ pathname: "/auth/sign-in" });
     }
-    if (user) {
+    if (user.accessToken) {
       setToken(user.accessToken);
     }
   };
@@ -49,18 +50,19 @@ const HomeAdmin = () => {
   };
 
   const getTeachers = async () => {
-  
+    console.log(token + " Token")
     await axios.get("http://localhost:5000/admin/getTeachers", {
       headers: {
         token: "Bearer " + token,
       },
     }).then((res) => {
+      console.log(JSON.stringify(res) + " RES")
       if (res.data) {
         const teachersData = res.data.map(({ password, image, role, ...rest }) => rest);
         setTeachers(teachersData);
         //setIsLoaded(true);
       } else {
-        setError(true);
+        setTeachers([]);
       }
     });
   };
@@ -76,7 +78,7 @@ const HomeAdmin = () => {
         setStudents(studentsData);
         //setIsLoaded(true);
       } else {
-        setError(true);
+        setTeachers([]);
       }
     });
   };
@@ -87,9 +89,11 @@ const HomeAdmin = () => {
 
   useEffect(() => {
     takeUser();
-    getTeachers();
-    getStudents();
-  }, [isLoaded]);
+    if(token){
+      getTeachers();
+      getStudents();
+    }  
+  }, [token]);
   return (
     <>
       <Sidebar onSideBarItemClick={handleSideBarItemClick} />
@@ -105,4 +109,4 @@ const HomeAdmin = () => {
   );
 }
 
-export default HomeAdmin
+export default withAuth(AdminHomePage, ['admin']);
