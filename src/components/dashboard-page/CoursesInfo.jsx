@@ -13,7 +13,7 @@ const CoursesInfo = ({ name, title, teacher }) => {
           <div className="hover:underline font-medium">{title}</div>
           <div className="hover:underline font-medium">{teacher}</div>
         </div>
-        <div class="absolute w-20 h-20 -bottom-10 left-1/2 transform translate-x-3/4 border bg-white rounded-full"></div>
+        <div className="absolute w-20 h-20 -bottom-10 left-1/2 transform translate-x-3/4 border bg-white rounded-full"></div>
       </div>
       <div className="flex flex-row-reverse absolute bottom-0 w-full h-1/5 border-t items-center">
         <div className="hover:bg-gray-200 rounded-full mr-3 p-2 cursor-pointer">

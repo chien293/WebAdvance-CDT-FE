@@ -17,6 +17,7 @@
     "@mui/lab": "^5.0.0-alpha.153",
     "@mui/material": "^5.14.18",
     "@mui/x-data-grid": "^6.18.2",
+    "@mui/x-data-grid-premium": "^6.18.3",
     "@nextui-org/link": "^2.0.26",
     "@nextui-org/react": "^2.2.5",
     "axios": "^1.6.1",
@@ -36,6 +37,7 @@
     "react-dropdown": "^1.11.0",
     "react-hook-form": "^7.48.2",
     "react-icons": "^4.12.0",
+    "react-virtuoso": "^4.6.2",
     "recharts": "^2.9.3",
     "tailwind-scrollbar-hide": "^1.1.7"
   },

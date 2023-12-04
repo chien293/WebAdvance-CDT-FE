@@ -10,6 +10,7 @@ import { Container, Grid, Paper, Typography } from "@mui/material";
 import Post from "./Post";
 import Exercise from "./Exercise";
 import SettingsContent from "./SettingsContent";
+import GradeBoard from "./GradeBoard";
 
 export default function LabTabs() {
   const [value, setValue] = React.useState("1");
@@ -42,16 +43,24 @@ export default function LabTabs() {
             <Tab label="Exercise" value="2" />
             <Tab label="Participant" value="3" />
             <Tab label="Settings" value="4" />
+            <Tab label="Grade Board" value="5" />
           </TabList>
         </Box>
         <TabPanel value="1">
           <InfoContent />
         </TabPanel>
-        <TabPanel value="2"><Exercise/></TabPanel>
-        <TabPanel value="3">
-          <ParticipantContent/>
+        <TabPanel value="2">
+          <Exercise />
         </TabPanel>
-        <TabPanel value="4"><SettingsContent/></TabPanel>
+        <TabPanel value="3">
+          <ParticipantContent />
+        </TabPanel>
+        <TabPanel value="4">
+          <SettingsContent />
+        </TabPanel>
+        <TabPanel value="5">
+          <GradeBoard />
+        </TabPanel>
       </TabContext>
     </Box>
   );

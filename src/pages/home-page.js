@@ -93,7 +93,7 @@ export default function HomePage() {
   const [open, setOpen] = React.useState(true);
   const [currentUser, setCurrentUser] = React.useState(null);
   React.useEffect(() => {
-    authCheck();
+    // authCheck();
     //fetchData();
   }, [router.isReady]);
 
@@ -113,16 +113,16 @@ export default function HomePage() {
     }
   };
 
-  const authCheck = async () => {
-    const user = AuthService.getCurrentUser();
+  // const authCheck = async () => {
+  //   const user = AuthService.getCurrentUser();
 
-    if (isTokenExpired(user.accessToken) || !user.accessToken) {
-      router.push({ pathname: "/auth/sign-in" });
-    }
-    if (user) {
-      setCurrentUser(user.user[0].fullname);
-    }
-  };
+  //   if (isTokenExpired(user.accessToken) || !user.accessToken) {
+  //     router.push({ pathname: "/auth/sign-in" });
+  //   }
+  //   if (user) {
+  //     setCurrentUser(user.user[0].fullname);
+  //   }
+  // };
 
   const isTokenExpired = (token) => {
     const decodedToken = jwt.decode(token);
