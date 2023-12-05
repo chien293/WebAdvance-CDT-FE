@@ -1,10 +1,9 @@
 import React from "react";
 import Link from "next/link";
 
-const DropdownItem = ({ icon: IconComponent, href, title }) => {
+const DropdownItem = ({href, title }) => {
   return (
     <div class="flex-col block">
-      {/* <IconComponent /> */}
       <Link
         href={href}
         className="block px-4 py-2 font-bold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 text-black dark:text-white">

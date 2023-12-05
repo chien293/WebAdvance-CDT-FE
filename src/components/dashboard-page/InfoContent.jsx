@@ -30,6 +30,7 @@ const InfoContent = () => {
             </div>
           </Paper>
         </Grid>
+        <Post title="Checking examination papers" date="16 thg 11" />
         <Post title="Poll for Upcoming Topics" date="16 thg 11" />
         <Post title="Sample Nest project" date="16 thg 11" />
         <Post title="Final Project Feature list" date="16 thg 11" />

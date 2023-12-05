@@ -12,8 +12,7 @@ import {
 
 
 const Post = ({ title, date, comments}) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();  
 
   return (
     <React.Fragment>
