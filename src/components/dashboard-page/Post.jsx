@@ -10,8 +10,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 
-
-const Post = ({ title, date, comments}) => {
+const Post = ({ postWriter, title, date, comments }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();  
 
   return (
@@ -27,19 +26,20 @@ const Post = ({ title, date, comments}) => {
             </div>
             <div className="ml-5">
               <Typography>
-                Khanh Huy Nguyen posted a new document: {title}{" "}
+                {postWriter} posted a new document: {title}{" "}
               </Typography>
               <Typography color="text.secondary" sx={{ flex: 1 }}>
                 {date}
               </Typography>
             </div>
           </div>
-
-          <div
-            onClick={onOpen}
-            className="px-4 py-2 border-t text-sm hover:underline hover:text-green-600">
-            4 comments about the class
-          </div>
+          {comments.length > 0 && (
+            <div
+              onClick={onOpen}
+              className="px-4 py-2 border-t text-sm hover:underline hover:text-green-600">
+              {comments.length} comments about the class
+            </div>
+          )}
           <Modal size="3xl" isOpen={isOpen} onOpenChange={onOpenChange}>
             <ModalContent>
               {(onClose) => (
@@ -48,19 +48,14 @@ const Post = ({ title, date, comments}) => {
                     Classroom comments
                   </ModalHeader>
                   <ModalBody>
-                    <Comment
-                      userName="John Doe"
-                      date="December 3"
-                      content="This is a sample comment."
-                    />                    
-                    {/* {comments.map((cmt) => (
+                    {comments.map((cmt) => (
                       <Comment
-                        key={key}
+                        key={cmt.id}
                         userName={cmt.userName}
                         date={cmt.date}
                         content={cmt.content}
                       />
-                    ))} */}
+                    ))}
                   </ModalBody>
                 </>
               )}

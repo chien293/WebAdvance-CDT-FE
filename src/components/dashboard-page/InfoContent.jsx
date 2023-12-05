@@ -2,6 +2,72 @@ import { Container, Grid, Paper, Typography } from "@mui/material";
 import Post from "./Post";
 
 const InfoContent = () => {
+  const cmts = [
+    {
+      id: 1,
+      userName: "John Doe",
+      date: "December 3",
+      content: "This is a sample comment.",
+    },
+    {
+      id: 2,
+      userName: "John Doe",
+      date: "December 3",
+      content: "This is a sample comment.",
+    },
+    {
+      id: 3,
+      userName: "John Doe",
+      date: "December 3",
+      content: "This is a sample comment.",
+    },
+  ];
+
+  const posts = [
+    {
+      id: 1,
+      postWriter: "Khanh Huy Nguyen",
+      title: "Poll for Upcoming Topics",
+      date: "Nov 16",
+      comments: cmts,
+    },
+    {
+      id: 2,
+      postWriter: "Khanh Huy Nguyen",
+      title: "Sample Nest project",
+      date: "Nov 16",
+      comments: cmts,
+    },
+    {
+      id: 3,
+      postWriter: "Khanh Huy Nguyen",
+      title: "Final Project Feature list",
+      date: "Nov 16",
+      comments: cmts,
+    },
+    {
+      id: 4,
+      postWriter: "Khanh Huy Nguyen",
+      title: "Midterm project (Deadline Nov 15 10pm)",
+      date: "Nov 13",
+      comments: cmts,
+    },
+    {
+      id: 5,
+      postWriter: "Khanh Huy Nguyen",
+      title: "Simple JWT auth with Nest",
+      date: "Nov 13",
+      comments: cmts,
+    },
+    {
+      id: 6,
+      postWriter: "Khanh Huy Nguyen",
+      title: "Midterm Project",
+      date: "Nov 3",
+      comments: cmts,
+    },
+  ];
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Grid container spacing={3}>
@@ -30,13 +96,16 @@ const InfoContent = () => {
             </div>
           </Paper>
         </Grid>
-        <Post title="Checking examination papers" date="16 thg 11" />
-        <Post title="Poll for Upcoming Topics" date="16 thg 11" />
-        <Post title="Sample Nest project" date="16 thg 11" />
-        <Post title="Final Project Feature list" date="16 thg 11" />
-        <Post title="Midterm project (Deadline Nov 15 10pm)" date="13 thg 11" />
-        <Post title="Simple JWT auth with Nest" date="13thg 11" />
-        <Post title="Midterm Project" date="3 thg 11" />
+        {posts.length > 0 &&
+          posts.map((post) => (
+            <Post
+              key={post.id}
+              postWriter={post.postWriter}
+              title={post.title}
+              date={post.date}
+              comments={post.comments}
+            />
+          ))}
       </Grid>
     </Container>
   );

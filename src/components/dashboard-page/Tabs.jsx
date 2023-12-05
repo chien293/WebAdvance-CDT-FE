@@ -11,6 +11,7 @@ import Post from "./Post";
 import Exercise from "./Exercise";
 import SettingsContent from "./SettingsContent";
 import GradeBoard from "./GradeBoard";
+import ReviewExam from "./ReviewExam";
 
 export default function LabTabs() {
   const [value, setValue] = React.useState("1");
@@ -44,6 +45,7 @@ export default function LabTabs() {
             <Tab label="Participant" value="3" />
             <Tab label="Settings" value="4" />
             <Tab label="Grade Board" value="5" />
+            <Tab label="Checking Examination Papers" value="6" />
           </TabList>
         </Box>
         <TabPanel value="1">
@@ -60,6 +62,9 @@ export default function LabTabs() {
         </TabPanel>
         <TabPanel value="5">
           <GradeBoard />
+        </TabPanel>
+        <TabPanel value="6">
+          <ReviewExam />
         </TabPanel>
       </TabContext>
     </Box>
