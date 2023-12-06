@@ -78,14 +78,14 @@ export const Nav = () => {
         </div> */}
       </NavbarContent>
 
-      {/* <NavbarContent
+      <NavbarContent
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
           <SwitchTheme />
         </NavbarItem>
-      </NavbarContent> */}
+      </NavbarContent>
       {/* <NavbarContent className="basis-1 pl-4" justify="center">
         <div className=" hidden lg:flex gap-6 justify-start ml-2">
           {siteConfig.navItems.map((item) => (

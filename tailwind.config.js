@@ -18,7 +18,7 @@ module.exports = {
       },
     },
   },
-  darkMode: "class",
+  // darkMode: "class",
   plugins: [
     nextui({
       prefix: "nextui", // prefix for themes variables
