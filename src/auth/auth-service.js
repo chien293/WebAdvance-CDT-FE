@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API_URL = process.env.SERVER_URL + "/auth/";
+const API_URL = process.env.SERVER_URL;
 
 class AuthService {
   async login(email, password) {
-    const response = await axios.post(API_URL + "login", {
+    const response = await axios.post(API_URL + "/auth/login", {
       email,
       password,
     });
@@ -15,14 +15,14 @@ class AuthService {
   }
 
   loginGoogle() {
-    window.open(API_URL + "google", "_self");
+    window.open(API_URL + "/auth/google", "_self");
     // if (response.data.accessToken) {
     //   localStorage.setItem("user", JSON.stringify(response.data));
     // }
   }
 
   async loginGoogleSuccess() {
-    return await axios.get(API_URL + "google/success").then((res) => {
+    return await axios.get(API_URL + "/auth/google/success").then((res) => {
       console.log(res.data);
       if (res.data) {
         return res.user;
@@ -35,7 +35,7 @@ class AuthService {
   }
 
   async loginFacebook(email, password) {
-    const response = await axios.post(API_URL + "facebook", {
+    const response = await axios.post(API_URL + "/auth/facebook", {
       email,
       password,
     });
@@ -50,7 +50,7 @@ class AuthService {
   }
 
   async register(email, fullname, password) {
-    return await axios.post(API_URL + "signup", {
+    return await axios.post(API_URL + "/auth/signup", {
       email,
       fullname,
       password,
@@ -58,7 +58,7 @@ class AuthService {
   }
 
   async sentValidateEmail(email) {
-    return axios.get(API_URL + "forgot-password", {
+    return axios.get(API_URL + "/auth/forgot-password", {
       params: {
         email: email,
       },
@@ -74,7 +74,7 @@ class AuthService {
   async sentResetPassword(token, email, password) {
     console.log(token);
     return await axios.post(
-      API_URL + "forgot-password",
+      API_URL + "/auth/forgot-password",
       {
         email,
         password,
