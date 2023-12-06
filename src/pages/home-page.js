@@ -24,7 +24,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Image, { Label } from "@mui/icons-material";
 import AuthService from "@/auth/auth-service";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import {
@@ -100,14 +100,64 @@ function HomePage() {
   const [openForm, setOpenForm] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState(null);
 
-  React.useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      setCurrentUser(user.user[0]);
-    }
-  }, []);
+  
 
-  if (!currentUser) return <Loading />;
+  const takeUser = () => {
+    const user = AuthService.getCurrentUser();
+    console.log(user.accessToken);
+    console.log(user.user);
+    if (isTokenExpired(user.accessToken) || !user.accessToken) {
+      AuthService.logout();
+      router.push({ pathname: "/auth/sign-in" });
+    }
+    if (user.accessToken) {
+      setCurrentUser(user.user[0]);    
+    }
+  };
+
+
+
+  const isTokenExpired = (token) => {
+    const decodedToken = jwt.decode(token);
+    return decodedToken.exp * 1000 < Date.now();
+  };
+
+  React.useEffect(() => {
+    // const user = AuthService.getCurrentUser();
+    // if (user) {
+    //   setCurrentUser(user.user[0]);
+    // }
+    //takeUser();
+
+    const fetchData = () => {
+      if (router.isReady) {
+  
+        console.log(router.query)
+        const userParam = router.query.user;
+        const tokenParam = router.query.token;
+        const tmp = "1-1-1"
+        console.log(userParam + " USER DAY ")
+        if (userParam && tokenParam) {
+          const user = JSON.parse(decodeURI(userParam)); 
+          const userArray = [user];    
+          console.log(user + " USEER!!")
+          setCurrentUser(user.fullname);
+          const userSave = {user: userArray, accessToken: tokenParam}
+          AuthService.saveUser(userSave);
+          router.replace('/home-page', undefined, { shallow: true });
+        } else setCurrentUser("Chua dang nhap")
+  
+      }
+      
+      console.log("Khong co router")
+    };
+
+    fetchData();
+
+    
+  }, [router.isReady]);
+
+  
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -120,6 +170,7 @@ function HomePage() {
   };
 
   return (
+  
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
@@ -206,7 +257,7 @@ function HomePage() {
             </Menu> */}
             <LinkNext href="/">
               <Typography sx={{ paddingRight: 5 }}>
-                {currentUser.fullname}{" "}
+                {currentUser}{" "}
               </Typography>
             </LinkNext>
 
@@ -292,8 +343,9 @@ function HomePage() {
           onCancel={() => setOpenForm(false)}
         />
       </Box>
-    </ThemeProvider>
-  );
+    </ThemeProvider> 
+  ) ;
 }
 
-export default withAuth(HomePage, ["admin", "teacher", "student"]);
+export default HomePage;
+//export default withAuth(HomePage, ["admin", "teacher", "student"]);

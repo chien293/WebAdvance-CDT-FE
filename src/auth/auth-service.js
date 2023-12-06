@@ -87,6 +87,9 @@ class AuthService {
     );
   }
 
+  saveUser(data)  {
+    localStorage.setItem("user", JSON.stringify(data));
+  }
   getCurrentUser() {
     if (typeof window !== "undefined") {
       return localStorage.getItem("user")
