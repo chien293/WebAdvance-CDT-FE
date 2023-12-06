@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@nextui-org/react";
 import DropdownItem from "./DropdownItem";
 import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined";
-
+import authService from "@/auth/auth-service";
+import { useRouter } from "next/navigation";
 const AvatarDropdown = ({ user }) => {
   const [open, setOpen] = useState(false);
-
+  const router = useRouter();
   const handleLogout = () => {
     authService.logout();
     router.push({ pathname: "/auth/sign-in" });
@@ -44,7 +45,8 @@ const AvatarDropdown = ({ user }) => {
       <div
         onClick={() => {
           setOpen(!open);
-        }}>
+        }}
+      >
         <img
           className="relative inline-block h-12 w-12 rounded-full border-2 border-white object-cover object-center hover:z-10 focus:z-10 cursor-pointer"
           src="https://cdnphoto.dantri.com.vn/COm1qksauO2sqAC-gVVI2DdH_1I=/thumb_w/1020/2023/01/24/khoa-hocdocx-1674520013659.png"
@@ -72,8 +74,10 @@ const AvatarDropdown = ({ user }) => {
               href="/profile"
               title="Edit Profile"
             />
-          </ul>        
-          <Button className="w-full" onClick={handleLogout}>Logout</Button>
+          </ul>
+          <Button className="w-full" onClick={handleLogout}>
+            Logout
+          </Button>
         </div>
       )}
     </div>

@@ -2,21 +2,22 @@ import React from "react";
 import Link from "next/link";
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import useRouter from "next/router";
+import { useRouter } from "next/navigation";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from 'react';
-import { FaEye, FaEyeSlash, FaFacebook, FaGoogle } from 'react-icons/fa';
+import { useState } from "react";
+import { FaEye, FaEyeSlash, FaFacebook, FaGoogle } from "react-icons/fa";
 import authService from "@/auth/auth-service";
+import withAuth from "@/auth/with-auth";
 
 const SignInComponent = () => {
   const { register, handleSubmit } = useForm();
-  const [errorMessage, setErrorMessage] = useState('');
-  const router = useRouter;
+  const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter();
 
   const onSubmit = async (d) => {
     const { email, password } = d;
 
-    const URL = "http://localhost:5000/auth";
+    const URL = process.env.SERVER_URL + "/auth";
     authService.login(email, password).then((data) => {
       if (data) {
         if (data == "Wrong password" || data == "No user found") {
@@ -26,35 +27,33 @@ const SignInComponent = () => {
             router.push({
               pathname: "/auth/not-verify",
             });
-          }
-          else {
-            if(data.user[0].role == "admin"){
+          } else {
+            if (data.user[0].role == "admin") {
               router.push({
                 pathname: "/admin/home",
               });
-            }else if(data.user[0].role == "teacher"){
+            } else if (data.user[0].role == "teacher") {
               router.push({
                 pathname: "/teacher/home",
               });
-            }else if(data.user[0].role == "student"){
+            } else if (data.user[0].role == "student") {
               router.push({
                 pathname: "/home-page",
               });
-            }           
+            }
           }
         }
-
       }
     });
   };
 
   const handleFacebookLogin = (d) => {
-    window.open("http://localhost:5000/auth/facebook", "_self");
-  }
+    window.open(URL + "/facebook", "_self");
+  };
   const handleGoogleLogin = (d) => {
-    console.log("GOOGLE CLICK")
-    authService.loginGoogle()
-  }
+    console.log("GOOGLE CLICK");
+    authService.loginGoogle();
+  };
 
   return (
     <div>
@@ -125,17 +124,25 @@ const SignInComponent = () => {
                       </p>
                     </div>
                     <div className="divider d-flex align-items-center my-4">
-                      <p className="text-center fw-semi-bold mx-3 mb-0 text-muted">OR</p>
+                      <p className="text-center fw-semi-bold mx-3 mb-0 text-muted">
+                        OR
+                      </p>
                     </div>
                     <div className="text-center flex items-center justify-center">
-                      <span className="mr-3">
-                        Sign in with
-                      </span>
+                      <span className="mr-3">Sign in with</span>
                       <span className="mx-3">
-                        <FaFacebook size={40} color="#3b5998" onClick={handleFacebookLogin}/>
+                        <FaFacebook
+                          size={40}
+                          color="#3b5998"
+                          onClick={handleFacebookLogin}
+                        />
                       </span>
                       <span>
-                        <FaGoogle size={40} color="#dd4b39" onClick={handleGoogleLogin}/>
+                        <FaGoogle
+                          size={40}
+                          color="#dd4b39"
+                          onClick={handleGoogleLogin}
+                        />
                       </span>
                     </div>
                   </div>

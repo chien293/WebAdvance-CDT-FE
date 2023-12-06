@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -10,21 +10,24 @@ import {
   Input,
   Kbd,
 } from "@nextui-org/react";
-import {
-  TwitterIcon,
-  DiscordIcon,
-  GithubIcon,
-  AcmeLogo,
-  SearchIcon,
-} from "./Icons.jsx";
+import { Logo } from "./Icons.jsx";
 import NextLink from "next/link";
 import LinkNext from "next/link";
 import { link as linkStyles } from "@nextui-org/theme";
 import { siteConfig } from "../../config/site.js";
 import { SwitchTheme } from "./switch-theme/SwitchTheme.jsx";
 import clsx from "clsx";
-
+import { User } from "@nextui-org/react";
+import { set } from "react-hook-form";
+import authService from "@/auth/auth-service.js";
 export const Nav = () => {
+  const [currentUser, setCurrentUser] = React.useState(null);
+  useEffect(() => {
+    const user = authService.getCurrentUser();
+    if (user) {
+      setCurrentUser(user.user[0]);
+    }
+  }, []);
   return (
     <Navbar
       isBordered
@@ -53,7 +56,7 @@ export const Nav = () => {
             className="flex justify-start items-center gap-1 no-underline"
             href="/"
           >
-            <AcmeLogo />
+            <Logo />
             <p className="font-bold text-inherit mb-0">CDT</p>
           </NextLink>
         </NavbarBrand>
@@ -83,8 +86,7 @@ export const Nav = () => {
           <SwitchTheme />
         </NavbarItem>
       </NavbarContent> */}
-      <NavbarContent className="basis-1 pl-4" justify="center">
-        {/* <NavbarItem className="hidden lg:flex">{searchInput}</NavbarItem> */}
+      {/* <NavbarContent className="basis-1 pl-4" justify="center">
         <div className=" hidden lg:flex gap-6 justify-start ml-2">
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href}>
@@ -101,23 +103,39 @@ export const Nav = () => {
             </NavbarItem>
           ))}
         </div>
-      </NavbarContent>
+      </NavbarContent> */}
       <NavbarContent className="basis-1 pl-4" justify="end">
-        <NavbarItem className="md:flex">
-          <LinkNext href="/auth/sign-in" className="text-base text-default-500">
-            Login
-          </LinkNext>
-        </NavbarItem>
-        <NavbarItem>
-          <Button
-            className="text-base text-default-500"
-            as={LinkNext}
-            href="/auth/sign-up"
-            variant="flat"
-          >
-            Sign Up
-          </Button>
-        </NavbarItem>
+        {!currentUser ? (
+          <>
+            <NavbarItem className="md:flex">
+              <LinkNext
+                href="/auth/sign-in"
+                className="text-base text-default-500"
+              >
+                Login
+              </LinkNext>
+            </NavbarItem>
+            <NavbarItem>
+              <Button
+                className="text-base text-default-500"
+                as={LinkNext}
+                href="/auth/sign-up"
+                variant="flat"
+              >
+                Sign Up
+              </Button>
+            </NavbarItem>
+          </>
+        ) : (
+          <NavbarItem>
+            <User
+              name={currentUser.fullname}
+              avatarProps={{
+                src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+              }}
+            />
+          </NavbarItem>
+        )}
       </NavbarContent>
     </Navbar>
   );

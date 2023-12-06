@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/auth/";
+const API_URL = process.env.SERVER_URL + "/auth/";
 
 class AuthService {
   async login(email, password) {
@@ -15,20 +15,19 @@ class AuthService {
   }
 
   loginGoogle() {
-    window.open("http://localhost:5000/auth/google", "_self");
+    window.open(API_URL + "google", "_self");
     // if (response.data.accessToken) {
     //   localStorage.setItem("user", JSON.stringify(response.data));
     // }
   }
 
   async loginGoogleSuccess() {
-    return await axios.get(API_URL + "google/success").then((res) =>{
-      console.log(res.data)
-      if(res.data){
-        
+    return await axios.get(API_URL + "google/success").then((res) => {
+      console.log(res.data);
+      if (res.data) {
         return res.user;
       }
-    });;
+    });
 
     // if (response.data.accessToken) {
     //   localStorage.setItem("user", JSON.stringify(response.data));
@@ -73,12 +72,12 @@ class AuthService {
   // }
 
   async sentResetPassword(token, email, password) {
-    console.log(token)
+    console.log(token);
     return await axios.post(
       API_URL + "forgot-password",
       {
         email,
-        password
+        password,
       },
       {
         headers: {
@@ -97,6 +96,16 @@ class AuthService {
       console.log("WINDOW NULL");
     }
     //return JSON.parse(localStorage.getItem('user'));
+  }
+
+  getAccessToken() {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("user")
+        ? JSON.parse(localStorage.getItem("user")).accessToken
+        : null;
+    } else {
+      console.log("ACCESS TOKEN NULL");
+    }
   }
 }
 

@@ -16,7 +16,7 @@
     "@mui/icons-material": "^5.14.18",
     "@mui/lab": "^5.0.0-alpha.153",
     "@mui/material": "^5.14.18",
-    "@mui/x-data-grid": "^6.18.2",
+    "@mui/x-data-grid": "^6.18.3",
     "@mui/x-data-grid-premium": "^6.18.3",
     "@nextui-org/link": "^2.0.26",
     "@nextui-org/react": "^2.2.5",

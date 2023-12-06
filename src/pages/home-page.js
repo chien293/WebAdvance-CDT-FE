@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -18,13 +18,13 @@ import {
   Fab,
   Box,
   Menu,
-  MenuItem
+  MenuItem,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Image, { Label } from "@mui/icons-material";
 import AuthService from "@/auth/auth-service";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import {
@@ -39,6 +39,9 @@ import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 import AddIcon from "@mui/icons-material/Add";
 import CoursesList from "@/components/dashboard-page/CoursesList";
 import FormCreateClass from "@/components/dashboard-page/FormCreateClass";
+import withAuth from "@/auth/with-auth";
+import { set } from "react-hook-form";
+import Loading from "@/components/Loading";
 
 const drawerWidth = 240;
 
@@ -88,76 +91,33 @@ const Drawer = styled(MuiDrawer, {
 
 const defaultTheme = createTheme();
 
-export default function HomePage() {
+function HomePage() {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [openAddCourseButton, setOpenAddCourseButton] = React.useState(false);
+  const [placement, setPlacement] = React.useState();
+  const [openForm, setOpenForm] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState(null);
+
   React.useEffect(() => {
-    // authCheck();
-    //fetchData();
-  }, [router.isReady]);
-
-  const fetchData = async () => {
-    if (router.isReady) {
-      if(!currentUser)
-      {
-        const userParam = router.query.user;
-        const tokenParam = router.query.token;
-        if (userParam && tokenParam) {
-          const user = JSON.parse(decodeURI(userParam));
-          setCurrentUser(user.displayName);
-
-          router.replace("/home-page", undefined, { shallow: true });
-      } else setCurrentUser("Chua dang nhap");
+    const user = AuthService.getCurrentUser();
+    if (user) {
+      setCurrentUser(user.user[0]);
     }
-    }
-  };
+  }, []);
 
-  // const authCheck = async () => {
-  //   const user = AuthService.getCurrentUser();
-
-  //   if (isTokenExpired(user.accessToken) || !user.accessToken) {
-  //     router.push({ pathname: "/auth/sign-in" });
-  //   }
-  //   if (user) {
-  //     setCurrentUser(user.user[0].fullname);
-  //   }
-  // };
-
-  const isTokenExpired = (token) => {
-    const decodedToken = jwt.decode(token);
-    return decodedToken.exp * 1000 < Date.now();
-  };
+  if (!currentUser) return <Loading />;
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [openAddCourseButton, setOpenAddCourseButton] = React.useState(false);
-  const [placement, setPlacement] = React.useState();
 
   const handleClick = (newPlacement) => (event) => {
     setAnchorEl(event.currentTarget);
     setOpenAddCourseButton((prev) => placement !== newPlacement || !prev);
     setPlacement(newPlacement);
   };
-
-  const [openForm, setOpenForm] = React.useState(false);
-
-  const handleCreateClass = () => {
-    // Implement logic for creating the classroom
-    setOpen(false);
-  };
-
-  // const [anchorEl, setAnchorEl] = React.useState(null);
-  // const openMenu = Boolean(anchorEl);
-  // const handleClickAddIcon = (event) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
-  // const handleCloseMenu = () => {
-  //   setAnchorEl(null);
-  // };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -167,7 +127,8 @@ export default function HomePage() {
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
-            }}>
+            }}
+          >
             <IconButton
               edge="start"
               color="inherit"
@@ -176,7 +137,8 @@ export default function HomePage() {
               sx={{
                 marginRight: "36px",
                 ...(open && { display: "none" }),
-              }}>
+              }}
+            >
               <MenuIcon />
             </IconButton>
             <Typography
@@ -184,7 +146,8 @@ export default function HomePage() {
               variant="h6"
               color="inherit"
               noWrap
-              sx={{ flexGrow: 1 }}>
+              sx={{ flexGrow: 1 }}
+            >
               Classroom
             </Typography>
             <Fab
@@ -195,7 +158,8 @@ export default function HomePage() {
               }}
               size="small"
               // color="primary"
-              aria-label="add">
+              aria-label="add"
+            >
               <AddIcon />
             </Fab>
             {/* <AddIcon
@@ -241,7 +205,9 @@ export default function HomePage() {
               </MenuItem>
             </Menu> */}
             <LinkNext href="/">
-              <Typography sx={{ paddingRight: 5 }}>{currentUser} </Typography>
+              <Typography sx={{ paddingRight: 5 }}>
+                {currentUser.fullname}{" "}
+              </Typography>
             </LinkNext>
 
             <AvatarDropdown></AvatarDropdown>
@@ -257,7 +223,8 @@ export default function HomePage() {
               alignItems: "center",
               justifyContent: "flex-end",
               px: [1],
-            }}>
+            }}
+          >
             <IconButton onClick={toggleDrawer}>
               <ChevronLeftIcon />
             </IconButton>
@@ -281,7 +248,8 @@ export default function HomePage() {
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",
-          }}>
+          }}
+        >
           <Toolbar />
           <Popper
             open={openAddCourseButton}
@@ -289,7 +257,8 @@ export default function HomePage() {
             // placement={placement}
             placement="bottom"
             sx={{ position: "fixed", boxShadow: "10" }}
-            transition>
+            transition
+          >
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
                 <Paper>
@@ -302,13 +271,12 @@ export default function HomePage() {
                       Enroll Classroom
                     </Button>
                   </div>
-                  <div
-                    className="px-4 pb-2 hover:bg-gray-100"        
-                  >
+                  <div className="px-4 pb-2 hover:bg-gray-100">
                     <Button
                       sx={{ border: "none", textColor: "black" }}
                       variant="outlined"
-                      onClick={() => setOpenForm(true)}>
+                      onClick={() => setOpenForm(true)}
+                    >
                       Create Classroom
                     </Button>
                   </div>
@@ -322,9 +290,10 @@ export default function HomePage() {
           open={openForm}
           onClose={() => setOpenForm(false)}
           onCancel={() => setOpenForm(false)}
-          onCreate={handleCreateClass}
         />
       </Box>
     </ThemeProvider>
   );
 }
+
+export default withAuth(HomePage, ["admin", "teacher", "student"]);

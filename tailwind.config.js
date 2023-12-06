@@ -14,10 +14,24 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        my: "url('/background.svg')",
+        landing_page: "url('/background.svg')",
       },
     },
   },
   darkMode: "class",
-  plugins: [nextui()],
+  plugins: [
+    nextui({
+      themes: {
+        light: {
+          colors: {
+            primary: {
+              DEFAULT: "#6FEE8D",
+              foreground: "#ffffff",
+            },
+            focus: "#6FEE8D",
+          },
+        },
+      },
+    }),
+  ],
 };

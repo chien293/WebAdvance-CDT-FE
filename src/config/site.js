@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: "Next.js + NextUI",
+  name: "Google Classroom Clone",
   description: "Make beautiful websites regardless of your design experience.",
   navItems: [
     {
