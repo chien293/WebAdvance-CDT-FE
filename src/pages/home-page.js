@@ -100,64 +100,41 @@ function HomePage() {
   const [openForm, setOpenForm] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState(null);
 
-  
-
-  const takeUser = () => {
-    const user = AuthService.getCurrentUser();
-    console.log(user.accessToken);
-    console.log(user.user);
-    if (isTokenExpired(user.accessToken) || !user.accessToken) {
-      AuthService.logout();
-      router.push({ pathname: "/auth/sign-in" });
-    }
-    if (user.accessToken) {
-      setCurrentUser(user.user[0]);    
-    }
-  };
-
-
-
   const isTokenExpired = (token) => {
     const decodedToken = jwt.decode(token);
     return decodedToken.exp * 1000 < Date.now();
   };
 
   React.useEffect(() => {
-    // const user = AuthService.getCurrentUser();
-    // if (user) {
-    //   setCurrentUser(user.user[0]);
-    // }
     //takeUser();
 
     const fetchData = () => {
       if (router.isReady) {
-  
-        console.log(router.query)
+        console.log(router.query);
         const userParam = router.query.user;
         const tokenParam = router.query.token;
-        const tmp = "1-1-1"
-        console.log(userParam + " USER DAY ")
+        const tmp = "1-1-1";
+        console.log(userParam + " USER DAY ");
         if (userParam && tokenParam) {
-          const user = JSON.parse(decodeURI(userParam)); 
-          const userArray = [user];    
-          console.log(user + " USEER!!")
+          const user = JSON.parse(decodeURI(userParam));
+          const userArray = [user];
+          console.log(user + " USEER!!");
           setCurrentUser(user.fullname);
-          const userSave = {user: userArray, accessToken: tokenParam}
+          const userSave = { user: userArray, accessToken: tokenParam };
           AuthService.saveUser(userSave);
-          router.replace('/home-page', undefined, { shallow: true });
-        } else setCurrentUser("Chua dang nhap")
-  
+          router.replace("/home-page", undefined, { shallow: true });
+        } else setCurrentUser("Chua dang nhap");
       }
-      
-      console.log("Khong co router")
+      console.log("Khong co router");
     };
-
-    fetchData();
-
-    
+    const user = AuthService.getCurrentUser();
+    if (user) {
+      setCurrentUser(user.user[0].fullname);
+    } else {
+      fetchData();
+      console.log("3   " + user);
+    }
   }, [router.isReady]);
-
-  
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -170,7 +147,6 @@ function HomePage() {
   };
 
   return (
-  
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
@@ -256,9 +232,7 @@ function HomePage() {
               </MenuItem>
             </Menu> */}
             <LinkNext href="/">
-              <Typography sx={{ paddingRight: 5 }}>
-                {currentUser}{" "}
-              </Typography>
+              <Typography sx={{ paddingRight: 5 }}>{currentUser} </Typography>
             </LinkNext>
 
             <AvatarDropdown></AvatarDropdown>
@@ -343,8 +317,8 @@ function HomePage() {
           onCancel={() => setOpenForm(false)}
         />
       </Box>
-    </ThemeProvider> 
-  ) ;
+    </ThemeProvider>
+  );
 }
 
 export default HomePage;

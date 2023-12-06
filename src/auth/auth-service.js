@@ -58,18 +58,20 @@ class AuthService {
   }
 
   async sentValidateEmail(email) {
-    return axios.get(API_URL + "/auth/forgot-password", {
+    return axios.get(API_URL + "/auth/verifyAccount", {
       params: {
         email: email,
       },
     });
   }
 
-  // sentForgotPassword(email) {
-  //   axios.get(API_URL + "forgot-assword", {
-  //     email
-  //   });
-  // }
+  async sentForgotPassword(email) {
+    return axios.get(API_URL + "/auth/forgot-password", {
+      params: {
+        email: email,
+      },
+    });
+  }
 
   async sentResetPassword(token, email, password) {
     console.log(token);
@@ -87,7 +89,7 @@ class AuthService {
     );
   }
 
-  saveUser(data)  {
+  saveUser(data) {
     localStorage.setItem("user", JSON.stringify(data));
   }
   getCurrentUser() {
