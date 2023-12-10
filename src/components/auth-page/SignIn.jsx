@@ -13,11 +13,11 @@ const SignInComponent = () => {
   const { register, handleSubmit } = useForm();
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
-
+  const URL = process.env.SERVER_URL + "/auth";
   const onSubmit = async (d) => {
     const { email, password } = d;
 
-    const URL = process.env.SERVER_URL + "/auth";
+    
     authService.login(email, password).then((data) => {
       if (data) {
         if (data == "Wrong password" || data == "No user found") {
