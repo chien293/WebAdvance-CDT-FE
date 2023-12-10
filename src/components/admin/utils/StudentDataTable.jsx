@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { GridToolbarContainer, GridToolbarExport, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material';
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
+import { FaBan, FaCheck } from "react-icons/fa";
 
 const StudentDataTable = ({ students }) => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -12,8 +13,17 @@ const StudentDataTable = ({ students }) => {
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'email', headerName: 'Email', width: 200 },
     { field: 'fullname', headerName: 'Họ tên', width: 150 },  
-    { field: 'active', headerName: 'Xác thực', width: 150 },
-    { field: 'verified', headerName: 'Active', width: 100 },
+    {
+      field: 'active',
+      headerName: 'Active',
+      width: 150,
+      renderCell: (params) => (
+        <Button onClick={() => handleClickOpenActive(params.row)}>
+          {params.row.active ? <FaCheck /> : <FaBan />}
+        </Button>
+      ),
+    },
+    { field: 'verified', headerName: 'Xác thực', width: 100 },
     {
       field: 'edit',
       headerName: 'Chỉnh sửa',

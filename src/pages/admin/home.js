@@ -40,6 +40,7 @@ const AdminHomePage = () => {
   const [students, setStudents] = useState([]);
   const [classes, setClasses] = useState([]);
   const [token, setToken] = useState("");
+  
   const API_URL = process.env.SERVER_URL;
   const takeUser = () => {
     const user = AuthService.getCurrentUser();

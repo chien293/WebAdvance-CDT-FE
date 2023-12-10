@@ -7,17 +7,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
 import { FaEye, FaEyeSlash, FaFacebook, FaGoogle } from "react-icons/fa";
 import authService from "@/auth/auth-service";
-import withAuth from "@/auth/with-auth";
 
 const SignInComponent = () => {
   const { register, handleSubmit } = useForm();
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
   const URL = process.env.SERVER_URL + "/auth";
+  
   const onSubmit = async (d) => {
     const { email, password } = d;
 
-    
     authService.login(email, password).then((data) => {
       if (data) {
         if (data == "Wrong password" || data == "No user found") {
@@ -51,7 +50,6 @@ const SignInComponent = () => {
     window.open(URL + "/facebook", "_self");
   };
   const handleGoogleLogin = (d) => {
-    console.log("GOOGLE CLICK");
     authService.loginGoogle();
   };
 
