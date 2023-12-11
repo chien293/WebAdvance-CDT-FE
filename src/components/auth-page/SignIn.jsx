@@ -7,10 +7,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useState } from "react";
 import { FaEye, FaEyeSlash, FaFacebook, FaGoogle } from "react-icons/fa";
 import authService from "@/auth/auth-service";
+import BanAccountComponent from "../admin/BanAccount";
 
 const SignInComponent = () => {
   const { register, handleSubmit } = useForm();
   const [errorMessage, setErrorMessage] = useState("");
+  const [banState, setBanState] = useState(false);
   const router = useRouter();
   const URL = process.env.SERVER_URL + "/auth";
   
@@ -26,7 +28,12 @@ const SignInComponent = () => {
             router.push({
               pathname: "/auth/not-verify",
             });
-          } else {
+          } else if(data == "Your account has been banned")
+          {
+            console.log(data)
+            setBanState(true);
+          }
+          else {
             if (data.user[0].role == "admin") {
               router.push({
                 pathname: "/admin/home",
@@ -55,7 +62,7 @@ const SignInComponent = () => {
 
   return (
     <div>
-      <Container>
+      {banState ? <BanAccountComponent/> : <Container>
         <Row className="vh-100 d-flex justify-content-center align-items-center">
           <Col md={8} lg={6} xs={12}>
             <Card className="shadow">
@@ -149,7 +156,8 @@ const SignInComponent = () => {
             </Card>
           </Col>
         </Row>
-      </Container>
+      </Container>}
+      
     </div>
   );
 };

@@ -44,7 +44,7 @@ const AdminHomePage = () => {
   const API_URL = process.env.SERVER_URL;
   const takeUser = () => {
     const user = AuthService.getCurrentUser();
-    console.log(user.accessToken);
+
     if (isTokenExpired(user.accessToken) || !user.accessToken) {
       router.push({ pathname: "/auth/sign-in" });
     }
@@ -59,7 +59,7 @@ const AdminHomePage = () => {
   };
 
   const getTeachers = async () => {
-    console.log(token + " Token");
+    
     await axios
       .get(API_URL + "/admin/getTeachers", {
         headers: {
@@ -67,7 +67,7 @@ const AdminHomePage = () => {
         },
       })
       .then((res) => {
-        console.log(JSON.stringify(res) + " RES");
+      
         if (res.data) {
           const teachersData = res.data.map(
             ({ password, image, role, ...rest }) => rest
@@ -117,9 +117,9 @@ const AdminHomePage = () => {
       <Container>
         <h1>{selectedSideBarItem === "teacher" ? "Teacher" : "Student"}</h1>
         {selectedSideBarItem === "teacher" ? (
-          <TeacherDataTable teachers={teachers} />
+          <TeacherDataTable teachers={teachers} token={token} />
         ) : (
-          <StudentDataTable students={students} />
+          <StudentDataTable students={students} token={token}/>
         )}
       </Container>
     </>

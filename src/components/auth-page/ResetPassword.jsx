@@ -15,15 +15,13 @@ const ResetPassword = ({ token, email }) => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState("");
     const [checkPass, setCheckPass] = useState(null);
-    console.log(email)
+   
     const onSubmit = async (d) => {
         const { password} = d;
 
         if (password != confirmPassword) {
             setCheckPass(("Xác thực mật khẩu không trùng khớp"));
-        } else {
-            console.log("DANG DOI")
-            console.log(email)
+        } else {     
             await authService.sentResetPassword(token, email, password).then(res => {
                 if (res.data == "Reset password success") {
                     setCommit(true)

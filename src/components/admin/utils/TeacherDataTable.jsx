@@ -1,27 +1,47 @@
 // components/TeacherDataTable.js
 import React, { useState } from 'react';
-import { GridToolbarContainer, GridToolbarExport, Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText , Button, TextField } from '@mui/material';
+import {
+  GridToolbarContainer, GridToolbarExport, Dialog,
+  DialogTitle, DialogContent, DialogActions, DialogContentText,
+  Button, TextField, CircularProgress
+} from '@mui/material';
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import { FaBan, FaCheck } from "react-icons/fa";
+import axios from 'axios';
 
-const TeacherDataTable = ({ teachers }) => {
+const TeacherDataTable = ({ teachers, token }) => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [activeDialog, setActiveDialog] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState(null);
+  const [loadingActive, setLoading] = useState(false);
+  const [teachersData, setTeachers] = useState(null);
+  
+  const API_URL = process.env.SERVER_URL;
+
+  React.useEffect(() => {
+    if (teachers) {
+      setTeachers(teachers);
+    }
+  }, [teachers])
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'email', headerName: 'Email', width: 200 },
-    { field: 'fullname', headerName: 'Họ tên', width: 150 },  
+    { field: 'fullname', headerName: 'Họ tên', width: 150 },
     {
       field: 'active',
       headerName: 'Active',
       width: 150,
       renderCell: (params) => (
-        <Button onClick={() => handleClickOpenActive(params.row)}>
-          {params.row.active ? <FaCheck /> : <FaBan />}
-        </Button>
+        <div>
+          <Button onClick={() => handleClickOpenActive(params.row)}>
+            {params.row.active == "1" ? <FaCheck /> : <FaBan />}
+          </Button>
+          {loadingActive && selectedTeacher && selectedTeacher.id === params.row.id && (
+            <CircularProgress size={24} />
+          )}
+        </div>
       ),
     },
     { field: 'verified', headerName: 'Xác thực', width: 100 },
@@ -65,17 +85,38 @@ const TeacherDataTable = ({ teachers }) => {
     setActiveDialog(false);
   };
 
-  const handleActiveSubmit = () => {
-
-    // Logic for submitting edited information
+  const handleActiveSubmit = async () => {
     handleCloseActive();
+    setLoading(true);
+    const newActiveValue = selectedTeacher.active == "1" ? "0" : "1";
+    const result = await axios.post(
+      API_URL + "/admin/banUsers",
+      {
+        user: {
+          ...selectedTeacher,
+          active: newActiveValue,
+        },
+      },
+      {
+        headers: {
+          token: "Bearer " + token,
+        },
+      }
+    );
+    setTeachers((prevTeachers) =>
+      prevTeachers.map((teacher) =>
+        teacher.id === selectedTeacher.id ? { ...teacher, active: newActiveValue } : teacher
+      )
+    );
+    // Logic for submitting edited information
+    setLoading(false);
   };
 
   return (
     <div className="dataTable">
-      {teachers && teachers.length > 0 ? (
+      {teachersData && teachersData.length > 0 ? (
         <DataGrid
-          rows={teachers}
+          rows={teachersData}
           columns={columns}
           pageSize={5}
           pagination

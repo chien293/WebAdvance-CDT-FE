@@ -11,8 +11,18 @@ import PersonIcon from '@mui/icons-material/Person';
 import SchoolIcon from '@mui/icons-material/School';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import ClassIcon from '@mui/icons-material/Class';
+import Link from 'next/link';
+import authService from '@/auth/auth-service';
+import { useRouter } from "next/navigation";
 
-const Sidebar = ({onSideBarItemClick }) => {
+const Sidebar = ({ onSideBarItemClick }) => {
+  const router = useRouter();
+  const handleSignOut = () => {
+    authService.logout();
+    router.push({
+      pathname: "/auth/sign-in",
+    });
+  }
   return (
     <Drawer variant="permanent" anchor="left">
       <div>
@@ -34,7 +44,7 @@ const Sidebar = ({onSideBarItemClick }) => {
             <ListItemIcon>
               <SchoolIcon />
             </ListItemIcon>
-            <ListItemText primary="Học sinh" /> 
+            <ListItemText primary="Học sinh" />
           </ListItem>
           <ListItem ButtonBase onClick={() => onSideBarItemClick('class')}>
             <ListItemIcon>
@@ -44,14 +54,17 @@ const Sidebar = ({onSideBarItemClick }) => {
           </ListItem>
         </List>
 
+
         <Button
           variant="outlined"
           color="primary"
           startIcon={<LogoutIcon />}
           style={{ marginTop: 'auto', marginLeft: '16px' }}
+          onClick={handleSignOut}
         >
           Sign Out
         </Button>
+
       </div>
     </Drawer>
   );

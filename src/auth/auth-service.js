@@ -74,7 +74,6 @@ class AuthService {
   }
 
   async sentResetPassword(token, email, password) {
-    console.log(token);
     return await axios.post(
       API_URL + "/auth/forgot-password",
       {
