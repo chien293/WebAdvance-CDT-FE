@@ -30,7 +30,6 @@ const SignInComponent = () => {
             });
           } else if(data == "Your account has been banned")
           {
-            console.log(data)
             setBanState(true);
           }
           else {
