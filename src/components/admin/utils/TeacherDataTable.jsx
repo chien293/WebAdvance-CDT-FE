@@ -98,7 +98,7 @@ const TeacherDataTable = ({ teachers, token }) => {
     
     setTeachers((prevTeachers) =>
       prevTeachers.map((teacher) =>
-        teacher.id === selectedTeacher.id ? 
+        teacher.id == selectedTeacher.id ? 
         { ...teacher, fullname: editedFullname, birthday: dayjs(editedBirthday).format('DD-MM-YYYY') } : teacher
       )
     );
@@ -143,10 +143,10 @@ const TeacherDataTable = ({ teachers, token }) => {
     handleCloseActive();
   };
 
-
   return (
     <div className="dataTable">
       {teachersData && teachersData.length > 0 ? (
+        <div style={{ height: 400, width: '100%' }}>
         <DataGrid
           rows={teachersData}
           columns={columns}
@@ -154,14 +154,14 @@ const TeacherDataTable = ({ teachers, token }) => {
             ...teachersData.initialState,
             pagination: { paginationModel: { pageSize: 10 } },
           }}
-          rowsPerPageOptions={[5, 10, 20]}        
+           
           slots={{
             Toolbar: CustomToolbar,
           }}
-          onSelectionModelChange={(newSelection) => {
-            console.log(newSelection);
-          }}
+          pageSizeOptions={[5]}
+        
         />
+        </div>
       ) : (
         <p>No teachers available.</p>
       )}

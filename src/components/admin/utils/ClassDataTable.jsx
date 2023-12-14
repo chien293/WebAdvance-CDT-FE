@@ -1,16 +1,22 @@
 // components/TeacherDataTable.js
 import React, { useState, useEffect } from 'react';
-import { GridToolbarContainer, GridToolbarExport, Dialog, 
-  DialogTitle, DialogContent, DialogActions, DialogContentText, Button, TextField, Box } from '@mui/material';
+import {
+  GridToolbarContainer, GridToolbarExport, Dialog,
+  DialogTitle, DialogContent, DialogActions, DialogContentText, Button, TextField, Box
+} from '@mui/material';
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import { FaBan, FaCheck } from "react-icons/fa";
+import axios from 'axios';
 
-const ClassDataTable = ({  classes, teachers, token }) => {
+const ClassDataTable = ({ classes, teachers, token }) => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedClass, setSelectedClass] = useState(null);
   const [classData, setClassData] = useState([]);
   const [activeDialog, setActiveDialog] = useState(false);
+  const [pageSize, setPageSize] = useState(5);
+
+  const API_URL = process.env.SERVER_URL;
 
   useEffect(() => {
     if (classes.length > 0 && teachers.length > 0) {
@@ -32,24 +38,24 @@ const ClassDataTable = ({  classes, teachers, token }) => {
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'name', headerName: 'Class Name', width: 200 },
-    { field: 'createdBy', headerName: 'Created By', width: 150 },  
-    { field: 'title', headerName: 'Title', width: 150 },  
-    { field: 'topic', headerName: 'Topic', width: 150 },  
-    { field: 'room', headerName: 'Room', width: 150 },  
+    { field: 'createdBy', headerName: 'Created By', width: 150 },
+    { field: 'title', headerName: 'Title', width: 150 },
+    { field: 'topic', headerName: 'Topic', width: 150 },
+    { field: 'room', headerName: 'Room', width: 150 },
     {
       field: 'active',
       headerName: 'Active',
       width: 150,
       renderCell: (params) => (
         <Button onClick={() => handleClickOpenActive(params.row)}>
-          {params.row.active ? <FaCheck /> : <FaBan />}
+          {params.row.active == "1" ? <FaCheck /> : <FaBan />}
         </Button>
       ),
     },
   ];
 
-  const handleClickOpenActive = (teacher) => {
-    setSelectedTeacher(teacher);
+  const handleClickOpenActive = (data) => {
+    setSelectedClass(data);
     setActiveDialog(true);
   };
 
@@ -60,12 +66,12 @@ const ClassDataTable = ({  classes, teachers, token }) => {
   //Ban or Unban
   const handleActiveSubmit = async () => {
 
-    const newActiveValue = selectedTeacher.active == "1" ? "0" : "1";
+    const newActiveValue = selectedClass.active == "1" ? "0" : "1";
     const result = await axios.post(
-      API_URL + "/admin/banUsers",
+      API_URL + "/admin/activeClass",
       {
-        user: {
-          ...selectedTeacher,
+        data: {
+          ...selectedClass,
           active: newActiveValue,
         },
       },
@@ -75,12 +81,13 @@ const ClassDataTable = ({  classes, teachers, token }) => {
         },
       }
     );
+
     setClassData((prevTeachers) =>
-      prevTeachers.map((teacher) =>
-        teacher.id === selectedTeacher.id ? { ...teacher, active: newActiveValue } : teacher
+      prevTeachers.map((value) =>
+        value.id == selectedClass.id ? { ...value, active: newActiveValue } : value
       )
     );
-    // Logic for submitting edited information
+
     //setLoading(false);
     handleCloseActive();
   };
@@ -92,8 +99,11 @@ const ClassDataTable = ({  classes, teachers, token }) => {
         <DataGrid
           rows={classData}
           columns={columns}
-          pageSize={5}
-          pagination
+          initialState={{
+            ...classData.initialState,
+            pagination: { paginationModel: { pageSize: 10 } },
+          }}
+          rowsPerPageOptions={[5, 10, 20]}
           slots={{
             Toolbar: CustomToolbar,
           }}

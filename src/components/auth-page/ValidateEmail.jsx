@@ -2,7 +2,6 @@ import React from 'react'
 import Image from 'next/image'
 import assets from '../../assets/img/check.png'
 import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Link from 'next/link';
 
 

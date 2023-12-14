@@ -1,6 +1,5 @@
 import React from 'react'
 import assets from '../../assets/img/check.png'
-import "bootstrap/dist/css/bootstrap.min.css";
 import Link from 'next/link';
 import Image from 'next/image';
 const ResetPasswordSuccess = () => {
