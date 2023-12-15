@@ -4,7 +4,6 @@ import { Col, Button, Row, Container, Card, Form, InputGroup } from "react-boots
 import { useForm } from "react-hook-form";
 import { useState } from 'react';
 import ResetPasswordSuccess from './ResetPasswordSuccess';
-import "bootstrap/dist/css/bootstrap.min.css";
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import authService from '@/auth/auth-service';
 

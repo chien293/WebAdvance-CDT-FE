@@ -38,13 +38,7 @@ const Sidebar = ({ onSideBarItemClick }) => {
             <ListItemIcon>
               <SupervisorAccountIcon />
             </ListItemIcon>
-            <ListItemText primary="Giáo viên" />
-          </ListItem>
-          <ListItem ButtonBase onClick={() => onSideBarItemClick('student')}>
-            <ListItemIcon>
-              <SchoolIcon />
-            </ListItemIcon>
-            <ListItemText primary="Học sinh" />
+            <ListItemText primary="Thành viên" />
           </ListItem>
           <ListItem ButtonBase onClick={() => onSideBarItemClick('class')}>
             <ListItemIcon>

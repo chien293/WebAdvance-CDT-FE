@@ -3,12 +3,17 @@ import React, { useState } from 'react';
 import {
   GridToolbarContainer, GridToolbarExport, Dialog,
   DialogTitle, DialogContent, DialogActions, DialogContentText,
-  Button, TextField, CircularProgress
+  Button, TextField, CircularProgress, Box
 } from '@mui/material';
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { vi } from 'date-fns/locale';
 import EditIcon from '@mui/icons-material/Edit';
 import { FaBan, FaCheck } from "react-icons/fa";
 import axios from 'axios';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 const TeacherDataTable = ({ teachers, token }) => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -16,7 +21,9 @@ const TeacherDataTable = ({ teachers, token }) => {
   const [selectedTeacher, setSelectedTeacher] = useState(null);
   const [loadingActive, setLoading] = useState(false);
   const [teachersData, setTeachers] = useState(null);
-  
+  const [editedFullname, setEditedFullname] = useState('');
+  const [editedBirthday, setEditedBirthday] = useState(null);
+
   const API_URL = process.env.SERVER_URL;
 
   React.useEffect(() => {
@@ -29,6 +36,7 @@ const TeacherDataTable = ({ teachers, token }) => {
     { field: 'id', headerName: 'ID', width: 70 },
     { field: 'email', headerName: 'Email', width: 200 },
     { field: 'fullname', headerName: 'Họ tên', width: 150 },
+    { field: 'birthday', headerName: 'Ngày sinh', width: 150 },
     {
       field: 'active',
       headerName: 'Active',
@@ -38,9 +46,6 @@ const TeacherDataTable = ({ teachers, token }) => {
           <Button onClick={() => handleClickOpenActive(params.row)}>
             {params.row.active == "1" ? <FaCheck /> : <FaBan />}
           </Button>
-          {loadingActive && selectedTeacher && selectedTeacher.id === params.row.id && (
-            <CircularProgress size={24} />
-          )}
         </div>
       ),
     },
@@ -63,16 +68,41 @@ const TeacherDataTable = ({ teachers, token }) => {
   ];
 
   const handleEditClick = (teacher) => {
+    dayjs.extend(customParseFormat);
     setSelectedTeacher(teacher);
+    setEditedFullname(teacher.fullname || '');
+    setEditedBirthday(dayjs(teacher.birthday, 'DD-MM-YYYY') || '');
     setEditDialogOpen(true);
+    
   };
 
   const handleEditDialogClose = () => {
     setEditDialogOpen(false);
   };
 
-  const handleEditSubmit = () => {
-    // Logic for submitting edited information
+  //Chinh sua thong tin
+  const handleEditSubmit = async () => {
+    const result = await axios.post(
+      API_URL + "/admin/updateUsers",
+      {
+        id: selectedTeacher.id,
+        fullname: editedFullname,
+        birthday: dayjs(editedBirthday).format('DD-MM-YYYY')
+      },
+      {
+        headers: {
+          token: "Bearer " + token,
+        },
+      }
+    );
+    
+    setTeachers((prevTeachers) =>
+      prevTeachers.map((teacher) =>
+        teacher.id == selectedTeacher.id ? 
+        { ...teacher, fullname: editedFullname, birthday: dayjs(editedBirthday).format('DD-MM-YYYY') } : teacher
+      )
+    );
+
     handleEditDialogClose();
   };
 
@@ -85,9 +115,9 @@ const TeacherDataTable = ({ teachers, token }) => {
     setActiveDialog(false);
   };
 
+  //Ban or Unban
   const handleActiveSubmit = async () => {
-    handleCloseActive();
-    setLoading(true);
+
     const newActiveValue = selectedTeacher.active == "1" ? "0" : "1";
     const result = await axios.post(
       API_URL + "/admin/banUsers",
@@ -109,62 +139,79 @@ const TeacherDataTable = ({ teachers, token }) => {
       )
     );
     // Logic for submitting edited information
-    setLoading(false);
+    //setLoading(false);
+    handleCloseActive();
   };
 
   return (
     <div className="dataTable">
       {teachersData && teachersData.length > 0 ? (
+        <div style={{ height: 400, width: '100%' }}>
         <DataGrid
           rows={teachersData}
           columns={columns}
-          pageSize={5}
-          pagination
-          rowsPerPageOptions={[5, 10, 20]}
+          initialState={{
+            ...teachersData.initialState,
+            pagination: { paginationModel: { pageSize: 10 } },
+          }}
+           
           slots={{
             Toolbar: CustomToolbar,
           }}
-          onSelectionModelChange={(newSelection) => {
-            console.log(newSelection);
-          }}
+          pageSizeOptions={[5]}
+        
         />
+        </div>
       ) : (
         <p>No teachers available.</p>
       )}
+      {/* edit */}
       <Dialog open={editDialogOpen} onClose={handleEditDialogClose}>
-        <DialogTitle>Chỉnh sửa thông tin giáo viên</DialogTitle>
-        <DialogContent>
-          {/* Edit form fields */}
-          <TextField
-            label="Họ tên"
-            fullWidth
-            value={selectedTeacher ? selectedTeacher.fullname : ''}
-          />
-          {/* Add more fields as needed */}
-        </DialogContent>
+        <DialogTitle>Edit teacher information</DialogTitle>
+
+        <Box mt={-1}>
+          <DialogContent>
+            <Box mb={2}>
+              <TextField
+                label="Fullname"
+                fullWidth
+                value={editedFullname}
+                onChange={(e) => setEditedFullname(e.target.value)}
+              />
+            </Box>
+            <LocalizationProvider dateAdapter={AdapterDayjs} locale={vi}>
+              <DatePicker
+                label="Birthday"
+                value={dayjs(editedBirthday)}
+                inputFormat="DD-MM-YYYY"
+                onChange={(date) => setEditedBirthday(date)}
+              />
+            </LocalizationProvider>
+          </DialogContent>
+        </Box>
         <DialogActions>
-          <Button onClick={handleEditDialogClose}>Hủy</Button>
+          <Button onClick={handleEditDialogClose}>Cancel</Button>
           <Button onClick={handleEditSubmit} color="primary">
-            Lưu
+            Save
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* active */}
       <Dialog open={activeDialog} onClose={handleCloseActive}>
-        <DialogTitle>Chỉnh sửa thông tin giáo viên</DialogTitle>
+        <DialogTitle>Ban or Unban Teacher</DialogTitle>
         <DialogContent>
           {/* Edit form fields */}
           <DialogContentText >
-            You want to ban {selectedTeacher ? selectedTeacher.fullname : ''}
+            You want to {selectedTeacher ? (selectedTeacher.active == 1 ? "ban" : "unban") : ''} {selectedTeacher ? selectedTeacher.fullname : ''}
           </DialogContentText>
           {/* Add more fields as needed */}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseActive}>Hủy</Button>
-          <Button onClick={handleActiveSubmit} color="primary">
-            Lưu
-          </Button>
+          <Button onClick={handleCloseActive}>Cancel</Button>
+
+          <Button onClick={handleActiveSubmit} color="primary">Save</Button>
+
         </DialogActions>
       </Dialog>
     </div>

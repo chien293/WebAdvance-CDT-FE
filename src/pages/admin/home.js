@@ -21,7 +21,7 @@ import ModalAdd from "@/components/admin/ModelAdd";
 import Navbar from "@/components/admin/NavbarAdmin";
 import Sidebar from "@/components/admin/SideBar";
 import TeacherDataTable from "@/components/admin/utils/TeacherDataTable";
-import StudentDataTable from "@/components/admin/utils/StudentDataTable";
+import ClassDataTable from "@/components/admin/utils/ClassDataTable";
 import axios from "axios";
 import AuthService from "@/auth/auth-service";
 import { useRouter } from "next/router";
@@ -30,14 +30,10 @@ import withAuth from "@/auth/with-auth";
 
 const AdminHomePage = () => {
   const router = useRouter();
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [listAdminFilter, setListAdminFilter] = useState([]);
 
   const [role, setRole] = useState(0);
   const [selectedSideBarItem, setSelectedSideBarItem] = useState("teacher");
   const [teachers, setTeachers] = useState([]);
-  const [students, setStudents] = useState([]);
   const [classes, setClasses] = useState([]);
   const [token, setToken] = useState("");
   
@@ -80,22 +76,22 @@ const AdminHomePage = () => {
       });
   };
 
-  const getStudents = async () => {
+  const getClasses = async () => {
     await axios
-      .get(API_URL + "/admin/getStudents", {
+      .get(API_URL + "/admin/getClasses", {
         headers: {
           token: "Bearer " + token,
         },
       })
       .then((res) => {
         if (res.data) {
-          const studentsData = res.data.map(
+          const clasesData = res.data.map(
             ({ password, image, role, ...rest }) => rest
           );
-          setStudents(studentsData);
+          setClasses(clasesData);
           //setIsLoaded(true);
         } else {
-          setTeachers([]);
+          setClasses([]);
         }
       });
   };
@@ -108,18 +104,18 @@ const AdminHomePage = () => {
     takeUser();
     if (token) {
       getTeachers();
-      getStudents();
+      getClasses();
     }
   }, [token]);
   return (
     <>
       <Sidebar onSideBarItemClick={handleSideBarItemClick} />
       <Container>
-        <h1>{selectedSideBarItem === "teacher" ? "Teacher" : "Student"}</h1>
+        <h1>{selectedSideBarItem === "teacher" ? "Teacher" : "Class"}</h1>
         {selectedSideBarItem === "teacher" ? (
           <TeacherDataTable teachers={teachers} token={token} />
         ) : (
-          <StudentDataTable students={students} token={token}/>
+          <ClassDataTable classes={classes} teachers={teachers} token={token}/>
         )}
       </Container>
     </>

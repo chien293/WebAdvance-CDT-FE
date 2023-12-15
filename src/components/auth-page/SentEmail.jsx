@@ -1,8 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
 import assets from '../../assets/img/verify-email.jpg'
-import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+
+
 const SentEmail = ({ email }) => {
     return (
         <div className="container">
@@ -11,9 +11,9 @@ const SentEmail = ({ email }) => {
                 <div>Check your Email</div>
                 <div>We've send an email to {email}</div>
                 <div>to reset your password.</div>
-                <Button variant="primary" type="submit">
+                <button variant="primary" type="submit">
                 Resend email
-                </Button>
+                </button>
                 <Image src={assets} alt='ICON' />
             </section>
 
