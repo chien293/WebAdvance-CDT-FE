@@ -56,7 +56,7 @@ const ForgotPassword = () => {
         }}>
 
           <Form
-          form={form}
+            form={form}
             {...layout}
             name="normal_login"
             className="login-form"
@@ -64,22 +64,22 @@ const ForgotPassword = () => {
             onFinish={onSubmit}
             validateMessages={validateMessages}
           >
-            <Typography.Title style={{ fontSize: 35 }}>Forgot Passowrd</Typography.Title>
+            <Typography.Title className="block text-center" style={{ fontSize: 35 }}>Forgot Password</Typography.Title>
             <Form.Item
               name="email"
-              
+              style={{ marginBottom: 8 }}
               rules={[{ required: true, type: 'email' }]}
             >
               <Input
                 placeholder="Email for recovery"
                 style={{ fontSize: 16, width: 300 }}
               />
-            </Form.Item>           
-            <Typography style={{ marginLeft: 93 }} >
+            </Form.Item>
+            <Typography className="block text-right " >
               Remember your account?{" "}
               <Link
                 href="/auth/sign-in"
-                className="text-primary fw-bold"
+                style={{ fontSize: 16, color: 'blue' }}
               >
                 Sign In
               </Link>
@@ -89,11 +89,11 @@ const ForgotPassword = () => {
             }
             <Form.Item>
               <Button type="primary" htmlType="submit" className="login-form-button"
-                style={{ backgroundColor: '#e0b6b6', borderColor: '#e0b6b6', fontSize: 16, marginLeft: 55, marginTop: 5}} block>
+                style={{ backgroundColor: '#e0b6b6', borderColor: '#e0b6b6', fontSize: 16, marginLeft: 55, marginTop: 5 }} block>
                 Submit
               </Button>
             </Form.Item >
-            
+
           </Form>
         </div>
       )}

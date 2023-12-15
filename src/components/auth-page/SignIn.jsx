@@ -76,9 +76,8 @@ const SignInComponent = () => {
             className="login-form"
             initialValues={{ remember: true }}
             onFinish={onSubmit}
-
           >
-            <Typography.Title style={{ fontSize: 35, marginLeft: 95 }}>Login</Typography.Title>
+            <Typography.Title className="block text-center" style={{ fontSize: 35 }}>Login</Typography.Title>
             <Form.Item
               name="email"
               rules={[{ required: true, message: 'Please input your email!' }]}
@@ -92,6 +91,7 @@ const SignInComponent = () => {
             <Form.Item
               name="password"
               rules={[{ required: true, message: 'Please input your Password!' }]}
+              style={{ marginBottom: 8 }}
             >
               <Input.Password
                 prefix={<LockOutlined className="site-form-item-icon" />}
@@ -105,15 +105,14 @@ const SignInComponent = () => {
               <Typography>{errorMessage}</Typography>
 
             }
-            <Form.Item>
-              <Form.Item name="remember" valuePropName="checked" noStyle style={{ fontSize: 16 }}>
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
-
-              <Link
-                href="/auth/forgot-password" style={{ fontSize: 16, color: 'blue', marginLeft: 52 }}>
-                Forgot password
-              </Link>
+            <Form.Item style={{ marginBottom: 8 }}>
+              <span className="block text-right" >
+                <Link
+                  href="/auth/forgot-password" style={{ fontSize: 16, color: 'blue' }}
+                >
+                  Forgot password
+                </Link>
+              </span>
             </Form.Item>
 
             <Form.Item>
@@ -122,10 +121,14 @@ const SignInComponent = () => {
                 Log in
               </Button>
             </Form.Item >
-            Don't have an account? <Link href="/auth/sign-up" style={{ fontSize: 16, color: 'blue', marginLeft: 52 }}>
-              Register now!
-            </Link>
-            
+            <Typography className="block text-right">
+              Don't have an account? 
+              <Link href="/auth/sign-up" style={{ fontSize: 16, color: 'blue', marginLeft: 15 }}>
+                Register now!
+              </Link>
+            </Typography>
+
+
             <Divider style={{ borderColor: "black" }}>Or Login with</Divider>
             <div style={{
               display: 'flex',
@@ -135,10 +138,10 @@ const SignInComponent = () => {
             }}>
               <FaGoogle size={40}
                 color="#dd4b39"
-                onClick={handleGoogleLogin} />
+                onClick={handleGoogleLogin} className="cursor-pointer" />
               <FaFacebook size={40}
                 color="#3b5998"
-                onClick={handleFacebookLogin} />
+                onClick={handleFacebookLogin} className="cursor-pointer" />
             </div>
           </Form>
         </div>
