@@ -1,5 +1,6 @@
 import { Container, Grid, Paper, Typography } from "@mui/material";
 import Post from "./Post";
+import Link from "next/link";
 
 const ReviewExam = () => {
   const requestsReview = [
@@ -50,16 +51,18 @@ const ReviewExam = () => {
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Grid container spacing={3}>
-        {requestsReview.length > 0 &&
-          requestsReview.map((req) => (
-            <Post
-              key={req.id}
-              postWriter={req.postWriter}
-              title={req.title}
-              date={req.date}
-              comments={req.comments}
-            />
-          ))}
+        <Link href="/review-exam-id" passHref>
+          {requestsReview.length > 0 &&
+            requestsReview.map((req) => (
+              <Post
+                key={req.id}
+                postWriter={req.postWriter}
+                title={req.title}
+                date={req.date}
+                comments={req.comments}
+              />
+            ))}
+        </Link>
       </Grid>
     </Container>
   );
