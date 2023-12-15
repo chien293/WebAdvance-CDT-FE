@@ -111,8 +111,8 @@ const AdminHomePage = () => {
     <>
       <Sidebar onSideBarItemClick={handleSideBarItemClick} />
       <Container>
-        <h1>{selectedSideBarItem === "teacher" ? "Teacher" : "Class"}</h1>
-        {selectedSideBarItem === "teacher" ? (
+        <h1>{selectedSideBarItem == "teacher" ? "Teacher" : "Class"}</h1>
+        {selectedSideBarItem == "teacher" ? (
           <TeacherDataTable teachers={teachers} token={token} />
         ) : (
           <ClassDataTable classes={classes} teachers={teachers} token={token}/>

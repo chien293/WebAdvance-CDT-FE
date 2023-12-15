@@ -35,11 +35,8 @@ const SignInComponent = () => {
               router.push({
                 pathname: "/admin/home",
               });
-            } else if (data.user[0].role == "teacher") {
-              router.push({
-                pathname: "/teacher/home",
-              });
-            } else if (data.user[0].role == "student") {
+            } 
+            else if (data.user[0].role == "user") {
               router.push({
                 pathname: "/home-page",
               });
