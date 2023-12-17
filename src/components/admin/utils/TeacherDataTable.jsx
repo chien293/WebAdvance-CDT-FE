@@ -1,11 +1,11 @@
 // components/TeacherDataTable.js
 import React, { useState } from 'react';
 import {
-  GridToolbarContainer, GridToolbarExport, Dialog,
+  Dialog,
   DialogTitle, DialogContent, DialogActions, DialogContentText,
-  Button, TextField, CircularProgress, Box
+  Button, TextField, CircularProgress, Box, Toolbar
 } from '@mui/material';
-import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridToolbar, GridToolbarContainer , GridToolbarExport} from '@mui/x-data-grid';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { vi } from 'date-fns/locale';
@@ -143,6 +143,15 @@ const TeacherDataTable = ({ teachers, token }) => {
     handleCloseActive();
   };
 
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <Button >Click me</Button>
+        <GridToolbarExport />      
+      </GridToolbarContainer>
+    );
+  }
+
   return (
     <div className="dataTable">
       {teachersData && teachersData.length > 0 ? (
@@ -150,15 +159,12 @@ const TeacherDataTable = ({ teachers, token }) => {
         <DataGrid
           rows={teachersData}
           columns={columns}
-          initialState={{
-            ...teachersData.initialState,
-            pagination: { paginationModel: { pageSize: 10 } },
-          }}
+          pageSizeOptions={[5, 10]}
            
           slots={{
-            Toolbar: CustomToolbar,
+            toolbar: CustomToolbar,
           }}
-          pageSizeOptions={[5]}
+          
         
         />
         </div>
@@ -218,12 +224,6 @@ const TeacherDataTable = ({ teachers, token }) => {
   );
 };
 
-const CustomToolbar = () => {
-  return (
-    <GridToolbarContainer>
-      <GridToolbarExport />
-    </GridToolbarContainer>
-  );
-};
+
 
 export default TeacherDataTable;

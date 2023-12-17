@@ -1,24 +1,12 @@
-import SearchIcon from "@mui/icons-material/Search";
+
 import {
   Box,
   Button,
   Container,
-  IconButton,
-  InputBase,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
 } from "@mui/material";
 import moment from "moment";
 import "moment-timezone";
 import { useEffect, useState } from "react";
-import DetailAdmin from "@/components/admin/detailAdmin";
-import ModalAdd from "@/components/admin/ModelAdd";
-import Navbar from "@/components/admin/NavbarAdmin";
 import Sidebar from "@/components/admin/SideBar";
 import TeacherDataTable from "@/components/admin/utils/TeacherDataTable";
 import ClassDataTable from "@/components/admin/utils/ClassDataTable";
@@ -27,6 +15,7 @@ import AuthService from "@/auth/auth-service";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
 import withAuth from "@/auth/with-auth";
+import AdminStudentIdTable from "@/components/admin/utils/AdminStudentIdTable";
 
 const AdminHomePage = () => {
   const router = useRouter();
@@ -35,8 +24,9 @@ const AdminHomePage = () => {
   const [selectedSideBarItem, setSelectedSideBarItem] = useState("teacher");
   const [teachers, setTeachers] = useState([]);
   const [classes, setClasses] = useState([]);
+  const [studentIds, setStudentIds] = useState([]);
   const [token, setToken] = useState("");
-  
+
   const API_URL = process.env.SERVER_URL;
   const takeUser = () => {
     const user = AuthService.getCurrentUser();
@@ -55,7 +45,7 @@ const AdminHomePage = () => {
   };
 
   const getTeachers = async () => {
-    
+
     await axios
       .get(API_URL + "/admin/getTeachers", {
         headers: {
@@ -63,7 +53,7 @@ const AdminHomePage = () => {
         },
       })
       .then((res) => {
-      
+
         if (res.data) {
           const teachersData = res.data.map(
             ({ password, image, role, ...rest }) => rest
@@ -96,6 +86,25 @@ const AdminHomePage = () => {
       });
   };
 
+  const getStudentIds = async () => {
+    await axios
+      .get(API_URL + "/admin/getStudentIds", {
+        headers: {
+          token: "Bearer " + token,
+        },
+      })
+      .then((res) => {
+        if (res.data) {
+          console.log(res.data);
+          const clasesData = res.data
+          setStudentIds(clasesData);
+          //setIsLoaded(true);
+        } else {
+          setStudentIds([]);
+        }
+      });
+  };
+
   const handleSideBarItemClick = (item) => {
     setSelectedSideBarItem(item);
   };
@@ -105,19 +114,30 @@ const AdminHomePage = () => {
     if (token) {
       getTeachers();
       getClasses();
+      getStudentIds();
     }
   }, [token]);
   return (
     <>
+      <Box style={{ display: 'flex', height: '100vh' }}>
       <Sidebar onSideBarItemClick={handleSideBarItemClick} />
       <Container>
-        <h1>{selectedSideBarItem == "teacher" ? "Teacher" : "Class"}</h1>
-        {selectedSideBarItem == "teacher" ? (
+        <h1 style={{marginBottom: 40}}>{selectedSideBarItem === "teacher"
+          ? "Teacher"
+          : selectedSideBarItem === "class"
+            ? "Class"
+            : "MapId"}</h1>
+        {selectedSideBarItem === "teacher" ? (
           <TeacherDataTable teachers={teachers} token={token} />
-        ) : (
-          <ClassDataTable classes={classes} teachers={teachers} token={token}/>
-        )}
+        ) : selectedSideBarItem === "class" ? (
+          <ClassDataTable classes={classes} teachers={teachers} token={token} />
+        ) : selectedSideBarItem === "mapId" ? (
+          <AdminStudentIdTable studentIds={studentIds} token={token} />
+        ) : null}
+
       </Container>
+    </Box >
+
     </>
   );
 };

@@ -7,8 +7,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import LogoutIcon from '@mui/icons-material/Logout';
-import PersonIcon from '@mui/icons-material/Person';
-import SchoolIcon from '@mui/icons-material/School';
+import PlaceIcon from '@mui/icons-material/Place';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import ClassIcon from '@mui/icons-material/Class';
 import Link from 'next/link';
@@ -45,6 +44,12 @@ const Sidebar = ({ onSideBarItemClick }) => {
               <ClassIcon />
             </ListItemIcon>
             <ListItemText primary="Lớp học" />
+          </ListItem>
+          <ListItem ButtonBase onClick={() => onSideBarItemClick('mapId')}>
+            <ListItemIcon>
+              <PlaceIcon />
+            </ListItemIcon>
+            <ListItemText primary="Map Id" />
           </ListItem>
         </List>
 
