@@ -179,12 +179,12 @@ export default function GradeBoard() {
       <DataGrid
         rows={rows}
         columns={columns}
-        // initialState={{
-        //   pagination: {
-        //     paginationModel: { page: 0, pageSize: 8 },
-        //   },
-        // }}
-        pageSizeOptions={[8, 10]}
+        initialState={{
+          pagination: {
+            paginationModel: { page: 0, pageSize: 5 },
+          },
+        }}
+        // pageSizeOptions={[1, 2]}
         checkboxSelection
         slots={{
           toolbar: CustomToolbar,

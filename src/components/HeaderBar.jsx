@@ -7,10 +7,7 @@ import {
   CssBaseline,
   Popper,
   Fade,
-  Paper,
-  Modal,
-  InputAdornment,
-  IconButton,
+  Paper, 
   Divider,
   Typography,
   List,
@@ -27,11 +24,7 @@ import AuthService from "@/auth/auth-service";
 import { useRouter } from "next/router";
 import axios from "axios";
 import jwt from "jsonwebtoken";
-import {
-  middleListItems,
-  bottomListItems,
-  topListItems,
-} from "../components/dashboard-page/listItems";
+
 import LinkNext from "next/link";
 import AvatarDropdown from "@/components/AvatarDropdown";
 import Layout from "../components/dashboard-page/Layout";
@@ -63,35 +56,8 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  "& .MuiDrawer-paper": {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    boxSizing: "border-box",
-    ...(!open && {
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
-      },
-    }),
-  },
-}));
-
 const HeaderBar = ({ isHomePage }) => {
   const router = useRouter();
-  const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openAddCourseButton, setOpenAddCourseButton] = React.useState(false);
   const [placement, setPlacement] = React.useState();
@@ -251,24 +217,7 @@ const HeaderBar = ({ isHomePage }) => {
             &nbsp; &nbsp; &nbsp;
           </Typography>
         </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <Toolbar
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            px: [1],
-          }}></Toolbar>
-        <Divider />
-        <List component="nav">
-          {topListItems}
-          <Divider sx={{ my: 1 }} />
-          {middleListItems}
-          <Divider sx={{ my: 1 }} />
-          {bottomListItems}
-        </List>
-      </Drawer>
+      </AppBar>      
       <FormCreateClass
         open={openForm}
         onClose={() => setOpenForm(false)}

@@ -13,6 +13,7 @@ import authService from "@/auth/auth-service";
 import LinkNext from "next/link";
 import Layout from "../components/dashboard-page/Layout";
 import HeaderBar from "@/components/HeaderBar";
+import SideBar from "@/components/SideBar";
 
 const defaultTheme = createTheme();
 
@@ -82,7 +83,8 @@ export default function Class() {
           </List>
         </Drawer> */}
         <HeaderBar />
-        <Layout />
+        <SideBar/>
+        {/* <Layout /> */}
       </Box>
     </ThemeProvider>
   );
