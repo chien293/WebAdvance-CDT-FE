@@ -48,23 +48,32 @@ const ReviewExam = () => {
     },
   ];
 
+  const handleLink = () => {
+    navigateToHome();
+  };
+
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Grid container spacing={3}>
-        <Link href="/review-exam-id" passHref>
-          {requestsReview.length > 0 &&
-            requestsReview.map((req) => (
-              <Post
-                key={req.id}
-                postWriter={req.postWriter}
-                title={req.title}
-                date={req.date}
-                comments={req.comments}
-              />
-            ))}
-        </Link>
-      </Grid>
-    </Container>
+    // <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    //   <Grid container spacing={3}>
+    <div className="flex flex-col w-full items-center">
+      <div className="w-8/12 mt-10">
+        {requestsReview.length > 0 &&
+          requestsReview.map((req) => (
+            <Link key={req.id} href="/review-exam-id" passHref>
+              <div className="mb-5">
+                <Post
+                  postWriter={req.postWriter}
+                  title={req.title}
+                  date={req.date}
+                  comments={req.comments}
+                />
+              </div>
+            </Link>
+          ))}
+      </div>
+    </div>
+    //   </Grid>
+    // </Container>
   );
 };
 

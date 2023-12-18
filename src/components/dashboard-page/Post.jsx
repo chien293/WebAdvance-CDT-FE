@@ -11,12 +11,12 @@ import {
 } from "@nextui-org/react";
 
 const Post = ({ postWriter, title, date, comments }) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();  
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <React.Fragment>
       <Grid item xs={12} md={4} lg={10}>
-        <div className="flex-row  bg-white cursor-pointer hover:bg-green-100 rounded-lg border">
+        <div className="flex-row bg-white cursor-pointer hover:bg-green-100 rounded-lg border">
           <div className="flex p-2">
             <div className="p-2 m-1 rounded-3xl bg-green-600">
               <ClassOutlinedIcon

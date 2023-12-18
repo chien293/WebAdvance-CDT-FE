@@ -157,6 +157,17 @@ const rows = [
     finalProject: 10,
     finalGrade: 10,
   },
+  {
+    id: 10,
+    lastName: "Dinh Van",
+    firstName: "H",
+    iE: 10,
+    gE: 10,
+    midProject: 10,
+    seminar: 10,
+    finalProject: 10,
+    finalGrade: 10,
+  },
 ];
 
 function CustomToolbar() {
@@ -171,8 +182,8 @@ export default function GradeBoard() {
   return (
     <div
       style={{
-        height: 400,
-        width: "82%",
+        height: 670,
+        width: "85%",
         marginLeft: "auto",
         marginRight: "auto",
       }}>
@@ -181,10 +192,10 @@ export default function GradeBoard() {
         columns={columns}
         initialState={{
           pagination: {
-            paginationModel: { page: 0, pageSize: 5 },
+            paginationModel: { page: 1, pageSize: 10 },
           },
         }}
-        // pageSizeOptions={[1, 2]}
+        pageSizeOptions={[1, 2]}
         checkboxSelection
         slots={{
           toolbar: CustomToolbar,
