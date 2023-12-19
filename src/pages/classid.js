@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import {
   CssBaseline,
@@ -19,13 +20,14 @@ import Tabs from "../components/dashboard-page/Tabs";
 const defaultTheme = createTheme();
 
 export default function Class() {
+  const [currentSelection, setCurrentSelection] = useState("Class");
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: "flex" }}>      
+      <Box sx={{ display: "flex" }}>
         <HeaderBar />
-        <SideBar />
-        <Tabs/>
+        <SideBar setCurrentSelection={setCurrentSelection} />
+        <Tabs />
       </Box>
     </ThemeProvider>
   );

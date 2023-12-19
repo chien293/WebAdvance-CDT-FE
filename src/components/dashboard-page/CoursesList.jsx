@@ -7,28 +7,28 @@ const CoursesList = () => {
   const list = [
     {
       id: 1,
-      link: "home-page",
+      link: "classid",
       name: "1-CLC-AWP-20KTPM",
       title: "Advanced Web Programming",
       teacher: "Khanh Huy Nguyen",
     },
     {
       id: 2,
-      link: "home-page",
+      link: "classid",
       name: "2-CLC-AWP-21KTPM",
       title: "Web Programming",
       teacher: "Khanh Huy Nguyen",
     },
     {
       id: 3,
-      link: "home-page",
+      link: "classid",
       name: "3-CLC-AWP-21KTPM",
       title: "Web Programming",
       teacher: "Khanh Huy Nguyen",
     },
     {
       id: 4,
-      link: "home-page",
+      link: "classid",
       name: "4-CLC-AWP-21KTPM",
       title: "Web Programming",
       teacher: "Khanh Huy Nguyen",
