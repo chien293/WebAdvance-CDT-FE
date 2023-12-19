@@ -9,9 +9,9 @@ import {
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 import { FaBan, FaCheck } from "react-icons/fa";
 import axios from 'axios';
-import dayjs from 'dayjs';
+import authService from '@/auth/auth-service';
 
-const StudentIdDataTable = ({ listIds, token, accountId }) => {
+const StudentIdDataTable = () => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [activeDialog, setActiveDialog] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState(null);
@@ -22,14 +22,34 @@ const StudentIdDataTable = ({ listIds, token, accountId }) => {
   const API_URL = process.env.SERVER_URL;
 
   React.useEffect(() => {
-    if (listIds) {
-      setListIdsData(listIds);
-    }
-  }, [listIds])
+      getStudentIds();
+    
+  }, [])
+
+  const getStudentIds = async () => {
+    const currentUser = authService.getCurrentUser();
+    setId(currentUser.user[0].id)
+    await axios
+      .get(API_URL + "/getStudentIds", {
+        headers: {
+          token: "Bearer " + currentUser.accessToken,
+        },
+      })
+      .then((res) => {
+        if (res.data) {
+          console.log(res.data);
+          const idsData = res.data
+          setListIdsData(idsData);
+          //setIsLoaded(true);
+        } else {
+          setListIdsData([]);
+        }
+      });
+  };
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'studentId', headerName: 'Email', width: 200 },
+    { field: 'idstudent', headerName: 'Student Id', width: 200 },
     {
       field: 'active',
       headerName: 'Active',
@@ -37,7 +57,7 @@ const StudentIdDataTable = ({ listIds, token, accountId }) => {
       renderCell: (params) => (
         <div>
           <Button onClick={() => handleClickOpenActive(params.row)}>
-            {params.row.active == "1" ? <FaCheck /> : <FaBan />}
+            <FaCheck />
           </Button>
         </div>
       ),
@@ -58,7 +78,7 @@ const StudentIdDataTable = ({ listIds, token, accountId }) => {
 
     const newActiveValue = selectedTeacher.accountId;
     const result = await axios.post(
-      API_URL + "/studentId",
+      API_URL + "/setStudentId",
       {
         user: {
           ...selectedTeacher,
@@ -80,20 +100,20 @@ const StudentIdDataTable = ({ listIds, token, accountId }) => {
     <div className="studentIdsDataTable">
       {listIdsData && listIdsData.length > 0 ? (
         <div style={{ height: 400, width: '100%' }}>
-        <DataGrid
-          rows={listIdsData}
-          columns={columns}
-          initialState={{
-            ...teachersData.initialState,
-            pagination: { paginationModel: { pageSize: 10 } },
-          }}
-           
-          slots={{
-            Toolbar: CustomToolbar,
-          }}
-          pageSizeOptions={[5]}
-        
-        />
+          <DataGrid
+            rows={listIdsData}
+            columns={columns}
+            initialState={{
+              ...listIdsData.initialState,
+              pagination: { paginationModel: { pageSize: 10 } },
+            }}
+
+            slots={{
+              Toolbar: CustomToolbar,
+            }}
+            pageSizeOptions={[5]}
+
+          />
         </div>
       ) : (
         <p>No ids available.</p>
@@ -104,7 +124,7 @@ const StudentIdDataTable = ({ listIds, token, accountId }) => {
         <DialogContent>
           <DialogContentText >
             You want to map {selectedTeacher ? selectedTeacher.studentId : ''} to your account ?
-          </DialogContentText>  
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseActive}>Cancel</Button>

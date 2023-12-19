@@ -15,6 +15,7 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import SettingsIcon from "@mui/icons-material/Settings";
 import CoursesList from "./dashboard-page/CoursesList";
 import Tabs from "./dashboard-page/Tabs";
+import StudentIdDataTable from "./admin/utils/StudentIdTable";
 
 const SideBar = () => {
   const [value, setValue] = useState("1"); // Initial selected tab value
@@ -77,6 +78,7 @@ const SideBar = () => {
             <TabPanel value="2">
               {/* Content for MapID tab */}
               <h2>MapID Content</h2>
+              <StudentIdDataTable/>
             </TabPanel>
             <TabPanel value="3">
               {/* Content for Registered tab */}
