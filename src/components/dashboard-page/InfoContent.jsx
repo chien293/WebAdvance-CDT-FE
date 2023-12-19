@@ -81,6 +81,7 @@ const InfoContent = () => {
               cursor: "pointer",
               ":hover": { backgroundColor: "#ebffef", color: "green" },
               color: "text.secondary",
+              overflow: "auto",
             }}>
             <div>
               <img

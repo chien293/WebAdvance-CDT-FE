@@ -6,6 +6,7 @@ const ReviewExam = () => {
   const requestsReview = [
     {
       id: 1,
+      link: "/review-exam-id",
       postWriter: "Nguyen Van A",
       title: "Review the mark again",
       date: "Nov 16",
@@ -13,6 +14,7 @@ const ReviewExam = () => {
     },
     {
       id: 2,
+      link: "/review-exam-id",
       postWriter: "Tran Van B",
       title: "I hope the teacher will review the mark again",
       date: "Nov 16",
@@ -20,6 +22,7 @@ const ReviewExam = () => {
     },
     {
       id: 3,
+      link: "/review-exam-id",
       postWriter: "Cao Tuan K",
       title: "Review the mark again",
       date: "Nov 16",
@@ -27,6 +30,7 @@ const ReviewExam = () => {
     },
     {
       id: 4,
+      link: "/review-exam-id",
       postWriter: "Vu Trong P",
       title: "Review the mark again",
       date: "Nov 13",
@@ -34,6 +38,7 @@ const ReviewExam = () => {
     },
     {
       id: 5,
+      link: "/review-exam-id",
       postWriter: "Ho Thi K",
       title: "Review the mark again",
       date: "Nov 13",
@@ -41,6 +46,7 @@ const ReviewExam = () => {
     },
     {
       id: 6,
+      link: "/review-exam-id",
       postWriter: "Le Thanh H",
       title: "Review the mark again",
       date: "Nov 3",
@@ -59,7 +65,7 @@ const ReviewExam = () => {
       <div className="w-8/12 mt-10">
         {requestsReview.length > 0 &&
           requestsReview.map((req) => (
-            <Link key={req.id} href="/review-exam-id" passHref>
+            <Link key={req.id} href={req.link} passHref>
               <div className="mb-5">
                 <Post
                   postWriter={req.postWriter}

@@ -21,7 +21,7 @@ export default function LabTabs() {
   };
 
   return (
-    <Box sx={{marginLeft: -3, marginTop: -3, width: "100%", typography: "body1" }}>
+    <Box sx={{marginLeft: "240px", marginTop: 8, width: "100%", typography: "body1", backgroundColor: "white" }}>
       <TabContext value={value}>
         <Box
           sx={{

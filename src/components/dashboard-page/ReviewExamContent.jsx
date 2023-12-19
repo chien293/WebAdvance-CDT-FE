@@ -125,7 +125,7 @@ const ReviewExamContent = ({ postWriter, title, date, content }) => {
             : theme.palette.grey[900],
         flexGrow: 1,
         height: "100vh",
-        overflow: "auto",
+        // overflow: "auto",
       }}>
       <Toolbar />
       <div className="flex flex-col items-center justify-center self-center">

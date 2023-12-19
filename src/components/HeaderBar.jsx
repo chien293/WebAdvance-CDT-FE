@@ -109,7 +109,7 @@ const HeaderBar = ({ isHomePage }) => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="absolute" color="success">
+      <AppBar position="fixed" color="success">
         <Toolbar
           sx={{
             pr: "24px", // keep right padding when drawer closed
