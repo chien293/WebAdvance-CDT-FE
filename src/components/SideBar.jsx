@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
+import React, { useState } from "react";
 import {
   Box,
   Drawer,
@@ -10,6 +9,7 @@ import {
   Divider,
   IconButton,
   Toolbar,
+  Collapse
 } from "@mui/material";
 import Link from "next/link";
 import HomeIcon from "@mui/icons-material/Home";
@@ -17,13 +17,23 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import SchoolIcon from "@mui/icons-material/School";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import SettingsIcon from "@mui/icons-material/Settings";
-import CoursesList from "./dashboard-page/CoursesList";
-import Tabs from "./dashboard-page/Tabs";
-import StudentIdDataTable from "./admin/utils/StudentIdTable";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
+  const [openStudent, setOpenStudent] = useState(false);
+  const [openTeacher, setOpenTeacher] = useState(false);
 
-const SideBar = ({ setCurrentSelection }) => {
-  
+  const handleClickStudent = () => {
+    setOpenStudent(!openStudent);
+  };
+  const handleClickTeacher = () => {
+    setOpenTeacher(!openTeacher);
+  };
+
+  React.useEffect(() => {
+    console.log(studentClass)
+  })
   return (
     <Drawer variant="permanent">
       <Toolbar
@@ -33,10 +43,9 @@ const SideBar = ({ setCurrentSelection }) => {
           justifyContent: "flex-end",
           px: [1],
           width: "240px",
-        }}>
-        <IconButton
-        // onClick={toggleDrawer}
-        >
+        }}
+      >
+        <IconButton>
           <ChevronLeftIcon />
         </IconButton>
       </Toolbar>
@@ -44,8 +53,10 @@ const SideBar = ({ setCurrentSelection }) => {
       <List component="nav">
         <Link
           href="/home-page"
-          onClick={() => {setCurrentSelection("Home");    
-          }}>
+          onClick={() => {
+            setCurrentSelection("Home");
+          }}
+        >
           <ListItemButton>
             <ListItemIcon>
               <HomeIcon />
@@ -60,19 +71,37 @@ const SideBar = ({ setCurrentSelection }) => {
           <ListItemText primary="MapID" />
         </ListItemButton>
         <Divider sx={{ my: 1 }} />
-        <ListItemButton onClick={() => setCurrentSelection("Registered")}>
+        <ListItemButton onClick={handleClickTeacher}>
           <ListItemIcon>
-            <SchoolIcon />
+            {openTeacher ? <ExpandLess /> : <ExpandMore />}
           </ListItemIcon>
-          <ListItemText primary="Registered" />
+          <ListItemText primary="Teaching" />
         </ListItemButton>
+        <Collapse in={openTeacher} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {teacherClass.map((item) => (
+              <ListItemButton style={{marginLeft: 30}} key={item.id}>
+                <ListItemText primary={item.name} />
+              </ListItemButton>
+            ))}
+          </List>
+        </Collapse>
         <Divider sx={{ my: 1 }} />
-        <ListItemButton onClick={() => setCurrentSelection("Archived class")}>
+        <ListItemButton onClick={handleClickStudent}>
           <ListItemIcon>
-            <ArchiveIcon />
+            {openStudent ? <ExpandLess /> : <ExpandMore />}
           </ListItemIcon>
-          <ListItemText primary="Archived class" />
+          <ListItemText primary="Enrolled" />
         </ListItemButton>
+        <Collapse in={openStudent} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {studentClass.map((item) => (
+              <ListItemButton style={{marginLeft: 30}} key={item.id}>
+                <ListItemText primary={item.name} />
+              </ListItemButton>
+            ))}
+          </List>
+        </Collapse>
         <ListItemButton onClick={() => setCurrentSelection("Settings")}>
           <ListItemIcon>
             <SettingsIcon />

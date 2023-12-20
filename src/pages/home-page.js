@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -15,8 +15,8 @@ import { set } from "react-hook-form";
 import HeaderBar from "@/components/HeaderBar";
 import SideBar from "@/components/SideBar";
 import Loading from "@/components/Loading";
-// import StudentIdDataTable from "./admin/utils/StudentIdTable";
-
+import axios from "axios";
+import StudentIdDataTable from "@/components/admin/utils/StudentIdTable";
 const defaultTheme = createTheme();
 
 function HomePage() {
@@ -24,17 +24,40 @@ function HomePage() {
   const [open, setOpen] = React.useState(true);
   const [placement, setPlacement] = React.useState();
   const [currentUser, setCurrentUser] = React.useState(null);
-
+  const [currentId, setId] = useState(null);
+  const [studentClass, setStudentClass] = useState([]);
+  const [teacherClass, setTeacherClass] = useState([]);
+  const [classData, setClassData] = useState([]);
+  const [currentToken, setToken] = useState(null);
+  const API_URL = process.env.SERVER_URL;
   React.useEffect(() => {
     const takeUser = () => {
       const user = AuthService.getCurrentUser();
+      console.log(user)
       if (user) {
         setCurrentUser(user.user[0].fullname);
+        setId(user.user[0].id);
+        setToken(user.accessToken);
       }
     };
 
     takeUser();
+    
   }, []);
+  React.useEffect(() =>{
+    if (currentToken)
+      getClasses();
+  }, [currentToken])
+
+  React.useEffect(() => {
+    if (studentClass.length > 0 && teacherClass.length > 0) {
+      console.log("Updated studentClass:", studentClass);
+      
+      // Thực hiện các bước cần thiết khi studentClass thay đổi
+      const temp = [...teacherClass, ...studentClass];
+      setClassData(temp);
+    }
+  }, [studentClass, teacherClass]);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -48,20 +71,62 @@ function HomePage() {
 
   const [currentSelection, setCurrentSelection] = useState("Home"); // default selection
 
+
+  const getClasses = async () => {
+    console.log(JSON.stringify(currentToken))
+    console.log(JSON.stringify(currentId))
+    console.log(API_URL)
+    await axios
+      .post(API_URL + "/class/getTeacherClasses",
+        {
+          id: currentId
+        },
+        {
+          headers: {
+            token: "Bearer " + currentToken,
+          }
+        }
+      )
+      .then((res) => {
+        if (res.data) {
+          console.log(res.data);
+          const teachersData = res.data
+          setTeacherClass(teachersData);
+        } else {
+          setTeacherClass([]);
+        }
+      });
+
+    await axios
+      .post(API_URL + "/class/getStudentClasses",
+        {
+          id: currentId
+        },
+        {
+          headers: {
+            token: "Bearer " + currentToken,
+          }
+        }
+      )
+      .then((res) => {
+        if (res.data) {
+          setStudentClass(res.data);
+        }
+      })
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
         <HeaderBar isHomePage={true} />
         <Box sx={{ flexGrow: 1 }}>
-          <SideBar setCurrentSelection={setCurrentSelection} />
+          <SideBar setCurrentSelection={setCurrentSelection} studentClass={studentClass} teacherClass={teacherClass} />
           {/* layout section */}
           <Box sx={{ marginLeft: "240px", marginTop: "100px" }}>
-            {currentSelection === "Home" && <CoursesList />}
+            {currentSelection === "Home" && <CoursesList classData={classData} />}
             {currentSelection === "MapID" && (
-              <div>Map ID content</div>
-            // <StudentIdDataTable />
+              <StudentIdDataTable />
             )}
-            {currentSelection === "Registered" && <div>Registered Content</div> }
+            {currentSelection === "Registered" && <div>Registered Content</div>}
             {currentSelection === "Archived class" && (
               <div>Archived Class Content Here</div>
             )}
