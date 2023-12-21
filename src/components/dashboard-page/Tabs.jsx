@@ -12,8 +12,7 @@ import Exercise from "./Exercise";
 import SettingsContent from "./SettingsContent";
 import GradeBoard from "./GradeBoard";
 import ReviewExam from "./ReviewExam";
-
-export default function LabTabs() {
+export default function LabTabs(props) {
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event, newValue) => {
@@ -21,14 +20,23 @@ export default function LabTabs() {
   };
 
   return (
-    <Box sx={{marginLeft: "240px", marginTop: 8, width: "100%", typography: "body1", backgroundColor: "white" }}>
+    <Box
+      sx={{
+        marginLeft: "240px",
+        marginTop: 8,
+        width: "100%",
+        typography: "body1",
+        backgroundColor: "white",
+      }}
+    >
       <TabContext value={value}>
         <Box
           sx={{
             borderBottom: 1,
             borderColor: "divider",
             "& .MuiTab-root": { textTransform: "none" },
-          }}>
+          }}
+        >
           <TabList
             onChange={handleChange}
             sx={{
@@ -39,7 +47,8 @@ export default function LabTabs() {
               "& button:hover": { color: "black", backgroundColor: "#eeeeee" },
               "& button:active": { color: "green" },
               "& button:focus": { color: "green" },
-            }}>
+            }}
+          >
             <Tab label="Information" value="1" />
             <Tab label="Exercise" value="2" />
             <Tab label="Participant" value="3" />
@@ -49,22 +58,22 @@ export default function LabTabs() {
           </TabList>
         </Box>
         <TabPanel value="1">
-          <InfoContent />
+          <InfoContent classId={props.classId} />
         </TabPanel>
         <TabPanel value="2">
-          <Exercise />
+          <Exercise classId={props.classId} />
         </TabPanel>
         <TabPanel value="3">
-          <ParticipantContent />
+          <ParticipantContent classId={props.classId} />
         </TabPanel>
         <TabPanel value="4">
-          <SettingsContent />
+          <SettingsContent classId={props.classId} />
         </TabPanel>
         <TabPanel value="5">
-          <GradeBoard />
+          <GradeBoard classId={props.classId} />
         </TabPanel>
         <TabPanel value="6">
-          <ReviewExam />
+          <ReviewExam classId={props.classId} />
         </TabPanel>
       </TabContext>
     </Box>

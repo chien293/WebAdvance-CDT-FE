@@ -17,7 +17,7 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Image, { Label } from "@mui/icons-material";
@@ -58,7 +58,6 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 const HeaderBar = ({ isHomePage }) => {
-  const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [openAddCourseButton, setOpenAddCourseButton] = React.useState(false);
   const [placement, setPlacement] = React.useState();
@@ -86,13 +85,15 @@ const HeaderBar = ({ isHomePage }) => {
         <Toolbar
           sx={{
             pr: "24px", // keep right padding when drawer closed
-          }}>
+          }}
+        >
           <Typography
             component="h1"
             variant="h6"
             color="inherit"
             noWrap
-            sx={{ flexGrow: 1 }}>
+            sx={{ flexGrow: 1 }}
+          >
             Classroom
           </Typography>
           {isHomePage && (
@@ -104,7 +105,8 @@ const HeaderBar = ({ isHomePage }) => {
               }}
               size="small"
               // color="primary"
-              aria-label="add">
+              aria-label="add"
+            >
               <AddIcon />
             </Fab>
           )}
@@ -118,7 +120,8 @@ const HeaderBar = ({ isHomePage }) => {
             // placement={placement}
             placement="bottom"
             sx={{ position: "fixed", boxShadow: "10" }}
-            transition>
+            transition
+          >
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
                 <Paper>
@@ -126,7 +129,7 @@ const HeaderBar = ({ isHomePage }) => {
                     <Button
                       sx={{ border: "none" }}
                       variant="outlined"
-                    // onClick={() => setOpen(true)}
+                      // onClick={() => setOpen(true)}
                     >
                       Enroll Classroom
                     </Button>
@@ -135,7 +138,8 @@ const HeaderBar = ({ isHomePage }) => {
                     <Button
                       sx={{ border: "none", textColor: "black" }}
                       variant="outlined"
-                      onClick={() => setOpenForm(true)}>
+                      onClick={() => setOpenForm(true)}
+                    >
                       Create Classroom
                     </Button>
                   </div>

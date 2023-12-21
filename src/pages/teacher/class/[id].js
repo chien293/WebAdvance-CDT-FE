@@ -10,16 +10,18 @@ import {
   Toolbar,
   Box,
 } from "@mui/material";
-import authService from "@/auth/auth-service";
-import LinkNext from "next/link";
-import Layout from "../components/dashboard-page/Layout";
+// import authService from "@/auth/auth-service";
+// import LinkNext from "next/link";
+// import Layout from "../components/dashboard-page/Layout";
 import HeaderBar from "@/components/HeaderBar";
 import SideBar from "@/components/SideBar";
-import Tabs from "../components/dashboard-page/Tabs";
+import Tabs from "@/components/dashboard-page/Tabs";
 
 const defaultTheme = createTheme();
 
 const SIDE_NAV_WIDTH = 280;
+
+import { useRouter } from "next/router";
 
 export default function Class() {
   const router = useRouter();

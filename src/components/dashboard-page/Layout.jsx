@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Tabs from "./Tabs";
 
-export default function Layout() {
+export default function Layout(props) {
   return (
     <Box
       component="main"
@@ -15,9 +15,10 @@ export default function Layout() {
         flexGrow: 1,
         height: "100vh",
         overflow: "auto",
-      }}>
-      <Toolbar />   
-      <Tabs/>      
+      }}
+    >
+      <Toolbar />
+      <Tabs classId={props.classId} />
     </Box>
   );
 }

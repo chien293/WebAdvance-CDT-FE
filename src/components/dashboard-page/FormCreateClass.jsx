@@ -18,6 +18,7 @@ export default function FormCreateClass({ open, onClose, onCancel }) {
     // Implement logic for creating the classroom
     const user = AuthService.getCurrentUser();
     const token = user.token;
+    console.log(user.user[0].id);
     const body = {
       className: data.className,
       createdBy: user.user[0].id,

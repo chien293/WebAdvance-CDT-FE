@@ -9,7 +9,7 @@ import {
   Divider,
   IconButton,
   Toolbar,
-  Collapse
+  Collapse,
 } from "@mui/material";
 import Link from "next/link";
 import HomeIcon from "@mui/icons-material/Home";
@@ -18,8 +18,8 @@ import SchoolIcon from "@mui/icons-material/School";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
   const [openStudent, setOpenStudent] = useState(false);
   const [openTeacher, setOpenTeacher] = useState(false);
@@ -32,8 +32,8 @@ const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
   };
 
   React.useEffect(() => {
-    console.log(studentClass)
-  })
+    console.log(studentClass);
+  });
   return (
     <Drawer variant="permanent">
       <Toolbar
@@ -80,7 +80,7 @@ const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
         <Collapse in={openTeacher} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {teacherClass.map((item) => (
-              <ListItemButton style={{marginLeft: 30}} key={item.id}>
+              <ListItemButton style={{ marginLeft: 30 }} key={item.id}>
                 <ListItemText primary={item.name} />
               </ListItemButton>
             ))}
@@ -96,7 +96,7 @@ const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
         <Collapse in={openStudent} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {studentClass.map((item) => (
-              <ListItemButton style={{marginLeft: 30}} key={item.id}>
+              <ListItemButton style={{ marginLeft: 30 }} key={item.id}>
                 <ListItemText primary={item.name} />
               </ListItemButton>
             ))}
