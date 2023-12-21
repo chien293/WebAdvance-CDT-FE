@@ -8,6 +8,7 @@ import {
     DataGridPro, GridColDef, GridToolbar,
     GridToolbarContainer, GridToolbarExport, useGridApiRef
 } from '@mui/x-data-grid-pro';
+import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import * as XLSX from 'xlsx'
@@ -84,10 +85,12 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
                     { ...data, iduser: editedUserId, } : data
             )
         );
- 
+
         handleEditDialogClose();
     };
-
+    const handleRowOrderChange = (params) => {
+        console.log('New row order: ', params);
+    };
     const CustomToolbar = ({ apiRef }) => {
         const handleExportClick = () => {
             if (!apiRef?.current) {
@@ -125,7 +128,7 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
                 const workbook = XLSX.read(data, { type: 'array' });
                 const sheet = workbook.Sheets[workbook.SheetNames[0]];
                 const importedData = XLSX.utils.sheet_to_json(sheet);
-    
+
                 // Handle the imported data
                 const result = await axios.post(
                     API_URL + "/admin/mapListStudentIds",
@@ -176,12 +179,13 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
                             ...studentIdsData.initialState,
                             pagination: { paginationModel: { pageSize: 10 } },
                         }}
+                        
                         apiRef={apiRef}
                         slots={{
                             toolbar: () => <CustomToolbar apiRef={apiRef} />,
                         }}
                         pageSizeOptions={[5, 10]}
-
+                        pagination
                     />
                 </div>
             ) : (
@@ -198,7 +202,7 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
                             <TextField
                                 label="UserId"
                                 fullWidth
-                                value={selectedStudentId.iduser}
+                                value={selectedStudentId?.iduser}
                                 onChange={(e) => setEditedUserId(e.target.value)}
                             />
                         </Box>
@@ -214,8 +218,5 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
         </div>
     );
 };
-
-
-
 
 export default AdminStudentIdTable;

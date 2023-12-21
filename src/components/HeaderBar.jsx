@@ -7,7 +7,7 @@ import {
   CssBaseline,
   Popper,
   Fade,
-  Paper, 
+  Paper,
   Divider,
   Typography,
   List,
@@ -17,6 +17,7 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Image, { Label } from "@mui/icons-material";
@@ -64,41 +65,13 @@ const HeaderBar = ({ isHomePage }) => {
   const [openForm, setOpenForm] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState(null);
 
-  //   const isTokenExpired = (token) => {
-  //     const decodedToken = jwt.decode(token);
-  //     return decodedToken.exp * 1000 < Date.now();
-  //   };
-
   React.useEffect(() => {
     //takeUser();
-
-    const fetchData = () => {
-      if (router.isReady) {
-        console.log(router.query);
-        const userParam = router.query.user;
-        const tokenParam = router.query.token;
-        const tmp = "1-1-1";
-        console.log(userParam + " USER DAY ");
-        if (userParam && tokenParam) {
-          const user = JSON.parse(decodeURI(userParam));
-          const userArray = [user];
-          console.log(user + " USEER!!");
-          setCurrentUser(user.fullname);
-          const userSave = { user: userArray, accessToken: tokenParam };
-          AuthService.saveUser(userSave);
-          router.replace("/home-page", undefined, { shallow: true });
-        } else setCurrentUser("Chua dang nhap");
-      }
-      console.log("Khong co router");
-    };
     const user = AuthService.getCurrentUser();
     if (user) {
       setCurrentUser(user.user[0].fullname);
-    } else {
-      fetchData();
-      console.log("3   " + user);
     }
-  }, [router.isReady]);
+  }, []);
 
   const handleClick = (newPlacement) => (event) => {
     setAnchorEl(event.currentTarget);
@@ -113,7 +86,7 @@ const HeaderBar = ({ isHomePage }) => {
         <Toolbar
           sx={{
             pr: "24px", // keep right padding when drawer closed
-          }}>            
+          }}>
           <Typography
             component="h1"
             variant="h6"
@@ -135,6 +108,10 @@ const HeaderBar = ({ isHomePage }) => {
               <AddIcon />
             </Fab>
           )}
+          <Button>
+            <NotificationsNoneIcon style={{ marginRight: 30 }} />
+          </Button>
+
           <Popper
             open={openAddCourseButton}
             anchorEl={anchorEl}
@@ -149,7 +126,7 @@ const HeaderBar = ({ isHomePage }) => {
                     <Button
                       sx={{ border: "none" }}
                       variant="outlined"
-                      // onClick={() => setOpen(true)}
+                    // onClick={() => setOpen(true)}
                     >
                       Enroll Classroom
                     </Button>
@@ -217,7 +194,7 @@ const HeaderBar = ({ isHomePage }) => {
             &nbsp; &nbsp; &nbsp;
           </Typography>
         </Toolbar>
-      </AppBar>      
+      </AppBar>
       <FormCreateClass
         open={openForm}
         onClose={() => setOpenForm(false)}
