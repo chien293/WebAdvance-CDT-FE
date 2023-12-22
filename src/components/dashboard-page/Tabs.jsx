@@ -12,6 +12,7 @@ import Exercise from "./Exercise";
 import SettingsContent from "./SettingsContent";
 import GradeBoard from "./GradeBoard";
 import ReviewExam from "./ReviewExam";
+import GradeStructureBoard from "./GradeStructure";
 export default function LabTabs(props) {
   const [value, setValue] = React.useState("1");
 
@@ -22,8 +23,8 @@ export default function LabTabs(props) {
   return (
     <Box
       sx={{
-        marginLeft: "240px",
-        marginTop: 8,
+        marginLeft: "20px",
+        
         width: "100%",
         typography: "body1",
         backgroundColor: "white",
@@ -53,8 +54,9 @@ export default function LabTabs(props) {
             <Tab label="Exercise" value="2" />
             <Tab label="Participant" value="3" />
             <Tab label="Settings" value="4" />
-            <Tab label="Grade Board" value="5" />
-            <Tab label="Checking Examination Papers" value="6" />
+            <Tab label="Grade Structure" value="5" />
+            <Tab label="Grade Board" value="6" />
+            <Tab label="Checking Examination Papers" value="7" />
           </TabList>
         </Box>
         <TabPanel value="1">
@@ -70,9 +72,12 @@ export default function LabTabs(props) {
           <SettingsContent classId={props.classId} />
         </TabPanel>
         <TabPanel value="5">
-          <GradeBoard classId={props.classId} />
+          <GradeStructureBoard classId={props.classId} />
         </TabPanel>
         <TabPanel value="6">
+          <GradeBoard classId={props.classId} />
+        </TabPanel>
+        <TabPanel value="7">
           <ReviewExam classId={props.classId} />
         </TabPanel>
       </TabContext>

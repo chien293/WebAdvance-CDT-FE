@@ -31,9 +31,6 @@ const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
     setOpenTeacher(!openTeacher);
   };
 
-  React.useEffect(() => {
-    console.log(studentClass);
-  });
   return (
     <Drawer variant="permanent">
       <Toolbar

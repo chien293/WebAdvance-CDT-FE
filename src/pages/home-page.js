@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -16,6 +16,8 @@ import Loading from "@/components/Loading";
 import axios from "axios";
 import StudentIdDataTable from "@/components/admin/utils/StudentIdTable";
 import NestedList from "@/components/dashboard-page/NestedList";
+import { ClassContext, ClassProvider } from "@/components/ClassProvider";
+import MainContent from "@/components/MainHomePage";
 const defaultTheme = createTheme();
 
 function HomePage() {
@@ -28,11 +30,11 @@ function HomePage() {
   const [teacherClass, setTeacherClass] = useState([]);
   const [classData, setClassData] = useState([]);
   const [currentToken, setToken] = useState(null);
+  const { updateClasses } = useContext(ClassContext);
   const API_URL = process.env.SERVER_URL;
   React.useEffect(() => {
     const takeUser = () => {
       const user = AuthService.getCurrentUser();
-      console.log(user);
       if (user) {
         setCurrentUser(user.user[0].fullname);
         setId(user.user[0].id);
@@ -49,9 +51,8 @@ function HomePage() {
   React.useEffect(() => {
     if (studentClass.length > 0 || teacherClass.length > 0) {
       console.log("Updated studentClass:", studentClass);
-
-      // Thực hiện các bước cần thiết khi studentClass thay đổi
       const temp = [...teacherClass, ...studentClass];
+      updateClasses(studentClass, teacherClass);
       setClassData(temp);
     }
   }, [studentClass, teacherClass]);
@@ -69,9 +70,6 @@ function HomePage() {
   const [currentSelection, setCurrentSelection] = useState("Home"); // default selection
 
   const getClasses = async () => {
-    console.log(JSON.stringify(currentToken));
-    console.log(JSON.stringify(currentId));
-    console.log(API_URL);
     await axios
       .post(
         API_URL + "/class/getTeacherClasses",
@@ -88,7 +86,7 @@ function HomePage() {
         if (res.data) {
           console.log(res.data);
           const teachersData = res.data;
-          setTeacherClass(teachersData);
+          setTeacherClass(teachersData);        
         } else {
           setTeacherClass([]);
         }
@@ -123,26 +121,11 @@ function HomePage() {
             teacherClass={teacherClass}
           />
           {/* layout section */}
-          <Box sx={{ marginLeft: "240px", marginTop: "100px" }}>
-            {currentSelection === "Home" && (
-              // <CoursesList classData={dataClass} />
-              <div>
-                <NestedList name="Student Class">
-                  <CoursesList classData={studentClass} />
-                </NestedList>
-
-                <NestedList name="Teacher Class">
-                  <CoursesList classData={teacherClass} />
-                </NestedList>
-              </div>
-            )}
-            {currentSelection === "MapID" && <StudentIdDataTable />}
-            {currentSelection === "Registered" && <div>Registered Content</div>}
-            {currentSelection === "Archived class" && (
-              <div>Archived Class Content Here</div>
-            )}
-            {currentSelection === "Setting" && <div>Settings Content Here</div>}
-          </Box>
+          <MainContent
+            currentSelection={currentSelection}
+            studentClass={studentClass}
+            teacherClass={teacherClass}
+          />
         </Box>
       </Box>
     </ThemeProvider>

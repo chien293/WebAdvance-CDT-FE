@@ -64,7 +64,6 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
         setEditDialogOpen(false);
     };
 
-    //Chinh sua thong tin
     const handleEditSubmit = async () => {
         const result = await axios.post(
             API_URL + "/admin/mapStudentId",
@@ -88,9 +87,7 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
 
         handleEditDialogClose();
     };
-    const handleRowOrderChange = (params) => {
-        console.log('New row order: ', params);
-    };
+
     const CustomToolbar = ({ apiRef }) => {
         const handleExportClick = () => {
             if (!apiRef?.current) {
