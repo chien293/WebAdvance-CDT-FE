@@ -98,7 +98,7 @@ const InfoContent = () => {
           </Paper>
         </Grid>
         {posts.length > 0 &&
-          posts.map((post) => (
+          posts.reverse().map((post) => (
             <Post
               key={post.id}
               postWriter={post.postWriter}

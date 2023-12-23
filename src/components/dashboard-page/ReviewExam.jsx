@@ -64,7 +64,7 @@ const ReviewExam = () => {
     <div className="flex flex-col w-full items-center">
       <div className="w-8/12 mt-10">
         {requestsReview.length > 0 &&
-          requestsReview.map((req) => (
+          requestsReview.reverse().map((req) => (
             <Link key={req.id} href={req.link} passHref>
               <div className="mb-5">
                 <Post
