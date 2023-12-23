@@ -6,7 +6,7 @@ import { Box } from "@mui/material";
 function MainContent({ currentSelection, studentClass, teacherClass, id }) {
     console.log(id + " MAIN CONTENT")
     return (
-      <Box sx={{ marginLeft: "240px", marginTop: "100px" }}>
+      <Box sx={{ marginLeft: "225px", backgroundColor: "white"}}>
         {currentSelection === "Home" && (
           <div>
             <NestedList name="Student Class">

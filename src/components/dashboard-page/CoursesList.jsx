@@ -12,7 +12,7 @@ const CoursesList = ({ classData }) => {
   });
 
   return classData ? (
-    <div className="grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 md:grid-cols-3">
+    <div className="flex flex-wrap w-full min-h-screen">
       {classData.map((course) => (
         <Link
           key={course.id}
@@ -20,8 +20,7 @@ const CoursesList = ({ classData }) => {
             (course.role === "teacher" ? "/teacher/class/" : "student/class/") +
             course.id
           }
-          passHref
-        >
+          passHref>
           <div>
             <CoursesInfo
               name={course.name}

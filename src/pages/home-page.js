@@ -114,7 +114,7 @@ function HomePage() {
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
         <HeaderBar isHomePage={true} />
-        <Box sx={{ flexGrow: 1 }}>
+        <Box>
           <SideBar
             setCurrentSelection={setCurrentSelection}
             studentClass={studentClass}
