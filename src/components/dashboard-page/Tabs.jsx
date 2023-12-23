@@ -6,7 +6,6 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import ParticipantContent from "./ParticipantContent";
 import InfoContent from "./InfoContent";
-import { Container, Grid, Paper, Typography } from "@mui/material";
 import Post from "./Post";
 import Exercise from "./Exercise";
 import SettingsContent from "./SettingsContent";
@@ -23,21 +22,25 @@ export default function LabTabs(props) {
   return (
     <Box
       sx={{
-        marginLeft: "20px",
-        
-        width: "100%",
+        width: "calc(100% - 240px)",
         typography: "body1",
+        marginTop: 8,
+        display: "flex",
+        flexDirection: "column",
+        position: "absolute",
         backgroundColor: "white",
-      }}
-    >
+        overflowY: "auto",
+        top: 0,
+        bottom: 0,
+      }}>
       <TabContext value={value}>
         <Box
           sx={{
             borderBottom: 1,
+            // backgroundColor: "red",
             borderColor: "divider",
             "& .MuiTab-root": { textTransform: "none" },
-          }}
-        >
+          }}>
           <TabList
             onChange={handleChange}
             sx={{
@@ -48,8 +51,7 @@ export default function LabTabs(props) {
               "& button:hover": { color: "black", backgroundColor: "#eeeeee" },
               "& button:active": { color: "green" },
               "& button:focus": { color: "green" },
-            }}
-          >
+            }}>
             <Tab label="Information" value="1" />
             <Tab label="Exercise" value="2" />
             <Tab label="Participant" value="3" />
@@ -59,27 +61,32 @@ export default function LabTabs(props) {
             <Tab label="Checking Examination Papers" value="7" />
           </TabList>
         </Box>
-        <TabPanel value="1">
-          <InfoContent classId={props.classId} />
-        </TabPanel>
-        <TabPanel value="2">
-          <Exercise classId={props.classId} />
-        </TabPanel>
-        <TabPanel value="3">
-          <ParticipantContent classId={props.classId} />
-        </TabPanel>
-        <TabPanel value="4">
-          <SettingsContent classId={props.classId} />
-        </TabPanel>
-        <TabPanel value="5">
-          <GradeStructureBoard classId={props.classId} />
-        </TabPanel>
-        <TabPanel value="6">
-          <GradeBoard classId={props.classId} />
-        </TabPanel>
-        <TabPanel value="7">
-          <ReviewExam classId={props.classId} />
-        </TabPanel>
+        <Box
+          sx={{
+   
+          }}>
+          <TabPanel value="1">
+            <InfoContent classId={props.classId} />
+          </TabPanel>
+          <TabPanel value="2">
+            <Exercise classId={props.classId} />
+          </TabPanel>
+          <TabPanel value="3">
+            <ParticipantContent classId={props.classId} />
+          </TabPanel>
+          <TabPanel value="4">
+            <SettingsContent classId={props.classId} />
+          </TabPanel>
+          <TabPanel value="5">
+            <GradeStructureBoard classId={props.classId} />
+          </TabPanel>
+          <TabPanel value="6">
+            <GradeBoard classId={props.classId} />
+          </TabPanel>
+          <TabPanel value="7">
+            <ReviewExam classId={props.classId} />
+          </TabPanel>
+        </Box>
       </TabContext>
     </Box>
   );

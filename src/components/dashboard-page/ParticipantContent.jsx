@@ -12,7 +12,7 @@ const ParticipantContent = () => {
   ];
 
   return (
-    <div className="flex flex-col w-6/12 font-medium">
+    <div className="flex flex-col w-6/12 font-medium ml-40">
       <div className="text-green-600 text-4xl p-5 border-b border-green-600">
         Teacher
       </div>

@@ -97,7 +97,7 @@ const StudentIdDataTable = () => {
   };
 
   return (
-    <div className="studentIdsDataTable">
+    <div className="studentIdsDataTable ml-20 mt-20 w-full">
       {listIdsData && listIdsData.length > 0 ? (
         <div style={{ height: 400, width: '100%' }}>
           <DataGrid

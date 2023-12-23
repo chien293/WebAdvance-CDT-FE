@@ -28,7 +28,7 @@ export default function Class() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
-        <HeaderBar />
+        <SideBar/>
         <Tabs classId={id} />
       </Box>
     </ThemeProvider>
