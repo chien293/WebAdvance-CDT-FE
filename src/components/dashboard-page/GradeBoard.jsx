@@ -7,9 +7,9 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import {
-  DataGridPro, GridColDef, GridToolbar,
+  DataGrid, GridColDef, GridToolbar,
   GridToolbarContainer, GridToolbarExport, useGridApiRef
-} from '@mui/x-data-grid-pro';
+} from '@mui/x-data-grid';
 import axios from 'axios';
 import * as XLSX from 'xlsx'
 
@@ -18,13 +18,15 @@ export default function GradeBoard(props) {
   const [currentId, setId] = useState(null);
   const [currentToken, setToken] = useState(null);
   const [gradeData, setGradeData] = useState([]);
+  const [filterGradeData, setFilterGradeData] = useState([]);
   const [columns, setColumns] = useState([]);
   const apiRef = useGridApiRef()
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedGrade, setSelectedGrade] = useState(null);
   const [selectedColumn, setSelectedColumn] = useState(null);
   const [gradeStructure, setGradeStructure] = useState(null);
-  const [sumValues, setSumValues] = useState({});
+  const [filterGradeStructure, setFilterGradeStructure] = useState(null);
+  const [sumValues, setSumValues] = useState([]);
 
   const API_URL = process.env.SERVER_URL;
 
@@ -48,10 +50,11 @@ export default function GradeBoard(props) {
     }
   }, [currentToken]);
 
+  //create columns
   useEffect(() => {
     if (gradeData.length > 0) {
       const firstItem = gradeData[0];
-      const columns = Object.keys(firstItem).map((key) => ({
+      const columns = Object.keys(firstItem).filter((key) => key.toLowerCase() !== "index").map((key) => ({
         field: key,
         headerName: key.charAt(0).toUpperCase() + key.slice(1),
         width: 150,
@@ -74,9 +77,39 @@ export default function GradeBoard(props) {
         },
       )
       setColumns(columns)
-      getGradeStructures(props.classId);
     }
   }, [gradeData]);
+
+  //count sum
+  useEffect(() => {
+    if (gradeStructure != null && gradeStructure.length > 0) {
+      let gradeStructureObj = filterGradeStructure[0];
+      console.log(JSON.stringify(gradeStructureObj), " GRADE COLUMN")
+      const newGrade = filterGradeData.map(obj => {
+        let newObj = { ...obj };
+        newObj.sum = Object.keys(gradeStructureObj).reduce((sum, key) => {
+          if (newObj[key] !== null && newObj[key] !== undefined && !isNaN(newObj[key])) {
+            return sum + (newObj[key] * gradeStructureObj[key] / 100);
+          } else {
+            return sum;
+          }
+        }, 0);
+        return newObj;
+      });
+      const sumValues = newGrade.map(obj => obj.sum);
+      if (gradeData.length > 0 && sumValues.length > 0) {
+        const newGradeData = gradeData.map((item, index) => {
+          return {
+            ...item,
+            sum: sumValues[index],
+          };
+        });
+        setGradeData(newGradeData);
+      }
+
+    }
+  }, [filterGradeStructure]);
+
 
   const getGrade = async (classId) => {
     await axios.get(
@@ -88,14 +121,17 @@ export default function GradeBoard(props) {
       }
     ).then((res) => {
       if (res.data) {
-        console.log(JSON.stringify(res.data))
+        const structure = res.data.map(obj => {
+          let newObj = { ...obj };
+          delete newObj.id;
+          delete newObj.fullname;
+          return newObj;
+        });
+        setFilterGradeData(structure)
         setGradeData(res.data);
       }
     })
 
-  }
-
-  const getGradeStructures = async (classId) => {
     await axios
       .get(API_URL + "/class/getGradeStructures/" + classId, {
         headers: {
@@ -104,39 +140,25 @@ export default function GradeBoard(props) {
       })
       .then((res) => {
         if (res.data) {
-          console.log(res.data)
-          calculateSum(res.data);
+          const structure = res.data.map(obj => {
+            let newObj = { ...obj };
+            delete newObj.id;
+            return newObj;
+          });
+          setFilterGradeStructure(structure);
 
-          setGradeStructure(res.data);
+          const newResult = []
+          Object.entries(res.data[0]).forEach(([key, value], index) => {
+            if (key !== 'id') {
+              newResult.push({ id: index + 1, percentage: key, value });
+            }
+          });
+          setGradeStructure(newResult);
         }
       });
-  };
 
-  const calculateSum = (data) => {
-    const structure = data;
-    const sums = {};
-    console.log(JSON.stringify(gradeData) + " SUM")
-    gradeData.forEach((item) => {
-      // Duyệt qua mỗi cột trong gradeStructure
-      structure.forEach((structureItem) => {
-        // Kiểm tra nếu cột tồn tại trong gradeData và không phải là 'full name' hoặc 'id'
-        if (
-          item.hasOwnProperty(structureItem.id) &&
-          structureItem.id !== 'full name' &&
-          structureItem.id !== 'id'
-        ) {
-          // Nếu chưa có giá trị tổng cho học sinh, khởi tạo là 0
-          if (!sums[item.id]) {
-            sums[item.id] = 0;
-          }
+  }
 
-          // Thêm giá trị cột vào tổng
-          sums[item.id] += parseFloat(item[structureItem.id] || 0);
-        }
-      });
-    });
-    setSumValues(sums);
-  };
 
   const handleEditClick = (data, field) => {
     setSelectedGrade(data);
@@ -150,26 +172,23 @@ export default function GradeBoard(props) {
 
   const handleEditSubmit = async () => {
     const result = await axios.post(
-      API_URL + "/admin/mapStudentId",
+      API_URL + "/class/updateGrade",
       {
-        id: selectedStudentId.id,
-        userId: editedUserId,
+        data: selectedGrade
       },
       {
         headers: {
-          token: "Bearer " + token,
+          token: "Bearer " + currentToken,
         },
       }
     );
 
-    getGradeStructures(props.id);
-
-    setStudentIdsData((prevIds) =>
+    setGradeData((prevIds) =>
       prevIds.map((data) =>
-        data.id == selectedStudentId.id ?
-          { ...data, iduser: editedUserId, } : data
+        data.id === selectedGrade.id ? { ...data, ...selectedGrade } : data
       )
     );
+
 
     handleEditDialogClose();
   };
@@ -182,24 +201,14 @@ export default function GradeBoard(props) {
   };
 
 
-  const CustomToolbar = ({ apiRef }) => {
+  const CustomToolbar = () => {
     const handleExportClick = () => {
-      if (!apiRef?.current) {
-        console.error('apiRef is not available');
-        return;
-      }
+      
 
-      const dataToExport = apiRef.current.getRowModels()
-      const valuesArray = Array.from(dataToExport.values());
+      // const dataToExport = apiRef.current.getRowModels()
+      // const valuesArray = Array.from(dataToExport.values());
 
-      valuesArray.map(row => ({
-        id: row.id,
-        idstudent: row.idstudent,
-        iduser: row.iduser,
-      }));
-
-
-      const ws = XLSX.utils.json_to_sheet(valuesArray);
+      const ws = XLSX.utils.json_to_sheet(gradeData);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
       XLSX.writeFile(wb, 'exported_data.xlsx');
@@ -218,21 +227,26 @@ export default function GradeBoard(props) {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, { type: 'array' });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const importedData = XLSX.utils.sheet_to_json(sheet);
-
+        const importedData = XLSX.utils.sheet_to_json(sheet, {
+          defval: null // Giá trị mặc định cho ô trống
+        });
+         
+        setGradeData(importedData);
+        
         // Handle the imported data
         const result = await axios.post(
-          API_URL + "/admin/mapListStudentIds",
+          API_URL + "/class/updateGrades",
           {
             data: importedData
           },
           {
             headers: {
-              token: "Bearer " + token,
+              token: "Bearer " + currentToken,
             },
           }
         );
-        setStudentIdsData(importedData);
+
+        
       };
 
       reader.readAsArrayBuffer(file);
@@ -266,7 +280,7 @@ export default function GradeBoard(props) {
         width: "100%",
       }}
     >
-      <DataGridPro
+      <DataGrid
         rows={gradeData}
         columns={columns}
         initialState={{
@@ -274,9 +288,9 @@ export default function GradeBoard(props) {
           pagination: { paginationModel: { pageSize: 10 } },
         }}
 
-        apiRef={apiRef}
+     
         slots={{
-          toolbar: () => <CustomToolbar apiRef={apiRef} />,
+          toolbar: () => <CustomToolbar  />,
         }}
         pageSizeOptions={[5, 10]}
         pagination
@@ -288,7 +302,7 @@ export default function GradeBoard(props) {
           <DialogContent>
             <Box mb={2}>
               {selectedColumn ? columns
-                .filter(column => column.field !== 'edit' && column.field !== 'id' && column.field !== 'fullname')
+                .filter(column => column.field !== 'edit' && column.field !== 'id' && column.field !== 'fullname' && column.field !== 'sum')
                 .map((column) => (
                   <Box mb={2} key={column.field}>
                     <TextField
