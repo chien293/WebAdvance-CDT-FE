@@ -140,19 +140,22 @@ export default function GradeBoard(props) {
       })
       .then((res) => {
         if (res.data) {
-          const structure = res.data.map(obj => {
-            let newObj = { ...obj };
-            delete newObj.id;
-            return newObj;
-          });
-          setFilterGradeStructure(structure);
-
           const newResult = []
-          Object.entries(res.data[0]).forEach(([key, value], index) => {
-            if (key !== 'id') {
-              newResult.push({ id: index + 1, percentage: key, value });
-            }
-          });
+          if (res.data.length > 0) {
+            const structure = res.data.map(obj => {
+              let newObj = { ...obj };
+              delete newObj.id;
+              return newObj;
+            });
+            setFilterGradeStructure(structure);
+
+
+            Object.entries(res.data[0]).forEach(([key, value], index) => {
+              if (key !== 'id') {
+                newResult.push({ id: index + 1, percentage: key, value });
+              }
+            });   
+          }
           setGradeStructure(newResult);
         }
       });
@@ -203,7 +206,7 @@ export default function GradeBoard(props) {
 
   const CustomToolbar = () => {
     const handleExportClick = () => {
-      
+
 
       // const dataToExport = apiRef.current.getRowModels()
       // const valuesArray = Array.from(dataToExport.values());
@@ -230,9 +233,9 @@ export default function GradeBoard(props) {
         const importedData = XLSX.utils.sheet_to_json(sheet, {
           defval: null // Giá trị mặc định cho ô trống
         });
-         
+
         setGradeData(importedData);
-        
+
         // Handle the imported data
         const result = await axios.post(
           API_URL + "/class/updateGrades",
@@ -246,7 +249,7 @@ export default function GradeBoard(props) {
           }
         );
 
-        
+
       };
 
       reader.readAsArrayBuffer(file);
@@ -288,9 +291,9 @@ export default function GradeBoard(props) {
           pagination: { paginationModel: { pageSize: 10 } },
         }}
 
-     
+
         slots={{
-          toolbar: () => <CustomToolbar  />,
+          toolbar: () => <CustomToolbar />,
         }}
         pageSizeOptions={[5, 10]}
         pagination

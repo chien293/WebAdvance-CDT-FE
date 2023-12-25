@@ -39,7 +39,8 @@ export default function Class() {
           currentSelection={currentSelection}
           studentClass={studentClass}
           teacherClass={teacherClass}
-          id={id} />
+          id={id}
+          role="teacher" />
   
       </Box>
     </ThemeProvider>

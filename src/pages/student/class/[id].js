@@ -40,6 +40,7 @@ export default function Class() {
           studentClass={studentClass}
           teacherClass={teacherClass}
           id={id}
+          role="student"
         />
       </Box>
     </ThemeProvider>

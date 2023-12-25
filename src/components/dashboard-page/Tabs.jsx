@@ -12,15 +12,18 @@ import SettingsContent from "./SettingsContent";
 import GradeBoard from "./GradeBoard";
 import ReviewExam from "./ReviewExam";
 import GradeStructureBoard from "./GradeStructure";
+import GradeBoardStudent from "./student/GradeBoardStudent";
 export default function LabTabs(props) {
   const [value, setValue] = React.useState("1");
 
+  console.log(props.role + " ROLE")
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   return (
-    <Box
+    props.role === "teacher" ?
+    (<Box
       sx={{
         width: "calc(100% - 240px)",
         typography: "body1",
@@ -88,6 +91,72 @@ export default function LabTabs(props) {
           </TabPanel>
         </Box>
       </TabContext>
+    </Box>) : (
+      <Box
+      sx={{
+        width: "calc(100% - 240px)",
+        typography: "body1",
+        marginTop: 8,
+        display: "flex",
+        flexDirection: "column",
+        position: "absolute",
+        backgroundColor: "white",
+        overflowY: "auto",
+        top: 0,
+        bottom: 0,
+      }}>
+      <TabContext value={value}>
+        <Box
+          sx={{
+            borderBottom: 1,
+            // backgroundColor: "red",
+            borderColor: "divider",
+            "& .MuiTab-root": { textTransform: "none" },
+          }}>
+          <TabList
+            onChange={handleChange}
+            sx={{
+              "& .MuiTabs-indicator": {
+                backgroundColor: "green", // indicatorColor
+              },
+              "& button": { fontWeight: "bold" },
+              "& button:hover": { color: "black", backgroundColor: "#eeeeee" },
+              "& button:active": { color: "green" },
+              "& button:focus": { color: "green" },
+            }}>
+            <Tab label="Information" value="1" />
+            <Tab label="Exercise" value="2" />
+            <Tab label="Participant" value="3" />
+            <Tab label="Settings" value="4" />
+            <Tab label="Grade Board" value="5" />
+            <Tab label="Checking Examination Papers" value="6" />
+          </TabList>
+        </Box>
+        <Box
+          sx={{
+   
+          }}>
+          <TabPanel value="1">
+            <InfoContent classId={props.classId} />
+          </TabPanel>
+          <TabPanel value="2">
+            <Exercise classId={props.classId} />
+          </TabPanel>
+          <TabPanel value="3">
+            <ParticipantContent classId={props.classId} />
+          </TabPanel>
+          <TabPanel value="4">
+            <SettingsContent classId={props.classId} />
+          </TabPanel>
+          <TabPanel value="5">
+            <GradeBoardStudent classId={props.classId}/>
+          </TabPanel>
+          <TabPanel value="6">
+            <ReviewExam classId={props.classId} />
+          </TabPanel>
+        </Box>
+      </TabContext>
     </Box>
+    )
   );
 }

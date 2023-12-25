@@ -3,7 +3,7 @@ import CoursesList from "./dashboard-page/CoursesList";
 import StudentIdDataTable from "./admin/utils/StudentIdTable";
 import Tabs from "@/components/dashboard-page/Tabs";
 import { Box } from "@mui/material";
-function MainContent({ currentSelection, studentClass, teacherClass, id }) {
+function MainContent({ currentSelection, studentClass, teacherClass, id, role }) {
     console.log(id + " MAIN CONTENT")
     return (
       <Box sx={{ marginLeft: "240px", backgroundColor: "white", height: "100%"}}>
@@ -24,7 +24,7 @@ function MainContent({ currentSelection, studentClass, teacherClass, id }) {
           <div>Archived Class Content Here</div>
         )}
         {currentSelection === "Setting" && <div>Settings Content Here</div>}
-        {currentSelection === "Tabs" &&  <Tabs classId={id}/>}
+        {currentSelection === "Tabs" &&  <Tabs classId={id} role={role}/>}
       </Box>
     );
   }
