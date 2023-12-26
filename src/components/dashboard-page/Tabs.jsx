@@ -13,16 +13,16 @@ import GradeBoard from "./GradeBoard";
 import ReviewExam from "./ReviewExam";
 import GradeStructureBoard from "./GradeStructure";
 import GradeBoardStudent from "./student/GradeBoardStudent";
-export default function LabTabs(props) {
+const LabTabs = ({classId, role, socket}) => {
   const [value, setValue] = React.useState("1");
 
-  console.log(props.role + " ROLE")
+  console.log(socket + " ROLE")
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   return (
-    props.role === "teacher" ?
+    role === "teacher" ?
     (<Box
       sx={{
         width: "calc(100% - 240px)",
@@ -69,25 +69,25 @@ export default function LabTabs(props) {
    
           }}>
           <TabPanel value="1">
-            <InfoContent classId={props.classId} />
+            <InfoContent classId={classId} />
           </TabPanel>
           <TabPanel value="2">
-            <Exercise classId={props.classId} />
+            <Exercise classId={classId} />
           </TabPanel>
           <TabPanel value="3">
-            <ParticipantContent classId={props.classId} />
+            <ParticipantContent classId={classId} />
           </TabPanel>
           <TabPanel value="4">
-            <SettingsContent classId={props.classId} />
+            <SettingsContent classId={classId} />
           </TabPanel>
           <TabPanel value="5">
-            <GradeStructureBoard classId={props.classId} />
+            <GradeStructureBoard classId={classId} socket={socket} />
           </TabPanel>
           <TabPanel value="6">
-            <GradeBoard classId={props.classId} />
+            <GradeBoard classId={classId} />
           </TabPanel>
           <TabPanel value="7">
-            <ReviewExam classId={props.classId} />
+            <ReviewExam classId={classId} />
           </TabPanel>
         </Box>
       </TabContext>
@@ -137,22 +137,22 @@ export default function LabTabs(props) {
    
           }}>
           <TabPanel value="1">
-            <InfoContent classId={props.classId} />
+            <InfoContent classId={classId} />
           </TabPanel>
           <TabPanel value="2">
-            <Exercise classId={props.classId} />
+            <Exercise classId={classId} />
           </TabPanel>
           <TabPanel value="3">
-            <ParticipantContent classId={props.classId} />
+            <ParticipantContent classId={classId} />
           </TabPanel>
           <TabPanel value="4">
-            <SettingsContent classId={props.classId} />
+            <SettingsContent classId={classId} />
           </TabPanel>
           <TabPanel value="5">
-            <GradeBoardStudent classId={props.classId}/>
+            <GradeBoardStudent classId={classId}/>
           </TabPanel>
           <TabPanel value="6">
-            <ReviewExam classId={props.classId} />
+            <ReviewExam classId={classId} />
           </TabPanel>
         </Box>
       </TabContext>
@@ -160,3 +160,5 @@ export default function LabTabs(props) {
     )
   );
 }
+
+export default LabTabs

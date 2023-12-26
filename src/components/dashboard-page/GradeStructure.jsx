@@ -51,7 +51,7 @@ const DragableBodyRow = ({ index, moveRow, className, style, ...restProps }) => 
     );
 };
 
-const GradeStructureBoard = (props) => {
+const GradeStructureBoard = ({classId, socket}) => {
     const API_URL = process.env.SERVER_URL;
     const [currentUser, setCurrentUser] = React.useState(null);
     const [currentId, setId] = useState(null);
@@ -111,7 +111,7 @@ const GradeStructureBoard = (props) => {
     }, []);
 
     useEffect(() => {
-        if (currentToken) getData(props.classId);
+        if (currentToken) getData(classId);
     }, [currentToken]);
 
     const getData = async (classId) => {
@@ -159,7 +159,7 @@ const GradeStructureBoard = (props) => {
         try {
             await axios.post(
                 API_URL + "/class/updateRowGradeStructures",
-                { idClass: props.classId, gradeStructure },
+                { idClass: classId, gradeStructure },
                 {
                     headers: {
                         token: "Bearer " + currentToken,
@@ -187,7 +187,7 @@ const GradeStructureBoard = (props) => {
         try {
             await axios.post(
                 API_URL + "/class/finalGradeStructure",
-                { idClass: props.classId, gradeStructure: finalRowData },
+                { idClass: classId, gradeStructure: finalRowData },
                 {
                     headers: {
                         token: "Bearer " + currentToken,
@@ -198,6 +198,11 @@ const GradeStructureBoard = (props) => {
             console.error("Error saving data to the database", error);
         }
 
+        socket.emit("sendNotification",{
+            senderId: currentId,
+            receiverId: classId,
+            type,
+        })
         
 
         const updatedData = gradeStructure.map((item) =>
@@ -219,7 +224,7 @@ const GradeStructureBoard = (props) => {
         try {
             await axios.post(
                 API_URL + "/class/updateGradeStructure",
-                { idClass: props.classId, gradeStructure: editRowData },
+                { idClass: classId, gradeStructure: editRowData },
                 {
                     headers: {
                         token: "Bearer " + currentToken,
@@ -256,7 +261,7 @@ const GradeStructureBoard = (props) => {
         setGradeStructure([...gradeStructure, newData]);
 
         axios.post(API_URL + "/class/addGradeStructure", {
-            idClass: props.classId,
+            idClass:classId,
             percentage: newRowData.percentage,
             value: newRowData.value,
             orderValue: gradeStructure.length + 1
@@ -303,7 +308,7 @@ const GradeStructureBoard = (props) => {
 
 
         axios.post(API_URL + "/class/deleteGradeStructure", {
-            idClass: props.classId,
+            idClass: classId,
             id: deleteRowData.id,
             gradeStructure: updatedWithNewIds,
             deletedValue: deleteRowData.percentage
@@ -324,11 +329,22 @@ const GradeStructureBoard = (props) => {
         setIsDeleteModalVisible(false);
     }
 
-
+    const handleNoti = () => {
+        console.log("NOTICLICK")
+        socket.emit("sendNotification",{
+            senderId: currentId,
+            receiverId: classId,
+            type,
+        })
+        
+    }
 
     return (
         <div>
             <h2>Grade Structure Board</h2>
+            <Button style={{ color: "blue" }} type="primary" onClick={handleNoti}>
+                NOTIFICATION
+            </Button>
             <Button style={{ color: "blue" }} type="primary" onClick={showModal}>
                 Thêm Dòng
             </Button>

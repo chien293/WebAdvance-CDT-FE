@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -17,6 +17,7 @@ import axios from "axios";
 import StudentIdDataTable from "@/components/admin/utils/StudentIdTable";
 import NestedList from "@/components/dashboard-page/NestedList";
 import { ClassContext, ClassProvider } from "@/components/ClassProvider";
+import {io} from "socket.io-client";
 import MainContent from "@/components/MainHomePage";
 const defaultTheme = createTheme();
 
@@ -30,9 +31,11 @@ function HomePage() {
   const [teacherClass, setTeacherClass] = useState([]);
   const [classData, setClassData] = useState([]);
   const [currentToken, setToken] = useState(null);
+  const [socket, setSocket] = useState(null);
   const { updateClasses } = useContext(ClassContext);
   const API_URL = process.env.SERVER_URL;
-  React.useEffect(() => {
+
+  useEffect(() => {
     const takeUser = () => {
       const user = AuthService.getCurrentUser();
       if (user) {
@@ -43,12 +46,26 @@ function HomePage() {
     };
 
     takeUser();
+
+    const newSocket = io("http://localhost:3500")
+    setSocket(newSocket);
+    return () => {
+      newSocket.disconnect();
+    };
   }, []);
-  React.useEffect(() => {
+
+  useEffect(() => {
+    if (socket) {
+      socket.emit("newUser", currentUser);
+      console.log(socket, " HOME-page")
+    }
+  }, [socket]);
+
+  useEffect(() => {
     if (currentToken) getClasses();
   }, [currentToken]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (studentClass.length > 0 || teacherClass.length > 0) {
       console.log("Updated studentClass:", studentClass);
       const temp = [...teacherClass, ...studentClass];
@@ -113,7 +130,7 @@ function HomePage() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
-        <HeaderBar isHomePage={true} />
+        <HeaderBar isHomePage={true} socket={socket} />
         <Box>
           <SideBar
             setCurrentSelection={setCurrentSelection}
@@ -125,6 +142,7 @@ function HomePage() {
             currentSelection={currentSelection}
             studentClass={studentClass}
             teacherClass={teacherClass}
+            socket={socket}
           />
         </Box>
       </Box>

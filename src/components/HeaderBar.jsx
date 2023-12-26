@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -57,20 +57,55 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const HeaderBar = ({ isHomePage }) => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [openAddCourseButton, setOpenAddCourseButton] = React.useState(false);
-  const [placement, setPlacement] = React.useState();
-  const [openForm, setOpenForm] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState(null);
+const NotificationPanel = ({ notifications }) => (
+  <Popper
+    open={Boolean(notifications)}
+    anchorEl={notifications}
+    placement="bottom-end"
+    transition
+  >
+    {({ TransitionProps }) => (
+      <Fade {...TransitionProps} timeout={350}>
+        <Paper>
+          <List>
+            {notifications && notifications.map((notification, index) => (
+              <div key={index} className="px-4 py-2 hover:bg-gray-100">
+                <Typography variant="body1">
+                  {notification.message}
+                </Typography>
+              </div>
+            ))}
+          </List>
+        </Paper>
+      </Fade>
+    )}
+  </Popper>
+);
 
-  React.useEffect(() => {
+const HeaderBar = ({ isHomePage, socket }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [openAddCourseButton, setOpenAddCourseButton] = useState(false);
+  const [placement, setPlacement] = useState();
+  const [openForm, setOpenForm] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [notifications, setNotifications] = useState(null);
+
+  useEffect(() => {
     //takeUser();
     const user = AuthService.getCurrentUser();
     if (user) {
       setCurrentUser(user.user[0].fullname);
     }
   }, []);
+
+  useEffect(() => {
+    if (socket) {
+      console.log(socket, "DANG TRONG HEADERBAR")
+      socket.on("getNotification", (data) => {
+        setNotifications((prev) => [...prev, data])
+      });
+    }
+  }, [socket]);
 
   const handleClick = (newPlacement) => (event) => {
     setAnchorEl(event.currentTarget);
@@ -113,6 +148,7 @@ const HeaderBar = ({ isHomePage }) => {
           <Button>
             <NotificationsNoneIcon style={{ marginRight: 30 }} />
           </Button>
+          <NotificationPanel notifications={notifications} />
 
           <Popper
             open={openAddCourseButton}
@@ -129,7 +165,7 @@ const HeaderBar = ({ isHomePage }) => {
                     <Button
                       sx={{ border: "none" }}
                       variant="outlined"
-                      // onClick={() => setOpen(true)}
+                    // onClick={() => setOpen(true)}
                     >
                       Enroll Classroom
                     </Button>
