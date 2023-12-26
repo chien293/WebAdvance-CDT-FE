@@ -1,7 +1,7 @@
 import NestedList from "@/components/dashboard-page/NestedList";
 import CoursesList from "@/components/dashboard-page/CoursesList";
 import StudentIdDataTable from "@/components/admin/utils/StudentIdTable";
-import Tabs from "@/components/class/student/StudentTabs";
+import Tabs from "@/components/class/teacher/TeacherTabs";
 import {
   Button,
   CssBaseline,
@@ -51,6 +51,7 @@ const TeacherClass = ({
   teacherClass,
   id,
   role,
+  tabs,
   socket,
 }) => {
   const [currentSocket, setSocket] = useState(null);
@@ -92,7 +93,7 @@ const TeacherClass = ({
       )}
       {currentSelection === "Setting" && <div>Settings Content Here</div>}
       {currentSelection === "Tabs" && (
-        <Tabs classId={id} role={role} socket={currentSocket} />
+        <Tabs classId={id} role={role} tabs={tabs} socket={currentSocket} />
       )}
       <Button style={{ color: "blue" }} type="primary" onClick={handleNoti}>
         NOTIFICATION

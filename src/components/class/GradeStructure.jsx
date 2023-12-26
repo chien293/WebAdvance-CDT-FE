@@ -51,7 +51,7 @@ const DragableBodyRow = ({ index, moveRow, className, style, ...restProps }) => 
     );
 };
 
-const GradeStructureBoard = ({classId, socket}) => {
+const GradeStructureBoard = ({ classId, onSendNotification }) => {
     const API_URL = process.env.SERVER_URL;
     const [currentUser, setCurrentUser] = React.useState(null);
     const [currentId, setId] = useState(null);
@@ -198,19 +198,18 @@ const GradeStructureBoard = ({classId, socket}) => {
             console.error("Error saving data to the database", error);
         }
 
-        socket.emit("sendNotification",{
-            senderId: currentId,
+        const updated = { senderId: currentId,
             receiverId: classId,
             type,
-        })
-        
+         };
+        onSendNotification(updated)
 
         const updatedData = gradeStructure.map((item) =>
             item.id === finalRowData.id ? { ...item, percentage: finalRowData.percentage, value: finalRowData.value } : item
         );
 
         setGradeStructure(updatedData);
-        
+
         setIsFinalVisible(false);
 
     };
@@ -261,7 +260,7 @@ const GradeStructureBoard = ({classId, socket}) => {
         setGradeStructure([...gradeStructure, newData]);
 
         axios.post(API_URL + "/class/addGradeStructure", {
-            idClass:classId,
+            idClass: classId,
             percentage: newRowData.percentage,
             value: newRowData.value,
             orderValue: gradeStructure.length + 1
@@ -330,13 +329,12 @@ const GradeStructureBoard = ({classId, socket}) => {
     }
 
     const handleNoti = () => {
-        console.log("NOTICLICK")
-        socket.emit("sendNotification",{
+        const updatedData = {
             senderId: currentId,
             receiverId: classId,
             type,
-        })
-        
+        };
+        onSendNotification(updatedData)
     }
 
     return (

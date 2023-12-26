@@ -12,12 +12,12 @@ const CoursesList = ({ classData, socket }) => {
       {classData.map((course) => (
         <Link
           key={course.id}
-          href={
-            (course.role === "teacher" ? "/teacher/class/" : "student/class/") +
-            course.id
-          }
+          href={{
+            pathname: course.role === "teacher" ? `/teacher/class/${course.id}` : `student/class/${course.id}`   
+          }}
+
           passHref>
-          <div>
+          <div socket={socket}>
             <CoursesInfo
               name={course.name}
               title={course.title}

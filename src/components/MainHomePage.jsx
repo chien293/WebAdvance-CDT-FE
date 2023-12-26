@@ -19,32 +19,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
-const NotificationPanel = ({ notifications }) => (
-  <Popper
-    open={Boolean(notifications)}
-    anchorEl={notifications}
-    placement="bottom-end"
-    transition
-  >
-    {({ TransitionProps }) => (
-      <Fade {...TransitionProps} timeout={350}>
-        <Paper>
-          <List>
-            {notifications &&
-              notifications.map((notification, index) => (
-                <div key={index} className="px-4 py-2 hover:bg-gray-100">
-                  <Typography variant="body1">
-                    {notification.message}
-                  </Typography>
-                </div>
-              ))}
-          </List>
-        </Paper>
-      </Fade>
-    )}
-  </Popper>
-);
-
 const MainContent = ({
   currentSelection,
   studentClass,
@@ -53,37 +27,29 @@ const MainContent = ({
   role,
   socket,
 }) => {
-  console.log(socket + " MAIN CONTENT");
+  console.log(socket, " MAIN CONTENT");
   const [currentSocket, setSocket] = useState(null);
   const [notifications, setNotifications] = useState(null);
   useEffect(() => {
     if (socket) {
       setSocket(socket);
+      console.log(currentSocket, " MAIN CONTENT current socket");
       socket.on("getNotification", (data) => {
         setNotifications((prev) => [...prev, data]);
       });
     }
   }, [socket]);
 
-  const handleNoti = () => {
-    console.log("NOTICLICK");
-    socket.emit("sendNotification", {
-      senderId: 3,
-      receiverId: id,
-      type: "GUI ROI do",
-    });
-  };
-
   return (
     <Box sx={{ marginLeft: "240px", backgroundColor: "white", height: "100%" }}>
       {currentSelection === "Home" && (
         <div>
           <NestedList name="Student Class">
-            <CoursesList classData={studentClass} socket={currentSocket} />
+            <CoursesList classData={studentClass} socket={socket} />
           </NestedList>
 
           <NestedList name="Teacher Class">
-            <CoursesList classData={teacherClass} socket={currentSocket} />
+            <CoursesList classData={teacherClass} socket={socket} />
           </NestedList>
         </div>
       )}
@@ -96,10 +62,6 @@ const MainContent = ({
       {currentSelection === "Tabs" && (
         <Tabs classId={id} role={role} socket={currentSocket} />
       )}
-      <Button style={{ color: "blue" }} type="primary" onClick={handleNoti}>
-        NOTIFICATION
-      </Button>
-      <NotificationPanel notifications={notifications} />
     </Box>
   );
 };

@@ -82,30 +82,66 @@ const NotificationPanel = ({ notifications }) => (
   </Popper>
 );
 
-const HeaderBar = ({ isHomePage, socket }) => {
+const HeaderBar = ({ isHomePage, socket, onSendNotification }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openAddCourseButton, setOpenAddCourseButton] = useState(false);
   const [placement, setPlacement] = useState();
   const [openForm, setOpenForm] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [currentToken, setCurrentToken] = useState(null);
+  const [currentId, setCurrentId] = useState(null);
   const [notifications, setNotifications] = useState(null);
-
+  const API_URL = process.env.SERVER_URL;
   useEffect(() => {
     //takeUser();
     const user = AuthService.getCurrentUser();
     if (user) {
       setCurrentUser(user.user[0].fullname);
+      setCurrentToken(user.accessToken);
+      setCurrentId(user.user[0].id)
     }
   }, []);
 
   useEffect(() => {
+    if (currentUser) {
+      getNotifications()
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
     if (socket) {
-      console.log(socket, "DANG TRONG HEADERBAR")
       socket.on("getNotification", (data) => {
         setNotifications((prev) => [...prev, data])
       });
     }
   }, [socket]);
+
+  useEffect(() => {
+    if (onSendNotification) {
+      console.log(JSON.stringify(onSendNotification), " DA NHAN DUOC DATA TU GRADE");
+    }
+  }, [onSendNotification]);
+
+
+  const getNotifications = async () => {
+    console.log(currentUser, " HEADERBAR")
+    await axios
+      .post(API_URL + "/class/getNotifications", 
+      {
+        idUser: currentId
+      },
+      {
+        headers: {
+          token: "Bearer " + currentToken,
+        },
+      })
+      .then((res) => {
+        if (res.data) {
+          console.log(JSON.stringify(res.data))
+          setNotifications(res.data);
+        }
+      });
+  };
 
   const handleClick = (newPlacement) => (event) => {
     setAnchorEl(event.currentTarget);
