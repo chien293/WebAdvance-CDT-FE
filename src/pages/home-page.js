@@ -103,7 +103,7 @@ function HomePage() {
         if (res.data) {
           console.log(res.data);
           const teachersData = res.data;
-          setTeacherClass(teachersData);        
+          setTeacherClass(teachersData);
         } else {
           setTeacherClass([]);
         }
@@ -150,5 +150,4 @@ function HomePage() {
   );
 }
 
-// export default withAuth(HomePage, ["admin", "user"]);
-export default HomePage;
+export default withAuth(HomePage, ["admin", "user", "teacher", "student"]);

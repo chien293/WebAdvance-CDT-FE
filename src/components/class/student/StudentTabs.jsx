@@ -4,26 +4,25 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import ParticipantContent from "./ParticipantContent";
-import InfoContent from "./InfoContent";
-import Post from "./Post";
-import Exercise from "./Exercise";
-import SettingsContent from "./SettingsContent";
-import GradeBoard from "./GradeBoard";
-import ReviewExam from "./ReviewExam";
-import GradeStructureBoard from "./GradeStructure";
-import GradeBoardStudent from "./student/GradeBoardStudent";
-const LabTabs = ({classId, role, socket}) => {
+import ParticipantContent from "@/components/class/ParticipantContent";
+import InfoContent from "@/components/class/InfoContent";
+import Post from "@/components/class/Post";
+import Exercise from "@/components/class/Exercise";
+import SettingsContent from "@/components/class/SettingsContent";
+import GradeBoard from "@/components/class/GradeBoard";
+import ReviewExam from "@/components/class/ReviewExam";
+import GradeStructureBoard from "@/components/class/GradeStructure";
+import GradeBoardStudent from "@/components/class/student/GradeBoardStudent";
+const StudentTabs = ({ classId, role, socket }) => {
   const [value, setValue] = React.useState("1");
 
-  console.log(socket + " ROLE")
+  console.log(socket + " ROLE");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  return (
-    role === "teacher" ?
-    (<Box
+  return role === "teacher" ? (
+    <Box
       sx={{
         width: "calc(100% - 240px)",
         typography: "body1",
@@ -35,7 +34,8 @@ const LabTabs = ({classId, role, socket}) => {
         overflowY: "auto",
         top: 0,
         bottom: 0,
-      }}>
+      }}
+    >
       <TabContext value={value}>
         <Box
           sx={{
@@ -43,7 +43,8 @@ const LabTabs = ({classId, role, socket}) => {
             // backgroundColor: "red",
             borderColor: "divider",
             "& .MuiTab-root": { textTransform: "none" },
-          }}>
+          }}
+        >
           <TabList
             onChange={handleChange}
             sx={{
@@ -54,7 +55,8 @@ const LabTabs = ({classId, role, socket}) => {
               "& button:hover": { color: "black", backgroundColor: "#eeeeee" },
               "& button:active": { color: "green" },
               "& button:focus": { color: "green" },
-            }}>
+            }}
+          >
             <Tab label="Information" value="1" />
             <Tab label="Exercise" value="2" />
             <Tab label="Participant" value="3" />
@@ -64,10 +66,7 @@ const LabTabs = ({classId, role, socket}) => {
             <Tab label="Checking Examination Papers" value="7" />
           </TabList>
         </Box>
-        <Box
-          sx={{
-   
-          }}>
+        <Box sx={{}}>
           <TabPanel value="1">
             <InfoContent classId={classId} />
           </TabPanel>
@@ -91,8 +90,9 @@ const LabTabs = ({classId, role, socket}) => {
           </TabPanel>
         </Box>
       </TabContext>
-    </Box>) : (
-      <Box
+    </Box>
+  ) : (
+    <Box
       sx={{
         width: "calc(100% - 240px)",
         typography: "body1",
@@ -104,7 +104,8 @@ const LabTabs = ({classId, role, socket}) => {
         overflowY: "auto",
         top: 0,
         bottom: 0,
-      }}>
+      }}
+    >
       <TabContext value={value}>
         <Box
           sx={{
@@ -112,7 +113,8 @@ const LabTabs = ({classId, role, socket}) => {
             // backgroundColor: "red",
             borderColor: "divider",
             "& .MuiTab-root": { textTransform: "none" },
-          }}>
+          }}
+        >
           <TabList
             onChange={handleChange}
             sx={{
@@ -123,7 +125,8 @@ const LabTabs = ({classId, role, socket}) => {
               "& button:hover": { color: "black", backgroundColor: "#eeeeee" },
               "& button:active": { color: "green" },
               "& button:focus": { color: "green" },
-            }}>
+            }}
+          >
             <Tab label="Information" value="1" />
             <Tab label="Exercise" value="2" />
             <Tab label="Participant" value="3" />
@@ -132,10 +135,7 @@ const LabTabs = ({classId, role, socket}) => {
             <Tab label="Checking Examination Papers" value="6" />
           </TabList>
         </Box>
-        <Box
-          sx={{
-   
-          }}>
+        <Box sx={{}}>
           <TabPanel value="1">
             <InfoContent classId={classId} />
           </TabPanel>
@@ -149,7 +149,7 @@ const LabTabs = ({classId, role, socket}) => {
             <SettingsContent classId={classId} />
           </TabPanel>
           <TabPanel value="5">
-            <GradeBoardStudent classId={classId}/>
+            <GradeBoardStudent classId={classId} />
           </TabPanel>
           <TabPanel value="6">
             <ReviewExam classId={classId} />
@@ -157,8 +157,7 @@ const LabTabs = ({classId, role, socket}) => {
         </Box>
       </TabContext>
     </Box>
-    )
   );
-}
+};
 
-export default LabTabs
+export default StudentTabs;

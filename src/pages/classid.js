@@ -15,7 +15,7 @@ import LinkNext from "next/link";
 import Layout from "../components/dashboard-page/Layout";
 import HeaderBar from "@/components/HeaderBar";
 import SideBar from "@/components/SideBar";
-import Tabs from "../components/dashboard-page/Tabs";
+import Tabs from "../components/class/Tabs";
 
 const defaultTheme = createTheme();
 
@@ -28,7 +28,7 @@ export default function Class() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
-        <SideBar/>
+        <SideBar />
         <Tabs classId={id} />
       </Box>
     </ThemeProvider>

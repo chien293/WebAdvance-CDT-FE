@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Typography, Grid } from "@mui/material";
 import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined";
-import Comment from "./Comment";
+import Comment from "../dashboard-page/Comment";
 import {
   Modal,
   ModalContent,
@@ -36,7 +36,8 @@ const Post = ({ postWriter, title, date, comments }) => {
           {comments.length > 0 && (
             <div
               onClick={onOpen}
-              className="px-4 py-2 border-t text-sm hover:underline hover:text-green-600">
+              className="px-4 py-2 border-t text-sm hover:underline hover:text-green-600"
+            >
               {comments.length} comments about the class
             </div>
           )}

@@ -15,9 +15,9 @@ import {
 // import Layout from "../components/dashboard-page/Layout";
 import HeaderBar from "@/components/HeaderBar";
 import SideBar from "@/components/SideBar";
-import Tabs from "@/components/dashboard-page/Tabs";
+import Tabs from "@/components/class/Tabs";
 import { ClassContext } from "@/components/ClassProvider";
-import MainContent from "@/components/MainHomePage";
+import StudentClass from "@/components/class/student/StudentClass";
 const defaultTheme = createTheme();
 
 const SIDE_NAV_WIDTH = 280;
@@ -27,15 +27,19 @@ import { useRouter } from "next/router";
 export default function Class() {
   const router = useRouter();
   const { id } = router.query;
-  console.log(id + " ID trong class")
+  console.log(id + " ID trong class");
   const { studentClass, teacherClass } = useContext(ClassContext);
   const [currentSelection, setCurrentSelection] = useState("Tabs");
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
         <HeaderBar />
-        <SideBar setCurrentSelection={setCurrentSelection} studentClass={studentClass} teacherClass={teacherClass} />
-        <MainContent
+        <SideBar
+          setCurrentSelection={setCurrentSelection}
+          studentClass={studentClass}
+          teacherClass={teacherClass}
+        />
+        <StudentClass
           currentSelection={currentSelection}
           studentClass={studentClass}
           teacherClass={teacherClass}

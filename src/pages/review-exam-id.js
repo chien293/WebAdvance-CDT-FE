@@ -14,7 +14,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { useRouter } from "next/router";
 import LinkNext from "next/link";
-import ReviewExamContent from "@/components/dashboard-page/ReviewExamContent";
+import ReviewExamContent from "@/components/class/ReviewExamContent";
 import HeaderBar from "@/components/HeaderBar";
 
 const defaultTheme = createTheme();
@@ -57,7 +57,7 @@ export default function Class() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
-        <HeaderBar/>
+        <HeaderBar />
         <ReviewExamContent
           postWriter={review.postWriter}
           title={review.title}

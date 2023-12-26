@@ -1,5 +1,5 @@
 import React from "react";
-import SelectTopic from "./SelectTopic";
+import SelectTopic from "../dashboard-page/SelectTopic";
 
 const Exercise = () => {
   const teachers = [
@@ -14,10 +14,8 @@ const Exercise = () => {
 
   return (
     <div className="flex flex-col w-6/12 font-medium">
-      <div className="">
-        Your Exercise
-      </div>
-     <SelectTopic/>
+      <div className="">Your Exercise</div>
+      <SelectTopic />
     </div>
   );
 };

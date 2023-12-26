@@ -82,7 +82,8 @@ const InfoContent = () => {
               ":hover": { backgroundColor: "#ebffef", color: "green" },
               color: "text.secondary",
               // overflow: "auto",
-            }}>
+            }}
+          >
             <div>
               <img
                 class="relative inline-block h-12 w-12 rounded-full object-cover object-center hover:z-10 focus:z-10"
@@ -98,15 +99,17 @@ const InfoContent = () => {
           </Paper>
         </Grid>
         {posts.length > 0 &&
-          posts.reverse().map((post) => (
-            <Post
-              key={post.id}
-              postWriter={post.postWriter}
-              title={post.title}
-              date={post.date}
-              comments={post.comments}
-            />
-          ))}
+          posts
+            .reverse()
+            .map((post) => (
+              <Post
+                key={post.id}
+                postWriter={post.postWriter}
+                title={post.title}
+                date={post.date}
+                comments={post.comments}
+              />
+            ))}
       </Grid>
     </Container>
   );
