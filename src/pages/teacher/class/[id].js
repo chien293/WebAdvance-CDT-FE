@@ -23,17 +23,19 @@ const defaultTheme = createTheme();
 const SIDE_NAV_WIDTH = 280;
 
 import { useRouter } from "next/router";
+import { useSocket } from "@/components/SocketProvider";
 
 export default function Class() {
   const router = useRouter();
   const { id } = router.query;
   const { studentClass, teacherClass } = useContext(ClassContext);
   const [currentSelection, setCurrentSelection] = useState("Tabs");
-  console.log(id + " ID trong class");
+  const socket = useSocket();
+  console.log(socket, " socket trong teacher class");
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
-        <HeaderBar />
+        <HeaderBar isHomePage={true}/>
         <SideBar
           setCurrentSelection={setCurrentSelection}
           studentClass={studentClass}
@@ -45,6 +47,7 @@ export default function Class() {
           teacherClass={teacherClass}
           id={id}
           role="teacher"
+          socket={socket}
         />
       </Box>
     </ThemeProvider>

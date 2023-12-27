@@ -31,16 +31,12 @@ const GradeStructurePage = () => {
   const { id, query } = router.query;
   const { studentClass, teacherClass } = useContext(ClassContext);
   const [currentSelection, setCurrentSelection] = useState("Tabs");
-  const [notification, setNotification] = useState(null);
-  const handleIntermediateUpdate = (data) => {
-    setNotification(data);
-  };
-
+  
   return (
     <div>
       <ThemeProvider theme={defaultTheme}>
         <Box sx={{ display: "flex" }}>
-          <HeaderBar onSendNotification={notification} />
+          <HeaderBar />
           <SideBar
             setCurrentSelection={setCurrentSelection}
             studentClass={studentClass}
@@ -69,7 +65,7 @@ const GradeStructurePage = () => {
               bottom: 0,
             }}
           >
-            <GradeStructureBoard classId={id} onSendNotification={handleIntermediateUpdate} />
+            <GradeStructureBoard classId={id} />
           </Box>
 
         </Box>

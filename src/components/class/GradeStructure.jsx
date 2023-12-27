@@ -5,8 +5,8 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import update from "immutability-helper";
 import { FaBan, FaCheck } from "react-icons/fa";
 import authService from "@/auth/auth-service";
+import { useSocket } from "../SocketProvider";
 import axios from 'axios';
-
 const type = "DragableBodyRow";
 
 const DragableBodyRow = ({ index, moveRow, className, style, ...restProps }) => {
@@ -56,6 +56,7 @@ const GradeStructureBoard = ({ classId, onSendNotification }) => {
     const [currentUser, setCurrentUser] = React.useState(null);
     const [currentId, setId] = useState(null);
     const [currentToken, setToken] = useState(null);
+    const socket = useSocket();
     const [columns, setColumns] = useState([
         { title: "Id", dataIndex: "id", key: "id" },
         { title: "Title", dataIndex: "percentage", key: "percentage" },
@@ -97,6 +98,7 @@ const GradeStructureBoard = ({ classId, onSendNotification }) => {
     const [deleteRowData, setDeleteRowData] = useState({ percentage: "", value: "" });
     const [finalRowData, setFinalRowData] = useState({ finalScore: "", percentage: "", value: "" });
     const [gradeStructure, setGradeStructure] = useState([]);
+    const [listStudentIds, setListStudentIds] = useState([]);
 
     useEffect(() => {
         const takeUser = () => {
@@ -125,6 +127,19 @@ const GradeStructureBoard = ({ classId, onSendNotification }) => {
                 if (res.data) {
                     console.log(JSON.stringify(res.data))
                     setGradeStructure(res.data);
+                }
+            });
+
+        await axios
+            .get(API_URL + "/class/getListStudentIds/" + classId, {
+                headers: {
+                    token: "Bearer " + currentToken,
+                },
+            })
+            .then((res) => {
+                if (res.data) {
+                    console.log(JSON.stringify(res.data))
+                    setListStudentIds(res.data);
                 }
             });
     };
@@ -187,7 +202,11 @@ const GradeStructureBoard = ({ classId, onSendNotification }) => {
         try {
             await axios.post(
                 API_URL + "/class/finalGradeStructure",
-                { idClass: classId, gradeStructure: finalRowData },
+                {
+                    idClass: classId,
+                    gradeStructure: finalRowData,
+                    url: `/student/grade/${classId}`
+                },
                 {
                     headers: {
                         token: "Bearer " + currentToken,
@@ -198,20 +217,21 @@ const GradeStructureBoard = ({ classId, onSendNotification }) => {
             console.error("Error saving data to the database", error);
         }
 
-        const updated = { senderId: currentId,
-            receiverId: classId,
-            type,
-         };
-        onSendNotification(updated)
+        const updated= {
+            receiverId: listStudentIds,
+            type: "class",
+        };
+        console.log(socket, "CHUan bi chay socket")
+        socket.emit("sendClassNotification", {
+            data: updated
+        });
 
         const updatedData = gradeStructure.map((item) =>
             item.id === finalRowData.id ? { ...item, percentage: finalRowData.percentage, value: finalRowData.value } : item
         );
 
         setGradeStructure(updatedData);
-
         setIsFinalVisible(false);
-
     };
 
     const handleEdit = (record) => {
@@ -328,21 +348,9 @@ const GradeStructureBoard = ({ classId, onSendNotification }) => {
         setIsDeleteModalVisible(false);
     }
 
-    const handleNoti = () => {
-        const updatedData = {
-            senderId: currentId,
-            receiverId: classId,
-            type,
-        };
-        onSendNotification(updatedData)
-    }
-
     return (
         <div>
             <h2>Grade Structure Board</h2>
-            <Button style={{ color: "blue" }} type="primary" onClick={handleNoti}>
-                NOTIFICATION
-            </Button>
             <Button style={{ color: "blue" }} type="primary" onClick={showModal}>
                 Thêm Dòng
             </Button>

@@ -4,11 +4,14 @@ import DropdownItem from "./DropdownItem";
 import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined";
 import authService from "@/auth/auth-service";
 import { useRouter } from "next/navigation";
-const AvatarDropdown = ({ user }) => {
+import { useSocket } from "./SocketProvider";
+const AvatarDropdown = ({ user, id }) => {
+  const socket = useSocket();
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const handleLogout = () => {
     authService.logout();
+    socket.disconnect();
     router.push({ pathname: "/auth/sign-in" });
   };
 

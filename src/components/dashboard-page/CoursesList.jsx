@@ -3,7 +3,7 @@ import CoursesInfo from "./CoursesInfo";
 import { Toolbar, Box } from "@mui/material";
 import Link from "next/link";
 
-const CoursesList = ({ classData, socket }) => {
+const CoursesList = ({ classData }) => {
   const [isStudent, setIsStudent] = React.useState(null);
   const [newClassData, setNewClassData] = React.useState(null);
 
@@ -17,7 +17,7 @@ const CoursesList = ({ classData, socket }) => {
           }}
 
           passHref>
-          <div socket={socket}>
+          <div>
             <CoursesInfo
               name={course.name}
               title={course.title}

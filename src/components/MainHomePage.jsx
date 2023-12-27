@@ -33,7 +33,6 @@ const MainContent = ({
   useEffect(() => {
     if (socket) {
       setSocket(socket);
-      console.log(currentSocket, " MAIN CONTENT current socket");
       socket.on("getNotification", (data) => {
         setNotifications((prev) => [...prev, data]);
       });
@@ -45,11 +44,11 @@ const MainContent = ({
       {currentSelection === "Home" && (
         <div>
           <NestedList name="Student Class">
-            <CoursesList classData={studentClass} socket={socket} />
+            <CoursesList classData={studentClass} socket={currentSocket} />
           </NestedList>
 
           <NestedList name="Teacher Class">
-            <CoursesList classData={teacherClass} socket={socket} />
+            <CoursesList classData={teacherClass} socket={currentSocket} />
           </NestedList>
         </div>
       )}

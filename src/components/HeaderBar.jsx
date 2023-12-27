@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import Link from "next/link";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -16,7 +17,15 @@ import {
   Box,
   Menu,
   MenuItem,
+  Badge,
+  IconButton
 } from "@mui/material";
+
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import Popover from '@mui/material/Popover';
+
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -24,8 +33,6 @@ import Image, { Label } from "@mui/icons-material";
 import AuthService from "@/auth/auth-service";
 import { useRouter } from "next/router";
 import axios from "axios";
-import jwt from "jsonwebtoken";
-
 import LinkNext from "next/link";
 import AvatarDropdown from "@/components/AvatarDropdown";
 import Layout from "../components/dashboard-page/Layout";
@@ -34,10 +41,10 @@ import AddIcon from "@mui/icons-material/Add";
 import CoursesList from "@/components/dashboard-page/CoursesList";
 import FormCreateClass from "@/components/dashboard-page/FormCreateClass";
 import withAuth from "@/auth/with-auth";
-import { set } from "react-hook-form";
-import Loading from "@/components/Loading";
+import { useSocket } from "./SocketProvider";
 
 const drawerWidth = 240;
+const API_URL = process.env.SERVER_URL;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -57,32 +64,98 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const NotificationPanel = ({ notifications }) => (
-  <Popper
-    open={Boolean(notifications)}
-    anchorEl={notifications}
-    placement="bottom-end"
-    transition
-  >
-    {({ TransitionProps }) => (
-      <Fade {...TransitionProps} timeout={350}>
-        <Paper>
-          <List>
-            {notifications && notifications.map((notification, index) => (
-              <div key={index} className="px-4 py-2 hover:bg-gray-100">
-                <Typography variant="body1">
-                  {notification.message}
-                </Typography>
-              </div>
-            ))}
-          </List>
-        </Paper>
-      </Fade>
-    )}
-  </Popper>
-);
+function NotificationIcon({ notiList, token }) {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [notifications, setNotifications] = useState([
+    { title: 'Monica', content: 'liked your post', url: '', createdDay: '', read: 0 },
+    { title: 'Michael', content: 'shared your post', url: '', createdDay: '', read: 0 },
+    { title: 'Eric', content: 'sent you a friend request', url: '', createdDay: '', read: 0 }
+  ]);
 
-const HeaderBar = ({ isHomePage, socket, onSendNotification }) => {
+  useEffect(() => {
+    if (notiList) {
+      console.log(notiList, " New list noti")
+      setNotifications(notiList);
+    }
+  }, [notiList])
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleMarkAsRead = async () => {
+    setNotifications(notifications.map(notification => ({ ...notification, read: 1 })));
+    await axios
+      .post(API_URL + "/class/setReadNotifications",
+        {
+          notifications: notifications
+        },
+        {
+          headers: {
+            token: "Bearer " + token,
+          },
+        })
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
+  return (
+    <div style={{ marginRight: 15 }}>
+      <IconButton color="inherit" onClick={handleClick}>
+        <Badge badgeContent={notifications.filter(notification => !notification.read).length} color="error">
+          <NotificationsIcon />
+        </Badge>
+      </IconButton>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <List>
+          {notifications.map((notification, index) => (
+            <React.Fragment key={index}>
+              <Link href={notification.url}>
+                <ListItem button style={{ backgroundColor: notification.read == 1 ? 'white' : '#32a852' }}>
+                  <ListItemText
+                    primary={<b>{notification.title}</b>}
+                    secondary={
+                      <React.Fragment>
+                        <Typography component="span" variant="body2" color="textPrimary">
+                          {notification.content}
+                        </Typography>
+                        <Typography component="span" variant="body2" color="textSecondary" align="right" display="block">
+                          {notification.createdDay}
+                        </Typography>
+                      </React.Fragment>
+                    }
+                  />
+                </ListItem>
+              </Link>
+              {index < notifications.length - 1 && <Divider />}
+            </React.Fragment>
+          ))}
+        </List>
+        <Button onClick={handleMarkAsRead}>Mark as read</Button>
+      </Popover>
+    </div>
+  );
+}
+
+const HeaderBar = ({ isHomePage }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openAddCourseButton, setOpenAddCourseButton] = useState(false);
   const [placement, setPlacement] = useState();
@@ -91,7 +164,8 @@ const HeaderBar = ({ isHomePage, socket, onSendNotification }) => {
   const [currentToken, setCurrentToken] = useState(null);
   const [currentId, setCurrentId] = useState(null);
   const [notifications, setNotifications] = useState(null);
-  const API_URL = process.env.SERVER_URL;
+  const socket  = useSocket();
+
   useEffect(() => {
     //takeUser();
     const user = AuthService.getCurrentUser();
@@ -111,34 +185,42 @@ const HeaderBar = ({ isHomePage, socket, onSendNotification }) => {
   useEffect(() => {
     if (socket) {
       socket.on("getNotification", (data) => {
-        setNotifications((prev) => [...prev, data])
+        const transformedData = data.content.map(notification => ({
+          id: notification.id,
+          title: notification.fullname || notification.name,
+          url: notification.url,
+          content: notification.content,
+          createdDay: notification.createdDay,
+          read: notification.marked
+        }));
+        setNotifications(transformedData)
       });
     }
   }, [socket]);
 
-  useEffect(() => {
-    if (onSendNotification) {
-      console.log(JSON.stringify(onSendNotification), " DA NHAN DUOC DATA TU GRADE");
-    }
-  }, [onSendNotification]);
-
-
   const getNotifications = async () => {
     console.log(currentUser, " HEADERBAR")
     await axios
-      .post(API_URL + "/class/getNotifications", 
-      {
-        idUser: currentId
-      },
-      {
-        headers: {
-          token: "Bearer " + currentToken,
+      .post(API_URL + "/class/getNotifications",
+        {
+          idUser: currentId
         },
-      })
+        {
+          headers: {
+            token: "Bearer " + currentToken,
+          },
+        })
       .then((res) => {
         if (res.data) {
-          console.log(JSON.stringify(res.data))
-          setNotifications(res.data);
+          const transformedNotifications = res.data.map(notification => ({
+            id: notification.id,
+            title: notification.fullname || notification.name,
+            url: notification.url,
+            content: notification.content,
+            createdDay: notification.createdDay,
+            read: notification.marked
+          }));
+          setNotifications(transformedNotifications);
         }
       });
   };
@@ -155,7 +237,7 @@ const HeaderBar = ({ isHomePage, socket, onSendNotification }) => {
       <AppBar position="fixed" color="success">
         <Toolbar
           sx={{
-            pr: "24px", // keep right padding when drawer closed
+            pr: "24px", // keep right padding when drawer closed        
           }}
         >
           <Typography
@@ -181,10 +263,8 @@ const HeaderBar = ({ isHomePage, socket, onSendNotification }) => {
               <AddIcon />
             </Fab>
           )}
-          <Button>
-            <NotificationsNoneIcon style={{ marginRight: 30 }} />
-          </Button>
-          <NotificationPanel notifications={notifications} />
+
+          <NotificationIcon notiList={notifications} token={currentToken} />
 
           <Popper
             open={openAddCourseButton}
@@ -219,6 +299,8 @@ const HeaderBar = ({ isHomePage, socket, onSendNotification }) => {
               </Fade>
             )}
           </Popper>
+
+
 
           {/* <AddIcon
               id="basic-button"
@@ -265,7 +347,7 @@ const HeaderBar = ({ isHomePage, socket, onSendNotification }) => {
           <LinkNext href="/">
             <Typography sx={{ paddingRight: 5 }}>{currentUser} </Typography>
           </LinkNext>
-          <AvatarDropdown></AvatarDropdown>
+          <AvatarDropdown user={currentUser} id={currentId}></AvatarDropdown>
           <Typography variant="title" color="inherit" noWrap>
             &nbsp; &nbsp; &nbsp;
           </Typography>

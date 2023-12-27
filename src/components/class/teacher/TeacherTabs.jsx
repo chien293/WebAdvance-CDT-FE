@@ -14,7 +14,7 @@ import ReviewExam from "@/components/class/ReviewExam";
 import GradeStructureBoard from "@/components/class/GradeStructure";
 import GradeBoardStudent from "@/components/class/student/GradeBoardStudent";
 import Link from "next/link";
-const TeacherTabs = ({ classId, tabs, role, socket }) => {
+const TeacherTabs = ({ classId, tabs, role }) => {
   const [value, setValue] = useState("1");
 
   useEffect(() =>{
@@ -22,7 +22,6 @@ const TeacherTabs = ({ classId, tabs, role, socket }) => {
     setValue(tabs)
   }, [tabs])
 
-  console.log(socket + " ROLE");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -90,7 +89,7 @@ const TeacherTabs = ({ classId, tabs, role, socket }) => {
             <SettingsContent classId={classId} />
           </TabPanel>
           <TabPanel value="5">
-          <GradeStructureBoard classId={classId} socket={socket} />
+          <GradeStructureBoard classId={classId} />
           </TabPanel>
           <TabPanel value="6">
             <GradeBoard classId={classId} />

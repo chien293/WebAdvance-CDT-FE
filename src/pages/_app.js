@@ -1,19 +1,22 @@
 import "@/styles/globals.css";
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import { NextUIProvider } from "@nextui-org/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ClassProvider } from "@/components/ClassProvider";
+import { SocketProvider } from "@/components/SocketProvider";
 
 export default function App({ Component, pageProps }) {
   return (
-    <ClassProvider>
+    <SocketProvider>
       <NextUIProvider>
         <NextThemesProvider attribute="class" defaultTheme="dark">
 
-          <Component {...pageProps} />
+          <ClassProvider>
+            <Component {...pageProps} />
+          </ClassProvider>
 
         </NextThemesProvider>
       </NextUIProvider>
-    </ClassProvider>
+    </SocketProvider>
   );
 }

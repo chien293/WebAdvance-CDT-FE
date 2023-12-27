@@ -17,6 +17,7 @@ import axios from "axios";
 import StudentIdDataTable from "@/components/admin/utils/StudentIdTable";
 import NestedList from "@/components/dashboard-page/NestedList";
 import { ClassContext, ClassProvider } from "@/components/ClassProvider";
+import { useSocket  } from "@/components/SocketProvider";
 import {io} from "socket.io-client";
 import MainContent from "@/components/MainHomePage";
 const defaultTheme = createTheme();
@@ -31,8 +32,9 @@ function HomePage() {
   const [teacherClass, setTeacherClass] = useState([]);
   const [classData, setClassData] = useState([]);
   const [currentToken, setToken] = useState(null);
-  const [socket, setSocket] = useState(null);
+  const [currentSocket, setCurrentSocket] = useState(null);
   const { updateClasses } = useContext(ClassContext);
+  const socket  = useSocket();
   const API_URL = process.env.SERVER_URL;
 
   useEffect(() => {
@@ -46,20 +48,14 @@ function HomePage() {
     };
 
     takeUser();
-
-    const newSocket = io("http://localhost:3500")
-    setSocket(newSocket);
-    return () => {
-      newSocket.disconnect();
-    };
+    setCurrentSocket(socket);
   }, []);
 
   useEffect(() => {
-    if (socket) {
-      socket.emit("newUser", currentUser);
-      console.log(socket, " HOME-page")
+    if (currentSocket) {
+      currentSocket.emit("newUser", currentId);
     }
-  }, [socket]);
+  }, [currentSocket]);
 
   useEffect(() => {
     if (currentToken) getClasses();
@@ -67,7 +63,6 @@ function HomePage() {
 
   useEffect(() => {
     if (studentClass.length > 0 || teacherClass.length > 0) {
-      console.log("Updated studentClass:", studentClass);
       const temp = [...teacherClass, ...studentClass];
       updateClasses(studentClass, teacherClass);
       setClassData(temp);
@@ -130,7 +125,7 @@ function HomePage() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
-        <HeaderBar isHomePage={true} socket={socket} />
+        <HeaderBar isHomePage={true} />
         <Box>
           <SideBar
             setCurrentSelection={setCurrentSelection}
@@ -142,7 +137,6 @@ function HomePage() {
             currentSelection={currentSelection}
             studentClass={studentClass}
             teacherClass={teacherClass}
-            socket={socket}
           />
         </Box>
       </Box>
