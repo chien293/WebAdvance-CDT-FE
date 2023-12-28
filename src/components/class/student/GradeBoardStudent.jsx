@@ -54,11 +54,10 @@ export default function GradeBoardStudent({ classId }) {
     }, []);
 
     useEffect(() => {
-        if (currentToken) {
-            getGrade(classId);
-
+        if (studentId) {
+            getGrade(classId, currentId);
         }
-    }, [currentToken]);
+    }, [studentId]);
 
     //create columns
     useEffect(() => {

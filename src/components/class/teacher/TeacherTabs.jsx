@@ -17,9 +17,9 @@ import Link from "next/link";
 const TeacherTabs = ({ classId, tabs }) => {
   const [value, setValue] = useState("1");
 
-  useEffect(() =>{
-    if(tabs)
-    setValue(tabs)
+  useEffect(() => {
+    if (tabs)
+      setValue(tabs)
   }, [tabs])
 
   const handleChange = (event, newValue) => {
@@ -66,11 +66,7 @@ const TeacherTabs = ({ classId, tabs }) => {
             <Tab label="Exercise" value="2" />
             <Tab label="Participant" value="3" />
             <Tab label="Settings" value="4" />
-            <Link
-            href={
-              `/teacher/class/gradestructure/${classId}`       
-            }
-            > <Tab label="Grade Structure" value="5" /> </Link>
+            <Tab label="Grade Structure" value="5" />
             <Tab label="Grade Board" value="6" />
             <Tab label="Checking Examination Papers" value="7" />
           </TabList>
@@ -89,7 +85,7 @@ const TeacherTabs = ({ classId, tabs }) => {
             <SettingsContent classId={classId} />
           </TabPanel>
           <TabPanel value="5">
-          <GradeStructureBoard classId={classId} />
+            <GradeStructureBoard classId={classId} />
           </TabPanel>
           <TabPanel value="6">
             <GradeBoard classId={classId} />

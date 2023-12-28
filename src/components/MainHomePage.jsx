@@ -25,30 +25,18 @@ const MainContent = ({
   teacherClass,
   id,
   role,
-  socket,
 }) => {
-  console.log(socket, " MAIN CONTENT");
-  const [currentSocket, setSocket] = useState(null);
-  const [notifications, setNotifications] = useState(null);
-  useEffect(() => {
-    if (socket) {
-      setSocket(socket);
-      socket.on("getNotification", (data) => {
-        setNotifications((prev) => [...prev, data]);
-      });
-    }
-  }, [socket]);
 
   return (
     <Box sx={{ marginLeft: "240px", backgroundColor: "white", height: "100%" }}>
       {currentSelection === "Home" && (
         <div>
           <NestedList name="Student Class">
-            <CoursesList classData={studentClass} socket={currentSocket} />
+            <CoursesList classData={studentClass} />
           </NestedList>
 
           <NestedList name="Teacher Class">
-            <CoursesList classData={teacherClass} socket={currentSocket} />
+            <CoursesList classData={teacherClass} />
           </NestedList>
         </div>
       )}
@@ -59,7 +47,7 @@ const MainContent = ({
       )}
       {currentSelection === "Setting" && <div>Settings Content Here</div>}
       {currentSelection === "Tabs" && (
-        <Tabs classId={id} role={role} socket={currentSocket} />
+        <Tabs classId={id} role={role} />
       )}
     </Box>
   );

@@ -3,16 +3,6 @@ import CoursesList from "@/components/dashboard-page/CoursesList";
 import StudentIdDataTable from "@/components/admin/utils/StudentIdTable";
 import Tabs from "@/components/class/student/StudentTabs";
 import {
-  Button,
-  CssBaseline,
-  Popper,
-  Fade,
-  Paper,
-  Divider,
-  Typography,
-  List,
-  Toolbar,
-  Fab,
   Box,
   Menu,
   MenuItem,
@@ -25,8 +15,8 @@ const StudentClass = ({
   teacherClass,
   id,
   role,
+  tabs
 }) => {
-  const [currentSocket, setSocket] = useState(null);
 
   return (
     <Box sx={{ marginLeft: "240px", backgroundColor: "white", height: "100%" }}>
@@ -48,7 +38,7 @@ const StudentClass = ({
       )}
       {currentSelection === "Setting" && <div>Settings Content Here</div>}
       {currentSelection === "Tabs" && (
-        <Tabs classId={id} role={role}/>
+        <Tabs classId={id} role={role} tabs={tabs}/>
       )}
     </Box>
   );

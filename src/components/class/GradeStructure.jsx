@@ -51,7 +51,7 @@ const DragableBodyRow = ({ index, moveRow, className, style, ...restProps }) => 
     );
 };
 
-const GradeStructureBoard = ({ classId, onSendNotification }) => {
+const GradeStructureBoard = ({ classId }) => {
     const API_URL = process.env.SERVER_URL;
     const [currentUser, setCurrentUser] = React.useState(null);
     const [currentId, setId] = useState(null);
@@ -205,7 +205,7 @@ const GradeStructureBoard = ({ classId, onSendNotification }) => {
                 {
                     idClass: classId,
                     gradeStructure: finalRowData,
-                    url: `/student/class/grade/${classId}`
+                    url: `/student/class/${classId}?tabs=5`
                 },
                 {
                     headers: {
@@ -221,7 +221,7 @@ const GradeStructureBoard = ({ classId, onSendNotification }) => {
             receiverId: listStudentIds,
             type: "class",
         };
-        console.log(socket, "CHUan bi chay socket")
+
         socket.emit("sendClassNotification", {
             data: updated
         });
@@ -263,7 +263,6 @@ const GradeStructureBoard = ({ classId, onSendNotification }) => {
         setIsEditModalVisible(false);
     };
 
-    // Hàm xử lý khi click vào nút "Cancel" trong modal chỉnh sửa
     const handleEditCancel = () => {
         setEditRowData({ percentage: "", value: "", key: null });
         setIsEditModalVisible(false);

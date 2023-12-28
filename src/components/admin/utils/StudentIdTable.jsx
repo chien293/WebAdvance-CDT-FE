@@ -1,6 +1,4 @@
-
-// components/TeacherDataTable.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   GridToolbarContainer, GridToolbarExport, Dialog,
   DialogTitle, DialogContent, DialogActions, DialogContentText,
@@ -12,23 +10,37 @@ import axios from 'axios';
 import authService from '@/auth/auth-service';
 
 const StudentIdDataTable = () => {
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [activeDialog, setActiveDialog] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState(null);
-  const [loadingActive, setLoading] = useState(false);
-  const [listIdsData, setListIdsData] = useState(null);
-  const [currentId, setId] = useState(null);
-
+  const [listIdsData, setListIdsData] = useState([]);
+  const [studentId, setStudentId] = useState(null);
+  const [currentId, setCurrentId] = useState(null);
   const API_URL = process.env.SERVER_URL;
 
-  React.useEffect(() => {
-      getStudentIds();
+  useEffect(() => {
+    checkStudentId();
     
   }, [])
 
+  const checkStudentId = async () => {
+    const currentUser = authService.getCurrentUser();
+    setCurrentId(currentUser.user[0].id);
+    await axios
+      .get(API_URL + `/getStudentId/${currentUser.user[0].id}`, {
+        headers: {
+          token: "Bearer " + currentUser.accessToken,
+        },
+      }).then((res) => {
+        if (res.data) {
+          setStudentId(res.data[0].idstudent)   
+        }
+        else{
+          getStudentIds();
+        }
+      })
+  }
   const getStudentIds = async () => {
     const currentUser = authService.getCurrentUser();
-    setId(currentUser.user[0].id)
     await axios
       .get(API_URL + "/getStudentIds", {
         headers: {
@@ -37,12 +49,8 @@ const StudentIdDataTable = () => {
       })
       .then((res) => {
         if (res.data) {
-          console.log(res.data);
           const idsData = res.data
           setListIdsData(idsData);
-          //setIsLoaded(true);
-        } else {
-          setListIdsData([]);
         }
       });
   };
@@ -64,8 +72,8 @@ const StudentIdDataTable = () => {
     },
   ];
 
-  const handleClickOpenActive = (teacher) => {
-    setSelectedTeacher(teacher);
+  const handleClickOpenActive = (data) => {
+    setSelectedTeacher(data);
     setActiveDialog(true);
   };
 
@@ -75,66 +83,70 @@ const StudentIdDataTable = () => {
 
   //Submit choose Id
   const handleActiveSubmit = async () => {
-
-    const newActiveValue = selectedTeacher.accountId;
+    const currentUser = authService.getCurrentUser();
+    const newActiveValue = selectedTeacher.idstudent;
     const result = await axios.post(
       API_URL + "/setStudentId",
       {
-        user: {
-          ...selectedTeacher,
-          userId: newActiveValue,
-        },
+        id: selectedTeacher.id,     
+        idUser: currentId,     
       },
       {
         headers: {
-          token: "Bearer " + token,
+          token: "Bearer " + currentUser.accessToken,
         },
       }
     );
 
-    //setLoading(false);
+    setStudentId(newActiveValue)
     handleCloseActive();
   };
 
-  return (
-    <div className="studentIdsDataTable ml-20 mt-20 w-full">
-      {listIdsData && listIdsData.length > 0 ? (
-        <div style={{ height: 400, width: '100%' }}>
-          <DataGrid
-            rows={listIdsData}
-            columns={columns}
-            initialState={{
-              ...listIdsData.initialState,
-              pagination: { paginationModel: { pageSize: 10 } },
-            }}
+  return (studentId ?
+    (<div className=" ml-20 mt-20 w-full"> 
+      Your student id is {studentId}
+    </div>)
+    :
+    (
+      <div className="studentIdsDataTable ml-20 mt-20 w-full">
+        {listIdsData && listIdsData.length > 0 ? (
+          <div style={{ height: 400, width: '100%' }}>
+            <DataGrid
+              rows={listIdsData}
+              columns={columns}
+              initialState={{
+                ...listIdsData.initialState,
+                pagination: { paginationModel: { pageSize: 5 } },
+              }}
 
-            slots={{
-              Toolbar: CustomToolbar,
-            }}
-            pageSizeOptions={[5]}
+              slots={{
+                Toolbar: CustomToolbar,
+              }}
+              pageSizeOptions={[5, 10, 20]}
 
-          />
-        </div>
-      ) : (
-        <p>No ids available.</p>
-      )}
+            />
+          </div>
+        ) : (
+          <p>No ids available.</p>
+        )}
 
-      <Dialog open={activeDialog} onClose={handleCloseActive}>
-        <DialogTitle>Ban or Unban Teacher</DialogTitle>
-        <DialogContent>
-          <DialogContentText >
-            You want to map {selectedTeacher ? selectedTeacher.studentId : ''} to your account ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseActive}>Cancel</Button>
+        <Dialog open={activeDialog} onClose={handleCloseActive}>
+          <DialogTitle>Map Student Id</DialogTitle>
+          <DialogContent>
+            <DialogContentText >
+              Do you want to map {selectedTeacher ? selectedTeacher.idstudent : ''} to your account ?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseActive}>Cancel</Button>
 
-          <Button onClick={handleActiveSubmit} color="primary">Save</Button>
+            <Button onClick={handleActiveSubmit} color="primary">Save</Button>
 
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
+          </DialogActions>
+        </Dialog>
+      </div>
+    )
+  )
 };
 
 const CustomToolbar = () => {

@@ -66,11 +66,7 @@ const AppBar = styled(MuiAppBar, {
 
 function NotificationIcon({ notiList, token }) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [notifications, setNotifications] = useState([
-    { title: 'Monica', content: 'liked your post', url: '', createdDay: '', read: 0 },
-    { title: 'Michael', content: 'shared your post', url: '', createdDay: '', read: 0 },
-    { title: 'Eric', content: 'sent you a friend request', url: '', createdDay: '', read: 0 }
-  ]);
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     if (notiList) {
@@ -88,17 +84,19 @@ function NotificationIcon({ notiList, token }) {
   };
 
   const handleMarkAsRead = async () => {
-    setNotifications(notifications.map(notification => ({ ...notification, read: 1 })));
-    await axios
-      .post(API_URL + "/class/setReadNotifications",
-        {
-          notifications: notifications
-        },
-        {
-          headers: {
-            token: "Bearer " + token,
+    if (notifications.length > 0) {
+      setNotifications(notifications.map(notification => ({ ...notification, read: 1 })));
+      await axios
+        .post(API_URL + "/class/setReadNotifications",
+          {
+            notifications: notifications
           },
-        })
+          {
+            headers: {
+              token: "Bearer " + token,
+            },
+          })
+    }
   };
 
   const open = Boolean(anchorEl);
@@ -126,28 +124,39 @@ function NotificationIcon({ notiList, token }) {
         }}
       >
         <List>
-          {notifications.map((notification, index) => (
-            <React.Fragment key={index}>
-              <Link href={notification.url}>
-                <ListItem button style={{ backgroundColor: notification.read == 1 ? 'white' : '#32a852' }}>
-                  <ListItemText
-                    primary={<b>{notification.title}</b>}
-                    secondary={
-                      <React.Fragment>
-                        <Typography component="span" variant="body2" color="textPrimary">
-                          {notification.content}
-                        </Typography>
-                        <Typography component="span" variant="body2" color="textSecondary" align="right" display="block">
-                          {notification.createdDay}
-                        </Typography>
-                      </React.Fragment>
-                    }
-                  />
-                </ListItem>
-              </Link>
-              {index < notifications.length - 1 && <Divider />}
-            </React.Fragment>
-          ))}
+          {notifications.length > 0 ? (
+            <div>
+              {notifications.map((notification, index) => (
+                <React.Fragment key={index}>
+                  <Link href={notification.url}>
+                    <ListItem button style={{ backgroundColor: notification.read == 1 ? 'white' : '#32a852' }}>
+                      <ListItemText
+                        primary={<b>{notification.title}</b>}
+                        secondary={
+                          <React.Fragment>
+                            <Typography component="span" variant="body2" color="textPrimary">
+                              {notification.content}
+                            </Typography>
+                            <Typography component="span" variant="body2" color="textSecondary" align="right" display="block">
+                              {notification.createdDay}
+                            </Typography>
+                          </React.Fragment>
+                        }
+                      />
+                    </ListItem>
+                  </Link>
+                  {index < notifications.length - 1 && <Divider />}
+                </React.Fragment>
+              ))}
+            </div>
+          ) : (
+            <div>
+              You have no notification.
+            </div>
+          )
+
+          }
+
         </List>
         <Button onClick={handleMarkAsRead}>Mark as read</Button>
       </Popover>
@@ -164,7 +173,7 @@ const HeaderBar = ({ isHomePage }) => {
   const [currentToken, setCurrentToken] = useState(null);
   const [currentId, setCurrentId] = useState(null);
   const [notifications, setNotifications] = useState(null);
-  const socket  = useSocket();
+  const socket = useSocket();
 
   useEffect(() => {
     //takeUser();

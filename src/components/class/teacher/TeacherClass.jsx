@@ -3,16 +3,6 @@ import CoursesList from "@/components/dashboard-page/CoursesList";
 import StudentIdDataTable from "@/components/admin/utils/StudentIdTable";
 import Tabs from "@/components/class/teacher/TeacherTabs";
 import {
-  Button,
-  CssBaseline,
-  Popper,
-  Fade,
-  Paper,
-  Divider,
-  Typography,
-  List,
-  Toolbar,
-  Fab,
   Box,
   Menu,
   MenuItem,
@@ -26,7 +16,6 @@ const TeacherClass = ({
   id,
   role,
   tabs,
-  socket,
 }) => {
   return (
     <Box sx={{ marginLeft: "240px", backgroundColor: "white", height: "100%" }}>

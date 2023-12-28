@@ -2,20 +2,10 @@ import * as React from "react";
 import { useState, useContext } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import {
-  CssBaseline,
-  IconButton,
-  Divider,
-  Typography,
-  List,
-  Toolbar,
   Box,
 } from "@mui/material";
-// import authService from "@/auth/auth-service";
-// import LinkNext from "next/link";
-// import Layout from "../components/dashboard-page/Layout";
 import HeaderBar from "@/components/HeaderBar";
 import SideBar from "@/components/SideBar";
-import Tabs from "@/components/class/Tabs";
 import { ClassContext } from "@/components/ClassProvider";
 import StudentClass from "@/components/class/student/StudentClass";
 const defaultTheme = createTheme();
@@ -26,10 +16,10 @@ import { useRouter } from "next/router";
 
 export default function Class() {
   const router = useRouter();
-  const { id } = router.query;
-  console.log(id + " ID trong class");
+  const { id, tabs } = router.query;
   const { studentClass, teacherClass } = useContext(ClassContext);
   const [currentSelection, setCurrentSelection] = useState("Tabs");
+  
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
@@ -45,6 +35,7 @@ export default function Class() {
           teacherClass={teacherClass}
           id={id}
           role="student"
+          tabs={tabs}
         />
       </Box>
     </ThemeProvider>

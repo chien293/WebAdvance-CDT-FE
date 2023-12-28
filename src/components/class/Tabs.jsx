@@ -13,10 +13,9 @@ import GradeBoard from "@/components/class/GradeBoard";
 import ReviewExam from "@/components/class/ReviewExam";
 import GradeStructureBoard from "@/components/class/GradeStructure";
 import GradeBoardStudent from "@/components/class/student/GradeBoardStudent";
-const LabTabs = ({ classId, role, socket }) => {
+const LabTabs = ({ classId, role }) => {
   const [value, setValue] = React.useState("1");
 
-  console.log(socket + " ROLE");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -80,7 +79,7 @@ const LabTabs = ({ classId, role, socket }) => {
             <SettingsContent classId={classId} />
           </TabPanel>
           <TabPanel value="5">
-            <GradeStructureBoard classId={classId} socket={socket} />
+            <GradeStructureBoard classId={classId} />
           </TabPanel>
           <TabPanel value="6">
             <GradeBoard classId={classId} />

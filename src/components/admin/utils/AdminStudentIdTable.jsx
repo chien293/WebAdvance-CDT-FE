@@ -88,24 +88,9 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
         handleEditDialogClose();
     };
 
-    const CustomToolbar = ({ apiRef }) => {
+    const CustomToolbar = () => {
         const handleExportClick = () => {
-            if (!apiRef?.current) {
-                console.error('apiRef is not available');
-                return;
-            }
-
-            const dataToExport = apiRef.current.getRowModels()
-            const valuesArray = Array.from(dataToExport.values());
-
-            valuesArray.map(row => ({
-                id: row.id,
-                idstudent: row.idstudent,
-                iduser: row.iduser,
-            }));
-
-
-            const ws = XLSX.utils.json_to_sheet(valuesArray);
+            const ws = XLSX.utils.json_to_sheet(studentIdsData);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
             XLSX.writeFile(wb, 'exported_data.xlsx');
@@ -124,9 +109,10 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
                 const data = new Uint8Array(e.target.result);
                 const workbook = XLSX.read(data, { type: 'array' });
                 const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                const importedData = XLSX.utils.sheet_to_json(sheet);
+                const importedData = XLSX.utils.sheet_to_json(sheet, {
+                    defval: null // Default value
+                  });
 
-                // Handle the imported data
                 const result = await axios.post(
                     API_URL + "/admin/mapListStudentIds",
                     {
@@ -169,19 +155,17 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
         <div className="studentIdsDataTable">
             {studentIdsData && studentIdsData.length > 0 ? (
                 <div style={{ height: 400, width: '100%' }}>
-                    <DataGridPro
+                    <DataGrid
                         rows={studentIdsData}
                         columns={columns}
                         initialState={{
                             ...studentIdsData.initialState,
                             pagination: { paginationModel: { pageSize: 10 } },
                         }}
-                        
-                        apiRef={apiRef}
                         slots={{
-                            toolbar: () => <CustomToolbar apiRef={apiRef} />,
+                            toolbar: () => <CustomToolbar />,
                         }}
-                        pageSizeOptions={[5, 10]}
+                        pageSizeOptions={[5, 10, 20]}
                         pagination
                     />
                 </div>

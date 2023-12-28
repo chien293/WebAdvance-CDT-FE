@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -14,8 +14,13 @@ import ReviewExam from "@/components/class/ReviewExam";
 import GradeStructureBoard from "@/components/class/GradeStructure";
 import GradeBoardStudent from "@/components/class/student/GradeBoardStudent";
 import Link from "next/link";
-const StudentTabs = ({ classId }) => {
+const StudentTabs = ({ classId, tabs }) => {
   const [value, setValue] = React.useState("1");
+
+  useEffect(() => {
+    if (tabs)
+      setValue(tabs)
+  }, [tabs])
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -61,12 +66,7 @@ const StudentTabs = ({ classId }) => {
             <Tab label="Exercise" value="2" />
             <Tab label="Participant" value="3" />
             <Tab label="Settings" value="4" />
-            <Link
-            href={`/student/class/grade/${classId}`}
-            >
-              <Tab label="Grade Board" value="5" />
-            </Link>
-
+            <Tab label="Grade Board" value="5" />
             <Tab label="Checking Examination Papers" value="6" />
           </TabList>
         </Box>

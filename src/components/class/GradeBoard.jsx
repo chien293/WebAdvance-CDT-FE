@@ -82,21 +82,12 @@ export default function GradeBoard(props) {
 
   //count sum
   useEffect(() => {
+    updateSum()
+  }, [filterGradeData]);
+
+  const updateSum = () => {
     if (gradeStructure != null && gradeStructure.length > 0) {
-      let gradeStructureObj = filterGradeStructure[0];
-      console.log(JSON.stringify(gradeStructureObj), " GRADE COLUMN")
-      const newGrade = filterGradeData.map(obj => {
-        let newObj = { ...obj };
-        newObj.sum = Object.keys(gradeStructureObj).reduce((sum, key) => {
-          if (newObj[key] !== null && newObj[key] !== undefined && !isNaN(newObj[key])) {
-            return sum + (newObj[key] * gradeStructureObj[key] / 100);
-          } else {
-            return sum;
-          }
-        }, 0);
-        return newObj;
-      });
-      const sumValues = newGrade.map(obj => obj.sum);
+      const sumValues = calculateAverage(filterGradeStructure, filterGradeData);
       if (gradeData.length > 0 && sumValues.length > 0) {
         const newGradeData = gradeData.map((item, index) => {
           return {
@@ -108,30 +99,23 @@ export default function GradeBoard(props) {
       }
 
     }
-  }, [filterGradeStructure]);
+  }
 
+  function calculateAverage(filterGradeStructure, filterGradeData) {
+    return filterGradeData.map(student => {
+      let total = 0;
+      let percentageSum = 0;
+      filterGradeStructure.forEach(item => {
+        const value = student[item.percentage] || 0;
+        total += value * item.value;
+        percentageSum += item.value;
+      });
+
+      return (total / percentageSum).toFixed(2);
+    });
+  }
 
   const getGrade = async (classId) => {
-    await axios.get(
-      API_URL + "/class/getGrades/" + classId,
-      {
-        headers: {
-          token: "Bearer " + currentToken,
-        },
-      }
-    ).then((res) => {
-      if (res.data) {
-        const structure = res.data.map(obj => {
-          let newObj = { ...obj };
-          delete newObj.id;
-          delete newObj.fullname;
-          return newObj;
-        });
-        setFilterGradeData(structure)
-        setGradeData(res.data);
-      }
-    })
-
     await axios
       .get(API_URL + "/class/getGradeStructures/" + classId, {
         headers: {
@@ -145,6 +129,7 @@ export default function GradeBoard(props) {
             const structure = res.data.map(obj => {
               let newObj = { ...obj };
               delete newObj.id;
+              delete newObj.finalScore;
               return newObj;
             });
             setFilterGradeStructure(structure);
@@ -154,12 +139,32 @@ export default function GradeBoard(props) {
               if (key !== 'id') {
                 newResult.push({ id: index + 1, percentage: key, value });
               }
-            });   
+            });
           }
           setGradeStructure(newResult);
         }
       });
 
+    await axios.get(
+      API_URL + "/class/getGrades/" + classId,
+      {
+        headers: {
+          token: "Bearer " + currentToken,
+        },
+      }
+    ).then((res) => {
+      if (res.data) {
+        const structure = res.data.map(obj => {
+          let newObj = { ...obj };
+          delete newObj.id;
+          delete newObj.fullname;
+          delete newObj.index;
+          return newObj;
+        });
+        setFilterGradeData(structure)
+        setGradeData(res.data);
+      }
+    })
   }
 
 
@@ -206,11 +211,6 @@ export default function GradeBoard(props) {
 
   const CustomToolbar = () => {
     const handleExportClick = () => {
-
-
-      // const dataToExport = apiRef.current.getRowModels()
-      // const valuesArray = Array.from(dataToExport.values());
-
       const ws = XLSX.utils.json_to_sheet(gradeData);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
@@ -231,11 +231,19 @@ export default function GradeBoard(props) {
         const workbook = XLSX.read(data, { type: 'array' });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const importedData = XLSX.utils.sheet_to_json(sheet, {
-          defval: null // Giá trị mặc định cho ô trống
+          defval: null // Default value
         });
 
         setGradeData(importedData);
 
+        const structure = importedData.map(obj => {
+          let newObj = { ...obj };
+          delete newObj.id;
+          delete newObj.fullname;
+          delete newObj.index;
+          return newObj;
+        });
+        setFilterGradeData(structure)
         // Handle the imported data
         const result = await axios.post(
           API_URL + "/class/updateGrades",

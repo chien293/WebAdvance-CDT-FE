@@ -1,11 +1,9 @@
-// components/TeacherDataTable.js
 import React, { useState, useEffect } from 'react';
 import {
   GridToolbarContainer, GridToolbarExport, Dialog,
   DialogTitle, DialogContent, DialogActions, DialogContentText, Button, TextField, Box
 } from '@mui/material';
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
-import EditIcon from '@mui/icons-material/Edit';
 import { FaBan, FaCheck } from "react-icons/fa";
 import axios from 'axios';
 
