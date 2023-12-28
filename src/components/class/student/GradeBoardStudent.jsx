@@ -13,7 +13,7 @@ import {
 import axios from 'axios';
 
 
-export default function GradeBoardStudent(props) {
+export default function GradeBoardStudent({ classId }) {
     const [currentUser, setCurrentUser] = React.useState(null);
     const [currentId, setId] = useState(null);
     const [currentToken, setToken] = useState(null);
@@ -25,18 +25,29 @@ export default function GradeBoardStudent(props) {
     const [selectedColumn, setSelectedColumn] = useState(null);
     const [gradeStructure, setGradeStructure] = useState(null);
     const [filterGradeStructure, setFilterGradeStructure] = useState(null);
+    const [studentId, setStudentId] = useState(null);
     const [sumValues, setSumValues] = useState([]);
 
     const API_URL = process.env.SERVER_URL;
 
     useEffect(() => {
-        const takeUser = () => {
+        const takeUser = async () => {
             const user = authService.getCurrentUser();
             if (user) {
                 setCurrentUser(user.user[0].fullname);
                 setId(user.user[0].id);
                 setToken(user.accessToken);
             }
+            await axios.get(API_URL + "/getStudentId/" + user.user[0].id, {
+                headers: {
+                    token: "Bearer " + user.accessToken,
+                },
+            }).then((res) => {
+                if (res.data) {
+                    console.log(res.data, " STUDENT ID")
+                    setStudentId(res.data);
+                }
+            })
         };
         takeUser();
 
@@ -44,7 +55,7 @@ export default function GradeBoardStudent(props) {
 
     useEffect(() => {
         if (currentToken) {
-            getGrade(props.classId);
+            getGrade(classId);
 
         }
     }, [currentToken]);
@@ -165,6 +176,8 @@ export default function GradeBoardStudent(props) {
     }
 
     const handleEditClick = (data, field) => {
+        console.log(data);
+        console.log(field);
         setSelectedGrade(data);
         setSelectedColumn(field);
         setEditDialogOpen(true);
@@ -198,62 +211,72 @@ export default function GradeBoardStudent(props) {
         }));
     };
 
-    return (
-        <div
-            style={{
-                height: 450,
-                width: "100%",
-            }}
-        >
-            <DataGrid
-                rows={gradeData}
-                columns={columns}
-                initialState={{
-                    ...gradeData.initialState,
-                    pagination: { paginationModel: { pageSize: 10 } },
+    return (studentId ?
+        (
+            <div
+                style={{
+                    height: 450,
+                    width: "100%",
                 }}
+            >
+                <DataGrid
+                    rows={gradeData}
+                    columns={columns}
+                    initialState={{
+                        ...gradeData.initialState,
+                        pagination: { paginationModel: { pageSize: 10 } },
+                    }}
 
-                pageSizeOptions={[5, 10]}
-                pagination
-            />
-            <Dialog open={editDialogOpen} onClose={handleEditDialogClose}>
-                <DialogTitle>Edit score</DialogTitle>
+                    pageSizeOptions={[5, 10]}
+                    pagination
+                />
+                <Dialog open={editDialogOpen} onClose={handleEditDialogClose}>
+                    <DialogTitle>Edit score</DialogTitle>
+                    <Box mt={-1}>
+                        <DialogContent>
+                            <Box mb={2}>
+                                {selectedColumn ? columns
+                                    .filter(column => column.field !== 'edit' && column.field !== 'id' && column.field !== 'fullname' && column.field !== 'sum')
+                                    .map((column) => (
+                                        <Box mb={2} key={column.field}>
+                                            <TextField
+                                                label="Expectation Score"
+                                                fullWidth
+                                                value={selectedGrade ? selectedGrade[column.headerName] : ''}
+                                                onChange={(e) => handleTextFieldChange(column.field, e.target.value)}
+                                            />
+                                            <TextField
+                                                style={{ marginTop: 30 }}
+                                                label="Message"
+                                                fullWidth
+                                                multiline
+                                                placeholder="Reason why you submit this review"
+                                                onChange={(e) => handleTextFieldChange(column.field, e.target.value)}
+                                            />
+                                        </Box>
+                                    ))
+                                    : null}
+                            </Box>
+                        </DialogContent>
+                    </Box>
+                    <DialogActions>
+                        <Button onClick={handleEditDialogClose}>Cancel</Button>
+                        <Button onClick={handleEditSubmit} color="primary">
+                            Save
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </div>) : (
+            <div
+                style={{
+                    height: 450,
+                    width: "100%",
+                }}
+            >
+                You need to verify your studentId to view grade.
+            </div>
+        )
+    )
 
-                <Box mt={-1}>
-                    <DialogContent>
-                        <Box mb={2}>
-                            {selectedColumn ? columns
-                                .filter(column => column.field !== 'edit' && column.field !== 'id' && column.field !== 'fullname' && column.field !== 'sum')
-                                .map((column) => (
-                                    <Box mb={2} key={column.field}>
-                                        <TextField
-                                            label="Expectation Score"
-                                            fullWidth
-                                            value={selectedGrade ? selectedGrade[column.headerName] : ''}
-                                            onChange={(e) => handleTextFieldChange(column.field, e.target.value)}
-                                        />
-                                        <TextField
-                                            style={{ marginTop: 30 }}
-                                            label="Message"
-                                            fullWidth
-                                            multiline
-                                            placeholder="Reason why you submit this review"
-                                            onChange={(e) => handleTextFieldChange(column.field, e.target.value)}
-                                        />
-                                    </Box>
-                                ))
-                                : null}
-                        </Box>
-                    </DialogContent>
-                </Box>
-                <DialogActions>
-                    <Button onClick={handleEditDialogClose}>Cancel</Button>
-                    <Button onClick={handleEditSubmit} color="primary">
-                        Save
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
 }
 

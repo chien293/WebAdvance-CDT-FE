@@ -205,7 +205,7 @@ const GradeStructureBoard = ({ classId, onSendNotification }) => {
                 {
                     idClass: classId,
                     gradeStructure: finalRowData,
-                    url: `/student/grade/${classId}`
+                    url: `/student/class/grade/${classId}`
                 },
                 {
                     headers: {
