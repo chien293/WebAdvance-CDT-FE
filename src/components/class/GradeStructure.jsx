@@ -114,7 +114,7 @@ const GradeStructureBoard = ({ classId }) => {
 
     useEffect(() => {
         if (currentToken) getData(classId);
-    }, [currentToken]);
+    }, [currentToken, classId]);
 
     const getData = async (classId) => {
         await axios

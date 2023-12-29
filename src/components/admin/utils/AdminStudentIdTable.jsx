@@ -25,15 +25,16 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
 
     React.useEffect(() => {
         if (studentIds) {
+            console.log(studentIds, " Id")
             setStudentIdsData(studentIds);
         }
     }, [studentIds])
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'idstudent', headerName: 'Email', width: 200 },
+        { field: 'idStudent', headerName: 'Student Id', width: 200 },
         {
-            field: 'iduser',
+            field: 'idUser',
             headerName: 'User Id',
             width: 150,
         },
@@ -56,7 +57,7 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
 
     const handleEditClick = (data) => {
         setSelectedStudentId(data);
-        setEditedUserId(data.userId || '');
+        setEditedUserId(data.idUser || '');
         setEditDialogOpen(true);
     };
 
@@ -81,7 +82,7 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
         setStudentIdsData((prevIds) =>
             prevIds.map((data) =>
                 data.id == selectedStudentId.id ?
-                    { ...data, iduser: editedUserId, } : data
+                    { ...data, idUser: editedUserId, } : data
             )
         );
 
@@ -113,6 +114,7 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
                     defval: null // Default value
                   });
 
+                  console.log(importedData, " IMported")
                 const result = await axios.post(
                     API_URL + "/admin/mapListStudentIds",
                     {

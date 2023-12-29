@@ -16,7 +16,7 @@ import GradeBoardStudent from "@/components/class/student/GradeBoardStudent";
 import Link from "next/link";
 const TeacherTabs = ({ classId, tabs }) => {
   const [value, setValue] = useState("1");
-
+  console.log(value, " TEACHER TABS")
   useEffect(() => {
     if (tabs)
       setValue(tabs)

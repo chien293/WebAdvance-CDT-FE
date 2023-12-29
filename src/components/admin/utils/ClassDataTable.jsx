@@ -101,13 +101,12 @@ const ClassDataTable = ({ classes, teachers, token }) => {
             ...classData.initialState,
             pagination: { paginationModel: { pageSize: 10 } },
           }}
-          rowsPerPageOptions={[5, 10, 20]}
+          
           slots={{
             Toolbar: CustomToolbar,
           }}
-          onSelectionModelChange={(newSelection) => {
-            console.log(newSelection);
-          }}
+          pageSizeOptions={[5, 10, 20]}
+          pagination
         />
       ) : (
         <p>No classes available.</p>

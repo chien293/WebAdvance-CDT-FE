@@ -121,7 +121,7 @@ const AdminHomePage = () => {
     <>
       <Box style={{ display: 'flex', height: '100vh' }}>
       <Sidebar onSideBarItemClick={handleSideBarItemClick} />
-      <Container>
+      <Container style={{marginRight: 100, marginTop: 30}}>
         <h1 style={{marginBottom: 40}}>{selectedSideBarItem === "teacher"
           ? "Teacher"
           : selectedSideBarItem === "class"

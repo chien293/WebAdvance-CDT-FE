@@ -145,7 +145,6 @@ const TeacherDataTable = ({ teachers, token }) => {
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <Button >Click me</Button>
         <GridToolbarExport />      
       </GridToolbarContainer>
     );
@@ -158,13 +157,16 @@ const TeacherDataTable = ({ teachers, token }) => {
         <DataGrid
           rows={teachersData}
           columns={columns}
-          pageSizeOptions={[5, 10]}
+          initialState={{
+            ...teachersData.initialState,
+            pagination: { paginationModel: { pageSize: 10 } },
+        }}
            
           slots={{
             toolbar: CustomToolbar,
           }}
-          
-        
+          pageSizeOptions={[5, 10]}
+          pagination
         />
         </div>
       ) : (

@@ -8,19 +8,18 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import {
   DataGrid, GridColDef, GridToolbar,
-  GridToolbarContainer, GridToolbarExport, useGridApiRef
+  GridToolbarContainer, GridToolbarExport,
 } from '@mui/x-data-grid';
 import axios from 'axios';
 import * as XLSX from 'xlsx'
 
-export default function GradeBoard(props) {
+export default function GradeBoard({classId}) {
   const [currentUser, setCurrentUser] = React.useState(null);
   const [currentId, setId] = useState(null);
   const [currentToken, setToken] = useState(null);
   const [gradeData, setGradeData] = useState([]);
   const [filterGradeData, setFilterGradeData] = useState([]);
   const [columns, setColumns] = useState([]);
-  const apiRef = useGridApiRef()
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedGrade, setSelectedGrade] = useState(null);
   const [selectedColumn, setSelectedColumn] = useState(null);
@@ -45,10 +44,9 @@ export default function GradeBoard(props) {
 
   useEffect(() => {
     if (currentToken) {
-      getGrade(props.classId);
-
+      getGrade(classId);
     }
-  }, [currentToken]);
+  }, [currentToken, classId]);
 
   //create columns
   useEffect(() => {

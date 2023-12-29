@@ -44,7 +44,6 @@ export default function GradeBoardStudent({ classId }) {
                 },
             }).then((res) => {
                 if (res.data) {
-                    console.log(res.data, " STUDENT ID")
                     setStudentId(res.data);
                 }
             })
@@ -57,7 +56,7 @@ export default function GradeBoardStudent({ classId }) {
         if (studentId) {
             getGrade(classId, currentId);
         }
-    }, [studentId]);
+    }, [studentId, classId]);
 
     //create columns
     useEffect(() => {

@@ -77,9 +77,15 @@ const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
         <Collapse in={openTeacher} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {teacherClass.map((item) => (
-              <ListItemButton style={{ marginLeft: 30 }} key={item.id}>
-                <ListItemText primary={item.name} />
-              </ListItemButton>
+              <Link
+                key={item.id}
+                href={{
+                  pathname: `/teacher/class/${item.id}`
+                }}>
+                <ListItemButton style={{ marginLeft: 30 }} key={item.id}>
+                  <ListItemText primary={item.name} />
+                </ListItemButton>
+              </Link>
             ))}
           </List>
         </Collapse>
@@ -93,9 +99,16 @@ const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
         <Collapse in={openStudent} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {studentClass.map((item) => (
-              <ListItemButton style={{ marginLeft: 30 }} key={item.id}>
-                <ListItemText primary={item.name} />
-              </ListItemButton>
+              <Link
+                key={item.id}
+                href={{
+                  pathname: `/student/class/${item.id}`
+                }}
+                >
+                <ListItemButton style={{ marginLeft: 30 }} key={item.id}>
+                  <ListItemText primary={item.name} />
+                </ListItemButton>
+              </Link>
             ))}
           </List>
         </Collapse>
