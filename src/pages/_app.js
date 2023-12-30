@@ -10,11 +10,9 @@ export default function App({ Component, pageProps }) {
     <SocketProvider>
       <NextUIProvider>
         <NextThemesProvider attribute="class" defaultTheme="dark">
-
           <ClassProvider>
             <Component {...pageProps} />
           </ClassProvider>
-
         </NextThemesProvider>
       </NextUIProvider>
     </SocketProvider>

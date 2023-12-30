@@ -10,15 +10,14 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import AuthService from "@/auth/auth-service.js";
 import { useRouter } from "next/navigation";
+import classService from "@/service/class/classService";
 export default function FormCreateClass({ open, onClose, onCancel }) {
   const router = useRouter();
   const { register, handleSubmit } = useForm();
-  const URL = process.env.SERVER_URL;
   const onCreate = async (data) => {
     // Implement logic for creating the classroom
     const user = AuthService.getCurrentUser();
-    const token = user.token;
-    console.log(user.user[0].id);
+
     const body = {
       className: data.className,
       createdBy: user.user[0].id,
@@ -27,33 +26,17 @@ export default function FormCreateClass({ open, onClose, onCancel }) {
       room: data.room,
       title: data.title,
     };
-    const config = {
-      headers: { Authorization: `Bearer ${token}` },
+
+    const insertId = await classService.insertClass(body);
+    const enrollmentData = {
+      userId: user.user[0].id,
+      classId: insertId.insertId,
+      role: "teacher",
     };
-    // write axios post with above url, body and config
-    // the below axios return a value, you can use it to redirect to the classroom page
 
-    const respone = await axios
-      .post(URL + "/class/insertClass", body, config)
-      .catch((err) => {
-        console.log(err);
-      });
-    const insertId = respone.data.insertId;
+    const enrollment = await classService.insertEnrollment(enrollmentData);
 
-    const respone2 = await axios
-      .post(
-        URL + "/class/insertEnrollment",
-        {
-          userId: user.user[0].id,
-          classId: insertId,
-          role: "teacher",
-        },
-        config
-      )
-      .catch((err) => {
-        console.log(err);
-      });
-    router.push("/class/" + insertId);
+    router.push("/teacher/class/" + insertId.insertId);
   };
   return (
     <React.Fragment>

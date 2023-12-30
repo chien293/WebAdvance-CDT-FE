@@ -17,8 +17,8 @@ import axios from "axios";
 import StudentIdDataTable from "@/components/admin/utils/StudentIdTable";
 import NestedList from "@/components/dashboard-page/NestedList";
 import { ClassContext, ClassProvider } from "@/components/ClassProvider";
-import { useSocket  } from "@/components/SocketProvider";
-import {io} from "socket.io-client";
+import { useSocket } from "@/components/SocketProvider";
+import { io } from "socket.io-client";
 import MainContent from "@/components/MainHomePage";
 const defaultTheme = createTheme();
 
@@ -34,7 +34,7 @@ function HomePage() {
   const [currentToken, setToken] = useState(null);
   const [currentSocket, setCurrentSocket] = useState(null);
   const { updateClasses } = useContext(ClassContext);
-  const socket  = useSocket();
+  const socket = useSocket();
   const API_URL = process.env.SERVER_URL;
 
   useEffect(() => {
@@ -96,7 +96,6 @@ function HomePage() {
       )
       .then((res) => {
         if (res.data) {
-          console.log(res.data);
           const teachersData = res.data;
           setTeacherClass(teachersData);
         } else {
@@ -144,4 +143,4 @@ function HomePage() {
   );
 }
 
-export default withAuth(HomePage, ["admin", "user", "teacher", "student"]);
+export default withAuth(HomePage, ["admin", "user"]);

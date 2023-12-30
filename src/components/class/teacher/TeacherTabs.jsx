@@ -16,11 +16,10 @@ import GradeBoardStudent from "@/components/class/student/GradeBoardStudent";
 import Link from "next/link";
 const TeacherTabs = ({ classId, tabs }) => {
   const [value, setValue] = useState("1");
-  console.log(value, " TEACHER TABS")
+  console.log(value, " TEACHER TABS");
   useEffect(() => {
-    if (tabs)
-      setValue(tabs)
-  }, [tabs])
+    if (tabs) setValue(tabs);
+  }, [tabs]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -45,9 +44,12 @@ const TeacherTabs = ({ classId, tabs }) => {
         <Box
           sx={{
             borderBottom: 1,
-            // backgroundColor: "red",
+            backgroundColor: "white",
             borderColor: "divider",
             "& .MuiTab-root": { textTransform: "none" },
+            position: "fixed",
+            width: "calc(100% - 240px)",
+            zIndex: 10,
           }}
         >
           <TabList
@@ -71,27 +73,27 @@ const TeacherTabs = ({ classId, tabs }) => {
             <Tab label="Checking Examination Papers" value="7" />
           </TabList>
         </Box>
-        <Box sx={{}}>
+        <Box sx={{ marginTop: 5 }}>
           <TabPanel value="1">
-            <InfoContent classId={classId} />
+            <InfoContent classId={classId} role="teacher" />
           </TabPanel>
           <TabPanel value="2">
-            <Exercise classId={classId} />
+            <Exercise classId={classId} role="teacher" />
           </TabPanel>
           <TabPanel value="3">
-            <ParticipantContent classId={classId} />
+            <ParticipantContent classId={classId} role="teacher" />
           </TabPanel>
           <TabPanel value="4">
-            <SettingsContent classId={classId} />
+            <SettingsContent classId={classId} role="teacher" />
           </TabPanel>
           <TabPanel value="5">
-            <GradeStructureBoard classId={classId} />
+            <GradeStructureBoard classId={classId} role="teacher" />
           </TabPanel>
           <TabPanel value="6">
-            <GradeBoard classId={classId} />
+            <GradeBoard classId={classId} role="teacher" />
           </TabPanel>
           <TabPanel value="7">
-            <ReviewExam classId={classId} />
+            <ReviewExam classId={classId} role="teacher" />
           </TabPanel>
         </Box>
       </TabContext>

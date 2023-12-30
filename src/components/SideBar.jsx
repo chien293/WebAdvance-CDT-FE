@@ -80,8 +80,9 @@ const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
               <Link
                 key={item.id}
                 href={{
-                  pathname: `/teacher/class/${item.id}`
-                }}>
+                  pathname: `/teacher/class/${item.id}`,
+                }}
+              >
                 <ListItemButton style={{ marginLeft: 30 }} key={item.id}>
                   <ListItemText primary={item.name} />
                 </ListItemButton>
@@ -102,9 +103,9 @@ const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
               <Link
                 key={item.id}
                 href={{
-                  pathname: `/student/class/${item.id}`
+                  pathname: `/student/class/${item.id}`,
                 }}
-                >
+              >
                 <ListItemButton style={{ marginLeft: 30 }} key={item.id}>
                   <ListItemText primary={item.name} />
                 </ListItemButton>
@@ -112,12 +113,12 @@ const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
             ))}
           </List>
         </Collapse>
-        <ListItemButton onClick={() => setCurrentSelection("Settings")}>
+        {/* <ListItemButton onClick={() => setCurrentSelection("Settings")}>
           <ListItemIcon>
             <SettingsIcon />
           </ListItemIcon>
           <ListItemText primary="Setting" />
-        </ListItemButton>
+        </ListItemButton> */}
       </List>
     </Drawer>
   );

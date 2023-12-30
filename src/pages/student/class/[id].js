@@ -1,9 +1,7 @@
 import * as React from "react";
 import { useState, useContext } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
-import {
-  Box,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import HeaderBar from "@/components/HeaderBar";
 import SideBar from "@/components/SideBar";
 import { ClassContext } from "@/components/ClassProvider";
@@ -13,13 +11,14 @@ const defaultTheme = createTheme();
 const SIDE_NAV_WIDTH = 280;
 
 import { useRouter } from "next/router";
+import withAuth from "@/auth/with-auth";
 
-export default function Class() {
+function Class() {
   const router = useRouter();
   const { id, tabs } = router.query;
   const { studentClass, teacherClass } = useContext(ClassContext);
   const [currentSelection, setCurrentSelection] = useState("Tabs");
-  
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
@@ -41,3 +40,6 @@ export default function Class() {
     </ThemeProvider>
   );
 }
+
+// export default withAuth(Class, ["student"]);
+export default Class;

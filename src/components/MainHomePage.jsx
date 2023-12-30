@@ -26,7 +26,6 @@ const MainContent = ({
   id,
   role,
 }) => {
-
   return (
     <Box sx={{ marginLeft: "240px", backgroundColor: "white", height: "100%" }}>
       {currentSelection === "Home" && (
@@ -41,14 +40,12 @@ const MainContent = ({
         </div>
       )}
       {currentSelection === "MapID" && <StudentIdDataTable />}
-      {currentSelection === "Registered" && <div>Registered Content</div>}
+      {/* {currentSelection === "Registered" && <div>Registered Content</div>}
       {currentSelection === "Archived class" && (
         <div>Archived Class Content Here</div>
       )}
       {currentSelection === "Setting" && <div>Settings Content Here</div>}
-      {currentSelection === "Tabs" && (
-        <Tabs classId={id} role={role} />
-      )}
+      {currentSelection === "Tabs" && <Tabs classId={id} role={role} />} */}
     </Box>
   );
 };

@@ -18,9 +18,8 @@ const StudentTabs = ({ classId, tabs }) => {
   const [value, setValue] = React.useState("1");
 
   useEffect(() => {
-    if (tabs)
-      setValue(tabs)
-  }, [tabs])
+    if (tabs) setValue(tabs);
+  }, [tabs]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -45,9 +44,12 @@ const StudentTabs = ({ classId, tabs }) => {
         <Box
           sx={{
             borderBottom: 1,
-            // backgroundColor: "red",
+            backgroundColor: "white",
             borderColor: "divider",
             "& .MuiTab-root": { textTransform: "none" },
+            position: "fixed",
+            width: "calc(100% - 240px)",
+            zIndex: 10,
           }}
         >
           <TabList
@@ -70,21 +72,21 @@ const StudentTabs = ({ classId, tabs }) => {
             <Tab label="Checking Examination Papers" value="6" />
           </TabList>
         </Box>
-        <Box sx={{}}>
+        <Box sx={{ marginTop: 5 }}>
           <TabPanel value="1">
-            <InfoContent classId={classId} />
+            <InfoContent classId={classId} role="student" />
           </TabPanel>
           <TabPanel value="2">
-            <Exercise classId={classId} />
+            <Exercise classId={classId} role="student" />
           </TabPanel>
           <TabPanel value="3">
-            <ParticipantContent classId={classId} />
+            <ParticipantContent classId={classId} role="student" />
           </TabPanel>
           <TabPanel value="4">
-            <SettingsContent classId={classId} />
+            <SettingsContent classId={classId} role="student" />
           </TabPanel>
           <TabPanel value="5">
-            <GradeBoardStudent classId={classId} />
+            <GradeBoardStudent classId={classId} role="student" />
           </TabPanel>
           <TabPanel value="6">
             <ReviewExam classId={classId} />

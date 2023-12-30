@@ -18,14 +18,14 @@ import {
   Menu,
   MenuItem,
   Badge,
-  IconButton
+  IconButton,
 } from "@mui/material";
 
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import Popover from '@mui/material/Popover';
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Popover from "@mui/material/Popover";
 
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -40,6 +40,7 @@ import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 import AddIcon from "@mui/icons-material/Add";
 import CoursesList from "@/components/dashboard-page/CoursesList";
 import FormCreateClass from "@/components/dashboard-page/FormCreateClass";
+import FormCreateEnroll from "@/components/dashboard-page/FormCreateEnroll";
 import withAuth from "@/auth/with-auth";
 import { useSocket } from "./SocketProvider";
 
@@ -70,10 +71,10 @@ function NotificationIcon({ notiList, token }) {
 
   useEffect(() => {
     if (notiList) {
-      console.log(notiList, " New list noti")
+      console.log(notiList, " New list noti");
       setNotifications(notiList);
     }
-  }, [notiList])
+  }, [notiList]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -85,27 +86,35 @@ function NotificationIcon({ notiList, token }) {
 
   const handleMarkAsRead = async () => {
     if (notifications.length > 0) {
-      setNotifications(notifications.map(notification => ({ ...notification, read: 1 })));
-      await axios
-        .post(API_URL + "/class/setReadNotifications",
-          {
-            notifications: notifications
+      setNotifications(
+        notifications.map((notification) => ({ ...notification, read: 1 }))
+      );
+      await axios.post(
+        API_URL + "/class/setReadNotifications",
+        {
+          notifications: notifications,
+        },
+        {
+          headers: {
+            token: "Bearer " + token,
           },
-          {
-            headers: {
-              token: "Bearer " + token,
-            },
-          })
+        }
+      );
     }
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
+  const id = open ? "simple-popover" : undefined;
 
   return (
     <div style={{ marginRight: 15 }}>
       <IconButton color="inherit" onClick={handleClick}>
-        <Badge badgeContent={notifications.filter(notification => !notification.read).length} color="error">
+        <Badge
+          badgeContent={
+            notifications.filter((notification) => !notification.read).length
+          }
+          color="error"
+        >
           <NotificationsIcon />
         </Badge>
       </IconButton>
@@ -115,12 +124,12 @@ function NotificationIcon({ notiList, token }) {
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
+          vertical: "bottom",
+          horizontal: "center",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
+          vertical: "top",
+          horizontal: "center",
         }}
       >
         <List>
@@ -129,15 +138,31 @@ function NotificationIcon({ notiList, token }) {
               {notifications.map((notification, index) => (
                 <React.Fragment key={index}>
                   <Link href={notification.url}>
-                    <ListItem button style={{ backgroundColor: notification.read == 1 ? 'white' : '#32a852' }}>
+                    <ListItem
+                      button
+                      style={{
+                        backgroundColor:
+                          notification.read == 1 ? "white" : "#32a852",
+                      }}
+                    >
                       <ListItemText
                         primary={<b>{notification.title}</b>}
                         secondary={
                           <React.Fragment>
-                            <Typography component="span" variant="body2" color="textPrimary">
+                            <Typography
+                              component="span"
+                              variant="body2"
+                              color="textPrimary"
+                            >
                               {notification.content}
                             </Typography>
-                            <Typography component="span" variant="body2" color="textSecondary" align="right" display="block">
+                            <Typography
+                              component="span"
+                              variant="body2"
+                              color="textSecondary"
+                              align="right"
+                              display="block"
+                            >
                               {notification.createdDay}
                             </Typography>
                           </React.Fragment>
@@ -150,13 +175,8 @@ function NotificationIcon({ notiList, token }) {
               ))}
             </div>
           ) : (
-            <div>
-              You have no notification.
-            </div>
-          )
-
-          }
-
+            <div>You have no notification.</div>
+          )}
         </List>
         <Button onClick={handleMarkAsRead}>Mark as read</Button>
       </Popover>
@@ -168,7 +188,8 @@ const HeaderBar = ({ isHomePage }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openAddCourseButton, setOpenAddCourseButton] = useState(false);
   const [placement, setPlacement] = useState();
-  const [openForm, setOpenForm] = useState(false);
+  const [openFormCreate, setOpenFormCreate] = useState(false);
+  const [openFormEnroll, setOpenFormEnroll] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentToken, setCurrentToken] = useState(null);
   const [currentId, setCurrentId] = useState(null);
@@ -176,58 +197,59 @@ const HeaderBar = ({ isHomePage }) => {
   const socket = useSocket();
 
   useEffect(() => {
-    //takeUser();
     const user = AuthService.getCurrentUser();
     if (user) {
       setCurrentUser(user.user[0].fullname);
       setCurrentToken(user.accessToken);
-      setCurrentId(user.user[0].id)
+      setCurrentId(user.user[0].id);
     }
   }, []);
 
   useEffect(() => {
     if (currentUser) {
-      getNotifications()
+      getNotifications();
     }
   }, [currentUser]);
 
   useEffect(() => {
     if (socket) {
       socket.on("getNotification", (data) => {
-        const transformedData = data.content.map(notification => ({
+        const transformedData = data.content.map((notification) => ({
           id: notification.id,
           title: notification.fullname || notification.name,
           url: notification.url,
           content: notification.content,
           createdDay: notification.createdDay,
-          read: notification.marked
+          read: notification.marked,
         }));
-        setNotifications(transformedData)
+        setNotifications(transformedData);
       });
     }
   }, [socket]);
 
   const getNotifications = async () => {
-    console.log(currentUser, " HEADERBAR")
+    console.log(currentUser, " HEADERBAR");
     await axios
-      .post(API_URL + "/class/getNotifications",
+      .post(
+        API_URL + "/class/getNotifications",
         {
-          idUser: currentId
+          idUser: currentId,
         },
         {
           headers: {
             token: "Bearer " + currentToken,
           },
-        })
+        }
+      )
       .then((res) => {
         if (res.data) {
-          const transformedNotifications = res.data.map(notification => ({
+          const transformedNotifications = res.data.map((notification) => ({
             id: notification.id,
             title: notification.fullname || notification.name,
             url: notification.url,
             content: notification.content,
             createdDay: notification.createdDay,
-            read: notification.marked
+            read: notification.marked,
           }));
           setNotifications(transformedNotifications);
         }
@@ -246,7 +268,7 @@ const HeaderBar = ({ isHomePage }) => {
       <AppBar position="fixed" color="success">
         <Toolbar
           sx={{
-            pr: "24px", // keep right padding when drawer closed        
+            pr: "24px", // keep right padding when drawer closed
           }}
         >
           <Typography
@@ -285,12 +307,12 @@ const HeaderBar = ({ isHomePage }) => {
           >
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
-                <Paper>
+                <Paper className="mt-4">
                   <div className="px-4 py-2 hover:bg-gray-100">
                     <Button
                       sx={{ border: "none" }}
                       variant="outlined"
-                    // onClick={() => setOpen(true)}
+                      onClick={() => setOpenFormEnroll(true)}
                     >
                       Enroll Classroom
                     </Button>
@@ -299,7 +321,7 @@ const HeaderBar = ({ isHomePage }) => {
                     <Button
                       sx={{ border: "none", textColor: "black" }}
                       variant="outlined"
-                      onClick={() => setOpenForm(true)}
+                      onClick={() => setOpenFormCreate(true)}
                     >
                       Create Classroom
                     </Button>
@@ -308,51 +330,6 @@ const HeaderBar = ({ isHomePage }) => {
               </Fade>
             )}
           </Popper>
-
-
-
-          {/* <AddIcon
-              id="basic-button"
-              aria-controls={openMenu ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={openMenu ? "true" : undefined}
-              onClick={handleClickAddIcon}
-              sx={{
-                m: 1,
-                p: 0.6,
-                backgroundColor: "white",
-                borderRadius: 19,
-                color: "black",
-                fontSize: 38,
-                boxShadow: "10",
-                shadowColor: "#888888",
-                "&:hover": { cursor: "pointer" },
-                "&:active": { backgroundColor: "#bdbdbd" },
-                "&:focus": { backgroundColor: "#bdbdbd" },
-              }}></AddIcon>
-            <Menu
-              id="basic-menu"
-              sx={{
-                // transform: "translate(-7%, -1%)",
-                position: "fixed",
-                // boxShadow: "10",
-                shadowColor: "#888888",
-                top: -5,
-                right: -50,
-              }}
-              anchorEl={anchorEl}
-              open={openMenu}
-              onClose={handleCloseMenu}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}>
-              <MenuItem onClick={() => setOpenForm(true)}>
-                Enroll Classroom
-              </MenuItem>
-              <MenuItem onClick={() => setOpenForm(true)}>
-                Create Classroom
-              </MenuItem>
-            </Menu> */}
           <LinkNext href="/">
             <Typography sx={{ paddingRight: 5 }}>{currentUser} </Typography>
           </LinkNext>
@@ -363,9 +340,14 @@ const HeaderBar = ({ isHomePage }) => {
         </Toolbar>
       </AppBar>
       <FormCreateClass
-        open={openForm}
-        onClose={() => setOpenForm(false)}
-        onCancel={() => setOpenForm(false)}
+        open={openFormCreate}
+        onClose={() => setOpenFormCreate(false)}
+        onCancel={() => setOpenFormCreate(false)}
+      />
+      <FormCreateEnroll
+        open={openFormEnroll}
+        onClose={() => setOpenFormEnroll(false)}
+        onCancel={() => setOpenFormEnroll(false)}
       />
     </Box>
   );

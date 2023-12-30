@@ -1,5 +1,4 @@
 // lib/withAuth.js
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
@@ -17,17 +16,19 @@ const withAuth = (WrappedComponent, allowedRoles) => {
     useEffect(() => {
       const fetchUserRole = () => {
         const user = AuthService.getCurrentUser();
-
+        //check if user is logged in and token is not expired or empty
         if (!user || isTokenExpired(user.accessToken) || !user.accessToken) {
           AuthService.logout();
           router.push({ pathname: "/auth/sign-in" });
         }
-
-        if (user && allowedRoles.includes(user.user[0].role)) {
+        // check class role and redirect if not allowed (undone)
+        if (allowedRoles.includes(user.user[0].role)) {
           setUserRole(user.user[0].role);
         } else {
-          router.push({ pathname: "/auth/sign-in" });
+          router.push({ pathname: "/home-page" });
         }
+
+        console.log(router.pathname);
       };
 
       fetchUserRole();
@@ -35,8 +36,6 @@ const withAuth = (WrappedComponent, allowedRoles) => {
 
     if (userRole) {
       return <WrappedComponent {...props} />;
-    } else {
-      return null;
     }
   };
 
