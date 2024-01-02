@@ -1,15 +1,40 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import authService from "@/auth/auth-service";
+const ParticipantContent = ({ classId }) => {
+  const [participants, setParticipants] = useState([]);
 
-const ParticipantContent = () => {
-  const teachers = [
-    { id: 1, name: "Khanh Huy Nguyen" },
-    { id: 2, name: "Tuan Mai Anh" },
-  ];
-  const students = [
-    { id: 1, name: "Tran Dam Gia Huy" },
-    { id: 2, name: " Vu Hoang Anh" },
-    { id: 3, name: "Toan Banh Hao" },
-  ];
+  const [token, setToken] = useState(null);
+  const API_URL = process.env.SERVER_URL;
+  useEffect(() => {
+    const takeUser = () => {
+      const user = authService.getCurrentUser();
+      if (user) {
+        setToken(user.accessToken);
+      }
+    };
+
+    takeUser();
+  })
+
+  useEffect(() => {
+    if (token) {
+      getClasses();
+    }
+  }, [token])
+
+  const getClasses = async () => {
+    await axios.get(API_URL + `/class/getParticipants/${classId}`,
+      {
+        headers: {
+          token: "Bearer " + token,
+        },
+      }).then((data) => {
+      if (data) {
+        setParticipants(data.data)
+      }
+    })
+  }
 
   return (
     <div className="flex flex-col w-6/12 font-medium ml-40">
@@ -17,22 +42,38 @@ const ParticipantContent = () => {
         Teacher
       </div>
       <ul>
-        {teachers.map((teacher) => (
-          <li className="border-b p-5" key={teacher.id}>
-            {teacher.name}
-          </li>
-        ))}
+        {participants.length > 0 ? (
+          participants
+            .filter((item) => item.role === 'teacher')
+            .map((teacher) => (
+              <li className="border-b p-5" key={teacher.fullname}>
+                {teacher.fullname}
+              </li>
+            ))
+        ) : (
+          <li className="border-b p-5">No teachers available</li>
+        )}
       </ul>
       <div className="flex flex-row text-green-600 p-5 border-b border-green-600 justify-between">
         <div className="text-4xl">Student</div>
-        <div className="flex items-end">{students.length} student</div>
+        <div className="flex items-end">
+          {participants.length > 0
+            ? `${participants.filter((item) => item.role === 'student').length} student`
+            : 'No students available'}
+        </div>
       </div>
       <ul>
-        {students.map((student) => (
-          <li className="border-b p-5" key={student.id}>
-            {student.name}
-          </li>
-        ))}
+        {participants.length > 0 ? (
+          participants
+            .filter((item) => item.role === 'student')
+            .map((student) => (
+              <li className="border-b p-5" key={student.fullname}>
+                {student.fullname}
+              </li>
+            ))
+        ) : (
+          <li className="border-b p-5">No students available</li>
+        )}
       </ul>
     </div>
   );

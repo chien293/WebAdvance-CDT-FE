@@ -90,21 +90,12 @@ export default function GradeBoardStudent({ classId }) {
 
     //count sum
     useEffect(() => {
+        updateSum()
+    }, [filterGradeStructure]);
+
+    const updateSum = () => {
         if (gradeStructure != null && gradeStructure.length > 0) {
-            let gradeStructureObj = filterGradeStructure[0];
-            console.log(JSON.stringify(gradeStructureObj), " GRADE COLUMN")
-            const newGrade = filterGradeData.map(obj => {
-                let newObj = { ...obj };
-                newObj.sum = Object.keys(gradeStructureObj).reduce((sum, key) => {
-                    if (newObj[key] !== null && newObj[key] !== undefined && !isNaN(newObj[key])) {
-                        return sum + (newObj[key] * gradeStructureObj[key] / 100);
-                    } else {
-                        return sum;
-                    }
-                }, 0);
-                return newObj;
-            });
-            const sumValues = newGrade.map(obj => obj.sum);
+            const sumValues = calculateAverage(filterGradeStructure, filterGradeData);
             if (gradeData.length > 0 && sumValues.length > 0) {
                 const newGradeData = gradeData.map((item, index) => {
                     return {
@@ -116,7 +107,21 @@ export default function GradeBoardStudent({ classId }) {
             }
 
         }
-    }, [filterGradeStructure]);
+    }
+
+    function calculateAverage(filterGradeStructure, filterGradeData) {
+        return filterGradeData.map(student => {
+            let total = 0;
+            let percentageSum = 0;
+            filterGradeStructure.forEach(item => {
+                const value = student[item.percentage] || 0;
+                total += value * item.value;
+                percentageSum += item.value;
+            });
+
+            return (total / percentageSum).toFixed(2);
+        });
+    }
 
 
     const getGrade = async (idClass) => {
@@ -132,14 +137,18 @@ export default function GradeBoardStudent({ classId }) {
             }
         ).then((res) => {
             if (res.data) {
-                const structure = res.data.map(obj => {
-                    let newObj = { ...obj };
-                    delete newObj.id;
-                    delete newObj.fullname;
-                    return newObj;
-                });
-                setFilterGradeData(structure)
-                setGradeData(res.data);
+                if (res.data.length > 0) {
+                    const structure = res.data.map(obj => {
+                        let newObj = { ...obj };
+                        delete newObj.id;
+                        delete newObj.fullname;
+                        return newObj;
+                    });
+                    setFilterGradeData(structure)
+                    setGradeData(res.data);
+                }else{
+                    setGradeData(res.data)
+                }
             }
         })
 
