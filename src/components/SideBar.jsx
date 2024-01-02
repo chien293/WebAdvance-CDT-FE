@@ -20,7 +20,12 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
+const SideBar = ({
+  setCurrentSelection,
+  studentClass,
+  teacherClass,
+  isNotHomePage,
+}) => {
   const [openStudent, setOpenStudent] = useState(false);
   const [openTeacher, setOpenTeacher] = useState(false);
 
@@ -51,7 +56,7 @@ const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
         <Link
           href="/home-page"
           onClick={() => {
-            setCurrentSelection("Home");
+            if (setCurrentSelection) setCurrentSelection("Home");
           }}
         >
           <ListItemButton>
@@ -68,51 +73,55 @@ const SideBar = ({ setCurrentSelection, studentClass, teacherClass }) => {
           <ListItemText primary="MapID" />
         </ListItemButton>
         <Divider sx={{ my: 1 }} />
-        <ListItemButton onClick={handleClickTeacher}>
-          <ListItemIcon>
-            {openTeacher ? <ExpandLess /> : <ExpandMore />}
-          </ListItemIcon>
-          <ListItemText primary="Teaching" />
-        </ListItemButton>
-        <Collapse in={openTeacher} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            {teacherClass.map((item) => (
-              <Link
-                key={item.id}
-                href={{
-                  pathname: `/teacher/class/${item.id}`,
-                }}
-              >
-                <ListItemButton style={{ marginLeft: 30 }} key={item.id}>
-                  <ListItemText primary={item.name} />
-                </ListItemButton>
-              </Link>
-            ))}
-          </List>
-        </Collapse>
-        <Divider sx={{ my: 1 }} />
-        <ListItemButton onClick={handleClickStudent}>
-          <ListItemIcon>
-            {openStudent ? <ExpandLess /> : <ExpandMore />}
-          </ListItemIcon>
-          <ListItemText primary="Enrolled" />
-        </ListItemButton>
-        <Collapse in={openStudent} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            {studentClass.map((item) => (
-              <Link
-                key={item.id}
-                href={{
-                  pathname: `/student/class/${item.id}`,
-                }}
-              >
-                <ListItemButton style={{ marginLeft: 30 }} key={item.id}>
-                  <ListItemText primary={item.name} />
-                </ListItemButton>
-              </Link>
-            ))}
-          </List>
-        </Collapse>
+        {!isNotHomePage && (
+          <>
+            <ListItemButton onClick={handleClickTeacher}>
+              <ListItemIcon>
+                {openTeacher ? <ExpandLess /> : <ExpandMore />}
+              </ListItemIcon>
+              <ListItemText primary="Teaching" />
+            </ListItemButton>
+            <Collapse in={openTeacher} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {teacherClass.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={{
+                      pathname: `/teacher/class/${item.id}`,
+                    }}
+                  >
+                    <ListItemButton style={{ marginLeft: 30 }} key={item.id}>
+                      <ListItemText primary={item.name} />
+                    </ListItemButton>
+                  </Link>
+                ))}
+              </List>
+            </Collapse>
+            <Divider sx={{ my: 1 }} />
+            <ListItemButton onClick={handleClickStudent}>
+              <ListItemIcon>
+                {openStudent ? <ExpandLess /> : <ExpandMore />}
+              </ListItemIcon>
+              <ListItemText primary="Enrolled" />
+            </ListItemButton>
+            <Collapse in={openStudent} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {studentClass.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={{
+                      pathname: `/student/class/${item.id}`,
+                    }}
+                  >
+                    <ListItemButton style={{ marginLeft: 30 }} key={item.id}>
+                      <ListItemText primary={item.name} />
+                    </ListItemButton>
+                  </Link>
+                ))}
+              </List>
+            </Collapse>
+          </>
+        )}
         {/* <ListItemButton onClick={() => setCurrentSelection("Settings")}>
           <ListItemIcon>
             <SettingsIcon />

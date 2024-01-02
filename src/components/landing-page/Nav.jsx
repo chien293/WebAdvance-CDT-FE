@@ -105,37 +105,21 @@ export const Nav = () => {
         </div>
       </NavbarContent> */}
       <NavbarContent className="basis-1 pl-4" justify="end">
-        {!currentUser ? (
-          <>
-            <NavbarItem className="md:flex">
-              <LinkNext
-                href="/auth/sign-in"
-                className="text-base text-default-500"
-              >
-                Login
-              </LinkNext>
-            </NavbarItem>
-            <NavbarItem>
-              <Button
-                className="text-base text-default-500"
-                as={LinkNext}
-                href="/auth/sign-up"
-                variant="flat"
-              >
-                Sign Up
-              </Button>
-            </NavbarItem>
-          </>
-        ) : (
-          <NavbarItem>
-            <User
-              name={currentUser.fullname}
-              avatarProps={{
-                src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-              }}
-            />
-          </NavbarItem>
-        )}
+        <NavbarItem className="md:flex">
+          <LinkNext href="/auth/sign-in" className="text-base text-default-500">
+            Login
+          </LinkNext>
+        </NavbarItem>
+        <NavbarItem>
+          <Button
+            className="text-base text-default-500"
+            as={LinkNext}
+            href="/auth/sign-up"
+            variant="flat"
+          >
+            Sign Up
+          </Button>
+        </NavbarItem>
       </NavbarContent>
     </Navbar>
   );

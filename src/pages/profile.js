@@ -1,6 +1,3 @@
-import ProfileBox from "@/components/profile-page/ProfileBox";
-import avt1 from "../assets/img/avt1.jpg";
-import EditProfile from "@/components/profile-page/EditProfile";
 import * as React from "react";
 import authService from "@/auth/auth-service";
 import axios from "axios";
@@ -8,64 +5,53 @@ import Layout from "@/components/dashboard-page/Layout";
 import Loading from "@/components/Loading";
 import AuthService from "@/auth/auth-service";
 import withAuth from "@/auth/with-auth";
+import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import { Box } from "@mui/material";
+import HeaderBar from "@/components/HeaderBar";
+import ProfileBox from "@/components/profile-page/Profile";
+import SideBar from "@/components/SideBar";
+
+const defaultTheme = createTheme();
+
 const Profile = () => {
-  const [isEdit, setIsEdit] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState(null);
-  const URL = process.env.SERVER_URL;
+
+  const [sharedState, setSharedState] = React.useState(null);
+
+  const updateSharedState = (newValue) => {
+    setSharedState(newValue);
+  };
+
   React.useEffect(() => {
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      setCurrentUser(user.user[0]);
-    }
+    const takeUser = () => {
+      const user = AuthService.getCurrentUser();
+      if (user) {
+        setCurrentUser(user.user[0]);
+      }
+    };
+    takeUser();
   }, []);
 
   if (!currentUser) return <Loading />;
 
-  const handleEditClick = () => {
-    setIsEdit(true);
-  };
-
-  const handleCancelClick = () => {
-    setIsEdit(false);
-  };
-
-  const handleUpdateUser = async (userId) => {
-    try {
-      const user1 = await authService.getCurrentUser();
-      const id = user1.user[0].id;
-      const fetch = await axios
-        .get(URL + "/" + { $id }, {
-          headers: {
-            token: "Bearer " + user1.accessToken,
-          },
-        })
-        .then((res) => {
-          console.log(res.data[0]);
-          setCurrentUser(res.data[0]);
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
-    <div>
-      {currentUser && (
-        <Layout currentUser={currentUser}>
-          {currentUser &&
-            (isEdit ? (
-              <EditProfile
-                user={currentUser}
-                onCancelClick={handleCancelClick}
-                onUpdateData={handleUpdateUser}
-              />
-            ) : (
-              <ProfileBox user={currentUser} onEditClick={handleEditClick} />
-            ))}
-        </Layout>
-      )}
-    </div>
+    <ThemeProvider theme={defaultTheme}>
+      <div className="grid grid-cols-1">
+        <HeaderBar sharedState={sharedState} />
+        <div className="flex">
+          <div className="w-1/5">
+            <SideBar studentClass={[]} teacherClass={[]} isNotHomePage={true} />
+          </div>
+          <div className="w-4/5 mt-20">
+            <ProfileBox
+              user={currentUser}
+              updateSharedState={updateSharedState}
+            />
+          </div>
+        </div>
+      </div>
+    </ThemeProvider>
   );
 };
 
-export default withAuth(Profile, ["admin", "teacher", "student"]);
+export default withAuth(Profile, ["admin", "user"]);

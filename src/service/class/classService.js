@@ -124,7 +124,7 @@ class ClassService {
     data.userId = userId;
     data.classId = classId;
     try {
-      const response = await axios.post("/getRoleInClass", data, {
+      const response = await axios.post(API_URL + "/getRoleInClass", data, {
         headers: {
           token: `Bearer ${token}`,
         },

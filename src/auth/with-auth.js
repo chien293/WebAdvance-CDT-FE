@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
 import AuthService from "./auth-service";
+import classService from "@/service/class/classService";
 const withAuth = (WrappedComponent, allowedRoles) => {
   const AuthComponent = (props) => {
     const router = useRouter();
@@ -14,29 +15,50 @@ const withAuth = (WrappedComponent, allowedRoles) => {
     };
 
     useEffect(() => {
-      const fetchUserRole = () => {
+      const fetchUserRole = async () => {
         const user = AuthService.getCurrentUser();
         //check if user is logged in and token is not expired or empty
         if (!user || isTokenExpired(user.accessToken) || !user.accessToken) {
           AuthService.logout();
           router.push({ pathname: "/auth/sign-in" });
         }
-        // check class role and redirect if not allowed (undone)
-        if (allowedRoles.includes(user.user[0].role)) {
-          setUserRole(user.user[0].role);
+        // Check if pathname includes "class"
+        if (router.pathname.includes("class")) {
+          const classId = router.query.id; // Assuming your classId is part of the query params
+          console.log(classId);
+          if (classId) {
+            // Call API to get user's role in the specified class
+            const role = await classService.getRoleInClass(
+              user.user[0].id,
+              classId
+            );
+            if (allowedRoles.includes(role.role)) {
+              setUserRole(role);
+            } else {
+              router.push({ pathname: "/home-page" });
+            }
+          } else {
+            // Handle missing classId in query params
+            console.error("Missing classId in query params");
+            router.push({ pathname: "/home-page" });
+          }
         } else {
-          router.push({ pathname: "/home-page" });
+          // Check class role and redirect if not allowed
+          if (allowedRoles.includes(user.user[0].role)) {
+            setUserRole(user.user[0].role);
+          } else {
+            router.push({ pathname: "/home-page" });
+          }
         }
-
-        console.log(router.pathname);
       };
-
       fetchUserRole();
     }, []);
 
     if (userRole) {
       return <WrappedComponent {...props} />;
     }
+
+    return null; // Or you can redirect to a loading page if you prefer
   };
 
   return AuthComponent;

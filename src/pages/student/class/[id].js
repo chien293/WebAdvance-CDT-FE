@@ -6,6 +6,7 @@ import HeaderBar from "@/components/HeaderBar";
 import SideBar from "@/components/SideBar";
 import { ClassContext } from "@/components/ClassProvider";
 import StudentClass from "@/components/class/student/StudentClass";
+
 const defaultTheme = createTheme();
 
 const SIDE_NAV_WIDTH = 280;
@@ -41,5 +42,5 @@ function Class() {
   );
 }
 
-// export default withAuth(Class, ["student"]);
-export default Class;
+export default withAuth(Class, ["student"]);
+// export default Class;

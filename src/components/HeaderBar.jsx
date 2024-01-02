@@ -184,7 +184,7 @@ function NotificationIcon({ notiList, token }) {
   );
 }
 
-const HeaderBar = ({ isHomePage }) => {
+const HeaderBar = ({ isHomePage, sharedState }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openAddCourseButton, setOpenAddCourseButton] = useState(false);
   const [placement, setPlacement] = useState();
@@ -194,16 +194,18 @@ const HeaderBar = ({ isHomePage }) => {
   const [currentToken, setCurrentToken] = useState(null);
   const [currentId, setCurrentId] = useState(null);
   const [notifications, setNotifications] = useState(null);
+  const [img, setImg] = useState(null);
   const socket = useSocket();
-
   useEffect(() => {
     const user = AuthService.getCurrentUser();
     if (user) {
       setCurrentUser(user.user[0].fullname);
       setCurrentToken(user.accessToken);
       setCurrentId(user.user[0].id);
+      setImg(user.user[0].image);
     }
-  }, []);
+    console.log("Shared State changed:", sharedState);
+  }, [sharedState]);
 
   useEffect(() => {
     if (currentUser) {
@@ -333,7 +335,11 @@ const HeaderBar = ({ isHomePage }) => {
           <LinkNext href="/">
             <Typography sx={{ paddingRight: 5 }}>{currentUser} </Typography>
           </LinkNext>
-          <AvatarDropdown user={currentUser} id={currentId}></AvatarDropdown>
+          <AvatarDropdown
+            user={currentUser}
+            id={currentId}
+            img={img}
+          ></AvatarDropdown>
           <Typography variant="title" color="inherit" noWrap>
             &nbsp; &nbsp; &nbsp;
           </Typography>
