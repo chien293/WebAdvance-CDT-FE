@@ -22,7 +22,7 @@ function Class() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
-        <HeaderBar isHomePage={true} />
+        <HeaderBar/>
         <SideBar
           setCurrentSelection={setCurrentSelection}
           studentClass={studentClass}
