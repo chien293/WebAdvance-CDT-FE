@@ -20,7 +20,7 @@ const CoursesInfo = ({ name, title, teacher }) => {
           <FolderOpenIcon />
         </div>
         <div className="hover:bg-gray-200 rounded-full mr-3 p-2 cursor-pointer">
-          <AssignmentIndOutlinedIcon className="" />
+          <AssignmentIndOutlinedIcon />
         </div>
       </div>
     </div>

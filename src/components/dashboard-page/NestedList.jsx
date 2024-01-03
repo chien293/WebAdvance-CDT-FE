@@ -12,6 +12,7 @@ import SendIcon from "@mui/icons-material/Send";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import StarBorder from "@mui/icons-material/StarBorder";
+import { styled } from '@mui/material/styles';
 
 export default function NestedList({ name, children }) {
   const [open, setOpen] = React.useState(true);
@@ -25,11 +26,16 @@ export default function NestedList({ name, children }) {
       <List
         sx={{ width: "100%" }}
         component="nav"
-        aria-labelledby="nested-list-subheader"
-      >
+        aria-labelledby="nested-list-subheader">
         <ListItemButton onClick={handleClick}>
-          <ListItemIcon></ListItemIcon>
-          <ListItemText primary={name} />
+          {/* <ListItemIcon></ListItemIcon> */}
+          <ListItemText
+            primary={name}
+            // style={{
+            //   fontWeight: "bold",
+            //   fontSize: "16px",
+            // }}  
+          />
           {open ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
         <Collapse in={open} timeout="auto" unmountOnExit>

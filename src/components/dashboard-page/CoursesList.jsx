@@ -8,7 +8,7 @@ const CoursesList = ({ classData }) => {
   const [newClassData, setNewClassData] = React.useState(null);
 
   return classData ? (
-    <div className="flex flex-wrap w-full min-h-screen">
+    <div className="flex flex-wrap w-full">
       {classData.map((course) => (
         <Link
           key={course.id}
