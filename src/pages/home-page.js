@@ -38,6 +38,7 @@ function HomePage() {
   const API_URL = process.env.SERVER_URL;
 
   console.log("socket", socket);
+
   useEffect(() => {
     const takeUser = () => {
       const user = AuthService.getCurrentUser();
