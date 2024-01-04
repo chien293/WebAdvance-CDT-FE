@@ -5,6 +5,7 @@ const nextConfig = {
     CLIENT_URL: process.env.CLIENT_URL,
     NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: "dmbwhnml9",
     NEXT_PUBLIC_CLOUDINARY_PRESET_NAME: "fxwqzera",
+    SOCKET_URL: process.env.SOCKET_URL,
   },
   images: {
     domains: ["res.cloudinary.com"],
