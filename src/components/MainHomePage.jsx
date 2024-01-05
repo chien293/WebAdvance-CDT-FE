@@ -15,25 +15,19 @@ const MainContent = ({
   role,
 }) => {
   return (
-    <Box sx={{ marginLeft: "240px", marginTop: "50px", backgroundColor: "white", height: "100%" }}>
+    <Box sx={{ marginLeft: "240px", marginTop: "50px", flexGrow:1, backgroundColor: "white"}}>
       {currentSelection === "Home" && (
         <div>
           <NestedList name="Student Class">
             <CoursesList classData={studentClass} />
-          </NestedList>
+          </NestedList> 
 
           <NestedList name="Teacher Class">
             <CoursesList classData={teacherClass} />
           </NestedList>
         </div>
       )}
-      {currentSelection === "MapID" && <StudentIdDataTable />}
-      {/* {currentSelection === "Registered" && <div>Registered Content</div>}
-      {currentSelection === "Archived class" && (
-        <div>Archived Class Content Here</div>
-      )}
-      {currentSelection === "Setting" && <div>Settings Content Here</div>}
-      {currentSelection === "Tabs" && <Tabs classId={id} role={role} />} */}
+      {currentSelection === "MapID" && <StudentIdDataTable />}    
     </Box>
   );
 };
