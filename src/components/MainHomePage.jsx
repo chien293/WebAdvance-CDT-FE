@@ -1,6 +1,5 @@
 import NestedList from "./dashboard-page/NestedList";
 import CoursesList from "./dashboard-page/CoursesList";
-import StudentIdDataTable from "./admin/utils/StudentIdTable";
 import Tabs from "@/components/class/Tabs";
 import { 
   Box, 
@@ -26,8 +25,7 @@ const MainContent = ({
             <CoursesList classData={teacherClass} />
           </NestedList>
         </div>
-      )}
-      {currentSelection === "MapID" && <StudentIdDataTable />}    
+      )} 
     </Box>
   );
 };

@@ -38,13 +38,16 @@ export default function GradeBoardStudent({ classId }) {
                 setId(user.user[0].id);
                 setToken(user.accessToken);
             }
-            await axios.get(API_URL + "/getStudentId/" + user.user[0].id, {
+            await axios.post(API_URL + "/getStudentId", {
+                id: user.user[0].id,
+                classId: classId
+            }, {
                 headers: {
                     token: "Bearer " + user.accessToken,
                 },
             }).then((res) => {
-                if (res.data) {
-                    setStudentId(res.data);
+                if (res.data[0].studentId) {
+                    setStudentId(res.data[0].studentId);
                 }
             })
         };
@@ -146,7 +149,7 @@ export default function GradeBoardStudent({ classId }) {
                     });
                     setFilterGradeData(structure)
                     setGradeData(res.data);
-                }else{
+                } else {
                     setGradeData(res.data)
                 }
             }
@@ -183,8 +186,6 @@ export default function GradeBoardStudent({ classId }) {
     }
 
     const handleEditClick = (data, field) => {
-        console.log(data);
-        console.log(field);
         setSelectedGrade(data);
         setSelectedColumn(field);
         setEditDialogOpen(true);

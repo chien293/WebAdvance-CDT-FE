@@ -1,6 +1,6 @@
 import NestedList from "@/components/dashboard-page/NestedList";
 import CoursesList from "@/components/dashboard-page/CoursesList";
-import StudentIdDataTable from "@/components/admin/utils/StudentIdTable";
+
 import Tabs from "@/components/class/student/StudentTabs";
 import { Box, Menu, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";

@@ -1,9 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import authService from "@/auth/auth-service";
-import TeacherMapStudentId from "./teacher/TeacherMapStudentId";
-
-const ParticipantContent = ({ classId }) => {
+const ParticipantStudent = ({ classId }) => {
   const [participants, setParticipants] = useState([]);
 
   const [token, setToken] = useState(null);
@@ -64,9 +62,21 @@ const ParticipantContent = ({ classId }) => {
             : 'No students available'}
         </div>
       </div>
-      <TeacherMapStudentId classId={classId}/>
+      <ul>
+        {participants.length > 0 ? (
+          participants
+            .filter((item) => item.role === 'student')
+            .map((student) => (
+              <li className="border-b p-5" key={student.fullname}>
+                {student.fullname}
+              </li>
+            ))
+        ) : (
+          <li className="border-b p-5">No students available</li>
+        )}
+      </ul>
     </div>
   );
 };
 
-export default ParticipantContent;
+export default ParticipantStudent;

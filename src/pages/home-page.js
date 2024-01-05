@@ -14,7 +14,7 @@ import HeaderBar from "@/components/HeaderBar";
 import SideBar from "@/components/SideBar";
 import Loading from "@/components/Loading";
 import axios from "axios";
-import StudentIdDataTable from "@/components/admin/utils/StudentIdTable";
+
 import NestedList from "@/components/dashboard-page/NestedList";
 import { ClassContext, ClassProvider } from "@/components/ClassProvider";
 import { useSocket } from "@/components/SocketProvider";

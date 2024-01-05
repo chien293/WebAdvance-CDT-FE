@@ -14,6 +14,8 @@ import ReviewExam from "@/components/class/ReviewExam";
 import GradeStructureBoard from "@/components/class/GradeStructure";
 import GradeBoardStudent from "@/components/class/student/GradeBoardStudent";
 import Link from "next/link";
+import StudentIdDataTable from "@/components/admin/utils/StudentIdTable";
+import ParticipantStudent from "./ParticipantStudent";
 const StudentTabs = ({ classId, tabs }) => {
   const [value, setValue] = React.useState("1");
 
@@ -69,7 +71,8 @@ const StudentTabs = ({ classId, tabs }) => {
             <Tab label="Participant" value="3" />
             <Tab label="Settings" value="4" />
             <Tab label="Grade Board" value="5" />
-            <Tab label="Checking Examination Papers" value="6" />
+            <Tab label="Map Student ID" value="6" />
+            <Tab label="Checking Examination Papers" value="7" />
           </TabList>
         </Box>
         <Box sx={{ marginTop: 5 }}>
@@ -80,7 +83,7 @@ const StudentTabs = ({ classId, tabs }) => {
             <Exercise classId={classId} role="student" />
           </TabPanel>
           <TabPanel value="3">
-            <ParticipantContent classId={classId} role="student" />
+            <ParticipantStudent classId={classId} role="student" />
           </TabPanel>
           <TabPanel value="4">
             <SettingsContent classId={classId} role="student" />
@@ -89,6 +92,9 @@ const StudentTabs = ({ classId, tabs }) => {
             <GradeBoardStudent classId={classId} role="student" />
           </TabPanel>
           <TabPanel value="6">
+            <StudentIdDataTable classId={classId} role="student" />
+          </TabPanel>
+          <TabPanel value="7">
             <ReviewExam classId={classId} />
           </TabPanel>
         </Box>
