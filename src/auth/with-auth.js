@@ -20,11 +20,20 @@ const withAuth = (WrappedComponent, allowedRoles) => {
         //check if user is logged in and token is not expired or empty
         if (!user || isTokenExpired(user.accessToken) || !user.accessToken) {
           AuthService.logout();
-          router.push({ pathname: "/auth/sign-in" });
-        }
-        // Check if pathname includes "class"
-        if (router.pathname.includes("class")) {
-          const classId = router.query.id; // Assuming your classId is part of the query params
+          localStorage.setItem("redirect", router.asPath);
+          router.push({
+            pathname: "/auth/sign-in",
+            // query: { redirect: router.asPath },
+          });
+        } else if (localStorage.getItem("redirect")) {
+          const pathToRedirect = localStorage.getItem("redirect");
+          localStorage.removeItem("redirect");
+          router.push(pathToRedirect);
+        } else if (router.pathname.includes("invite")) {
+          //do nothing
+          setUserRole("user");
+        } else if (router.pathname.includes("class")) {
+          const classId = router.query.id;
           console.log(classId);
           if (classId) {
             // Call API to get user's role in the specified class
@@ -52,7 +61,7 @@ const withAuth = (WrappedComponent, allowedRoles) => {
         }
       };
       fetchUserRole();
-    }, []);
+    }, [router.query]);
 
     if (userRole) {
       return <WrappedComponent {...props} />;

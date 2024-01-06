@@ -184,7 +184,7 @@ function NotificationIcon({ notiList, token }) {
   );
 }
 
-const HeaderBar = ({ isHomePage, sharedState }) => {
+const HeaderBar = ({ isHomePage, sharedState, userImg }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openAddCourseButton, setOpenAddCourseButton] = useState(false);
   const [placement, setPlacement] = useState();
@@ -203,8 +203,10 @@ const HeaderBar = ({ isHomePage, sharedState }) => {
       setCurrentToken(user.accessToken);
       setCurrentId(user.user[0].id);
       setImg(user.user[0].image);
+    } else {
+      setImg(userImg);
+      console.log(userImg, " HEADERBAR");
     }
-    console.log("Shared State changed:", sharedState);
   }, [sharedState]);
 
   useEffect(() => {

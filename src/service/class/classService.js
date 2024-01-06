@@ -135,6 +135,75 @@ class ClassService {
       throw error;
     }
   }
+  async getParticipants(id) {
+    try {
+      const response = await axios.get(API_URL + `/getParticipants/${id}`, {
+        headers: {
+          token: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  }
+
+  async getInfoTeacherOfClass(classId) {
+    const data = {};
+    data.id = classId;
+    try {
+      const response = await axios.post(
+        API_URL + "/getInfoTeacherOfClass",
+        data,
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data[0].image;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  }
+
+  async checkUserInClass(email, classId) {
+    const data = {};
+    data.email = email;
+    data.classId = classId;
+    try {
+      const response = await axios.post(API_URL + "/checkUserInClass", data, {
+        headers: {
+          token: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
+    }
+  }
+
+  async inviteByEmail(email, classId, role) {
+    const data = {};
+    data.email = email;
+    data.classId = classId;
+    data.role = role;
+    const user = AuthService.getCurrentUser();
+    data.from = user.user[0].email;
+    try {
+      const response = await axios.post(API_URL + "/inviteByEmail", data, {
+        headers: {
+          token: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 export default new ClassService();

@@ -29,14 +29,23 @@ export default function FormCreateEnroll({ open, onClose, onCancel }) {
     }
     const user = AuthService.getCurrentUser();
     const classId = await classService.getClassByCode(inviteCode);
-
-    const enrollmentData = {
-      userId: user.user[0].id,
-      classId: classId.id,
-      role: "student",
-    };
-    const enrollment = await classService.insertEnrollment(enrollmentData);
-    router.push(`/student/class/${classId.id}`);
+    const enrollmentCheck = await classService.getRoleInClass(
+      user.user[0].id,
+      classId.id
+    );
+    if (!enrollmentCheck) {
+      const enrollmentData = {
+        userId: user.user[0].id,
+        classId: classId.id,
+        role: "student",
+      };
+      const enrollment = await classService.insertEnrollment(enrollmentData);
+      router.push(`/student/class/${classId.id}`);
+    } else {
+      setIsError(true);
+      setHelperText("You already enrolled in this class");
+      // router.push(`/${enrollmentCheck.role}/class/${classId.id}`);
+    }
   };
   return (
     <React.Fragment>

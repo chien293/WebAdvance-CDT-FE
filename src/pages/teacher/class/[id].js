@@ -18,11 +18,11 @@ function Class() {
   const { id } = router.query;
   const { studentClass, teacherClass } = useContext(ClassContext);
   const [currentSelection, setCurrentSelection] = useState("Tabs");
-
+  console.log("teacherClass", currentSelection);
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
-        <HeaderBar/>
+        <HeaderBar />
         <SideBar
           setCurrentSelection={setCurrentSelection}
           studentClass={studentClass}

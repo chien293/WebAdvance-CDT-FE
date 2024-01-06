@@ -4,28 +4,19 @@ import { Toolbar, Box } from "@mui/material";
 import Link from "next/link";
 
 const CoursesList = ({ classData }) => {
-  const [isStudent, setIsStudent] = React.useState(null);
-  const [newClassData, setNewClassData] = React.useState(null);
-
   return classData ? (
     <div className="flex flex-wrap w-full">
       {classData.map((course) => (
-        <Link
-          key={course.id}
-          href={{
-            pathname: course.role === "teacher" ? `/teacher/class/${course.id}` : `student/class/${course.id}`   
-          }}
-
-          passHref>
-          <div>
-            <CoursesInfo
-              name={course.name}
-              title={course.title}
-              teacher={course.name}
-              
-            />
-          </div>
-        </Link>
+        <div key={course.id}>
+          <CoursesInfo
+            id={course.id}
+            name={course.name}
+            title={course.title}
+            teacher={course.name}
+            role={course.role}
+            image={course.image}
+          />
+        </div>
       ))}
     </div>
   ) : (

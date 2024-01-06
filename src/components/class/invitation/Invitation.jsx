@@ -5,7 +5,7 @@ import { Logo } from "@/components/landing-page/Icons";
 import authService from "@/auth/auth-service";
 import Link from "next/link";
 
-const Invitation = () => {
+const Invitation = ({ inviteRole }) => {
   const router = useRouter();
 
   // create object with ClassName,title,topic,room,description,teacher for fetch data
@@ -33,7 +33,7 @@ const Invitation = () => {
     const enrollmentData = {
       userId: user.user[0].id,
       classId: classData.id,
-      role: "student",
+      role: inviteRole || "student",
     };
 
     const enrollment = await classService.insertEnrollment(enrollmentData);
@@ -44,7 +44,7 @@ const Invitation = () => {
     <div className="grid place-items-center h-screen bg-gradient-to-tl from-green-200 p-4">
       <div className="cursor-default select-none space-y-2 rounded-sm bg-[#f2f3f5] p-4 shadow-xl">
         <p className="text-xs font-semibold uppercase text-[#4e5058]">
-          You've been invited to join a class
+          You've been invited to join a class as a <b>{inviteRole}</b>
         </p>
         <div className="flex items-center justify-between gap-16">
           <div className="flex items-center gap-4">

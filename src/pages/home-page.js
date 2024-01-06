@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, use } from "react";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -20,6 +20,7 @@ import { ClassContext, ClassProvider } from "@/components/ClassProvider";
 import { useSocket } from "@/components/SocketProvider";
 import { io } from "socket.io-client";
 import MainContent from "@/components/MainHomePage";
+import classService from "@/service/class/classService";
 const defaultTheme = createTheme();
 
 function HomePage() {
@@ -36,9 +37,7 @@ function HomePage() {
   const { updateClasses } = useContext(ClassContext);
   const socket = useSocket();
   const API_URL = process.env.SERVER_URL;
-
-  console.log("socket", socket);
-
+  const [userImage, setUserImage] = useState(null);
   useEffect(() => {
     const takeUser = () => {
       const user = AuthService.getCurrentUser();
@@ -46,9 +45,9 @@ function HomePage() {
         setCurrentUser(user.user[0].fullname);
         setId(user.user[0].id);
         setToken(user.accessToken);
+        setUserImage(user.user[0].image);
       }
     };
-
     takeUser();
     setCurrentSocket(socket);
   }, []);
@@ -99,6 +98,10 @@ function HomePage() {
       .then((res) => {
         if (res.data) {
           const teachersData = res.data;
+          res.data.map(async (item) => {
+            const teacherImage = userImage;
+            item.image = teacherImage;
+          });
           setTeacherClass(teachersData);
         } else {
           setTeacherClass([]);
@@ -126,7 +129,7 @@ function HomePage() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex", minHeight: "100vh" }}>
-        <HeaderBar isHomePage={true} />
+        <HeaderBar isHomePage={true} userImg={userImage} />
         <Box sx={{ display: "flex", flexGrow: 1 }}>
           <SideBar
             setCurrentSelection={setCurrentSelection}
