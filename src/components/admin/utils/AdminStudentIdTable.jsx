@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import {
     Dialog,
     DialogTitle, DialogContent, DialogActions, DialogContentText,
@@ -6,38 +6,54 @@ import {
 } from '@mui/material';
 import {
     DataGridPro, GridColDef, GridToolbar,
-    GridToolbarContainer, GridToolbarExport, useGridApiRef
+    GridToolbarContainer, GridToolbarExport, useGridApiRef, gridRowsLookupSelector, gridPaginatedVisibleSortedGridRowIdsSelector
 } from '@mui/x-data-grid-pro';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import * as XLSX from 'xlsx'
-
-const AdminStudentIdTable = ({ studentIds, token }) => {
+import AuthService from "@/auth/auth-service";
+const AdminStudentIdTable = () => {
     const [editDialogOpen, setEditDialogOpen] = useState(false);
-    const [selectedStudentId, setSelectedStudentId] = useState(null);
+    const [selectedStudentId, setSelectedStudentId] = useState('');
     const [loadingActive, setLoading] = useState(false);
-    const [studentIdsData, setStudentIdsData] = useState(null);
-    const [editedUserId, setEditedUserId] = useState('');
+    const [studentIdsData, setStudentIdsData] = useState([]);
+    const [editedUserId, setEditedUserId] = useState([]);
     const [currentId, setId] = useState(null);
     const apiRef = useGridApiRef()
     const API_URL = process.env.SERVER_URL;
+    const [token, setToken] = useState("");
 
-    React.useEffect(() => {
-        if (studentIds) {
-            console.log(studentIds, " Id")
-            setStudentIdsData(studentIds);
-        }
-    }, [studentIds])
+    useEffect(() => {
+        getStudentIds();
+    }, []);
+
+    const getStudentIds = async () => {
+        const user = AuthService.getCurrentUser();
+        setToken(user.accessToken)
+
+        await axios
+            .get(API_URL + "/admin/getStudentIds", {
+                headers: {
+                    token: "Bearer " + user.accessToken,
+                },
+            })
+            .then((res) => {
+                if (res.data) {
+                    setStudentIdsData(res.data);
+                }
+            });
+    };
+
+    useEffect(() => {
+        console.log(studentIdsData)
+    }, [studentIdsData])
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'idStudent', headerName: 'Student Id', width: 200 },
-        {
-            field: 'idUser',
-            headerName: 'User Id',
-            width: 150,
-        },
+        { field: 'fullname', headerName: 'Full Name', width: 200 },
+        { field: 'classId', headerName: 'Class Id', width: 200 },
+        { field: 'studentId', headerName: 'Student Id', width: 200 },
         {
             field: 'edit',
             headerName: 'Chỉnh sửa',
@@ -57,7 +73,7 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
 
     const handleEditClick = (data) => {
         setSelectedStudentId(data);
-        setEditedUserId(data.idUser || '');
+        setEditedUserId(data.studentId || '');
         setEditDialogOpen(true);
     };
 
@@ -70,7 +86,7 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
             API_URL + "/admin/mapStudentId",
             {
                 id: selectedStudentId.id,
-                userId: editedUserId,
+                studentId: editedUserId,
             },
             {
                 headers: {
@@ -81,21 +97,26 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
 
         setStudentIdsData((prevIds) =>
             prevIds.map((data) =>
-                data.id == selectedStudentId.id ?
-                    { ...data, idUser: editedUserId, } : data
+                data.id === selectedStudentId.id ?
+                    { ...data, studentId: parseInt(editedUserId), } : data
             )
         );
 
         handleEditDialogClose();
     };
 
-    const CustomToolbar = () => {
+    function CustomToolbar() {
         const handleExportClick = () => {
-            const ws = XLSX.utils.json_to_sheet(studentIdsData);
+            const lookup = gridRowsLookupSelector(apiRef.current.state);
+            const currentPageRowIds = gridPaginatedVisibleSortedGridRowIdsSelector(apiRef.current.state, apiRef.current.instanceId);
+            const currentPageRows = currentPageRowIds.map(rowId => lookup[rowId]);
+
+            const ws = XLSX.utils.json_to_sheet(currentPageRows);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Sheet 1');
+            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
             XLSX.writeFile(wb, 'exported_data.xlsx');
         };
+
 
         const handleImportClick = (e) => {
             const file = e.target.files[0];
@@ -112,9 +133,21 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
                 const sheet = workbook.Sheets[workbook.SheetNames[0]];
                 const importedData = XLSX.utils.sheet_to_json(sheet, {
                     defval: null // Default value
-                  });
+                });
+                const structure = importedData.map(obj => {
+                    let newObj = { ...obj };
+                    delete newObj.__rowNum__;
+                    return newObj;
+                });
 
-                  console.log(importedData, " IMported")
+                const updatedStudentIdsData = studentIdsData.map(item => {
+                    const update = structure.find(structureItem => structureItem.id === item.id);
+
+                    return update || item;
+                  });
+                  
+                  setStudentIdsData(updatedStudentIdsData);
+
                 const result = await axios.post(
                     API_URL + "/admin/mapListStudentIds",
                     {
@@ -126,7 +159,6 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
                         },
                     }
                 );
-                setStudentIdsData(importedData);
             };
 
             reader.readAsArrayBuffer(file);
@@ -154,10 +186,10 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
     };
 
     return (
-        <div className="studentIdsDataTable">
+        <div>
             {studentIdsData && studentIdsData.length > 0 ? (
-                <div style={{ height: 400, width: '100%' }}>
-                    <DataGrid
+                <div style={{ width: '100%', }}>
+                    <DataGridPro
                         rows={studentIdsData}
                         columns={columns}
                         initialState={{
@@ -165,8 +197,9 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
                             pagination: { paginationModel: { pageSize: 10 } },
                         }}
                         slots={{
-                            toolbar: () => <CustomToolbar />,
+                            toolbar: CustomToolbar,
                         }}
+                        apiRef={apiRef}
                         pageSizeOptions={[5, 10, 20]}
                         pagination
                     />
@@ -183,9 +216,9 @@ const AdminStudentIdTable = ({ studentIds, token }) => {
                     <DialogContent>
                         <Box mb={2}>
                             <TextField
-                                label="UserId"
+                                label="Student Id"
                                 fullWidth
-                                value={selectedStudentId?.iduser}
+                                value={editedUserId}
                                 onChange={(e) => setEditedUserId(e.target.value)}
                             />
                         </Box>

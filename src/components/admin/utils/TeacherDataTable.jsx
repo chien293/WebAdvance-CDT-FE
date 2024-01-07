@@ -4,7 +4,7 @@ import {
   DialogTitle, DialogContent, DialogActions, DialogContentText,
   Button, TextField, CircularProgress, Box, Toolbar
 } from '@mui/material';
-import { DataGrid, GridColDef, GridToolbar, GridToolbarContainer , GridToolbarExport} from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridToolbar, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { vi } from 'date-fns/locale';
@@ -13,8 +13,8 @@ import { FaBan, FaCheck } from "react-icons/fa";
 import axios from 'axios';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-
-const TeacherDataTable = ({ teachers, token }) => {
+import AuthService from "@/auth/auth-service";
+const TeacherDataTable = () => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [activeDialog, setActiveDialog] = useState(false);
   const [selectedTeacher, setSelectedTeacher] = useState(null);
@@ -22,14 +22,31 @@ const TeacherDataTable = ({ teachers, token }) => {
   const [teachersData, setTeachers] = useState(null);
   const [editedFullname, setEditedFullname] = useState('');
   const [editedBirthday, setEditedBirthday] = useState(null);
-
+  const [token, setToken] = useState('');
   const API_URL = process.env.SERVER_URL;
 
   React.useEffect(() => {
-    if (teachers) {
-      setTeachers(teachers);
-    }
-  }, [teachers])
+    getTeachers()
+  }, [])
+
+  const getTeachers = async () => {
+    const user = AuthService.getCurrentUser();
+    setToken(user.accessToken);
+    await axios
+      .get(API_URL + "/admin/getTeachers", {
+        headers: {
+          token: "Bearer " + user.accessToken,
+        },
+      })
+      .then((res) => {
+        if (res.data) {
+          const teachersData = res.data.map(
+            ({ password, image, role, ...rest }) => rest
+          );
+          setTeachers(teachersData);
+        }
+      });
+  };
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -72,7 +89,7 @@ const TeacherDataTable = ({ teachers, token }) => {
     setEditedFullname(teacher.fullname || '');
     setEditedBirthday(dayjs(teacher.birthday, 'DD-MM-YYYY') || '');
     setEditDialogOpen(true);
-    
+
   };
 
   const handleEditDialogClose = () => {
@@ -94,11 +111,11 @@ const TeacherDataTable = ({ teachers, token }) => {
         },
       }
     );
-    
+
     setTeachers((prevTeachers) =>
       prevTeachers.map((teacher) =>
-        teacher.id == selectedTeacher.id ? 
-        { ...teacher, fullname: editedFullname, birthday: dayjs(editedBirthday).format('DD-MM-YYYY') } : teacher
+        teacher.id == selectedTeacher.id ?
+          { ...teacher, fullname: editedFullname, birthday: dayjs(editedBirthday).format('DD-MM-YYYY') } : teacher
       )
     );
 
@@ -137,15 +154,14 @@ const TeacherDataTable = ({ teachers, token }) => {
         teacher.id === selectedTeacher.id ? { ...teacher, active: newActiveValue } : teacher
       )
     );
-    // Logic for submitting edited information
-    //setLoading(false);
+
     handleCloseActive();
   };
 
   function CustomToolbar() {
     return (
       <GridToolbarContainer>
-        <GridToolbarExport />      
+        <GridToolbarExport />
       </GridToolbarContainer>
     );
   }
@@ -154,20 +170,20 @@ const TeacherDataTable = ({ teachers, token }) => {
     <div className="dataTable">
       {teachersData && teachersData.length > 0 ? (
         <div style={{ height: 400, width: '100%' }}>
-        <DataGrid
-          rows={teachersData}
-          columns={columns}
-          initialState={{
-            ...teachersData.initialState,
-            pagination: { paginationModel: { pageSize: 10 } },
-        }}
-           
-          slots={{
-            toolbar: CustomToolbar,
-          }}
-          pageSizeOptions={[5, 10]}
-          pagination
-        />
+          <DataGrid
+            rows={teachersData}
+            columns={columns}
+            initialState={{
+              ...teachersData.initialState,
+              pagination: { paginationModel: { pageSize: 10 } },
+            }}
+
+            slots={{
+              toolbar: CustomToolbar,
+            }}
+            pageSizeOptions={[5, 10]}
+            pagination
+          />
         </div>
       ) : (
         <p>No teachers available.</p>

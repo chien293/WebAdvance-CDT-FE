@@ -6,32 +6,38 @@ import {
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 import { FaBan, FaCheck } from "react-icons/fa";
 import axios from 'axios';
-
-const ClassDataTable = ({ classes, teachers, token }) => {
+import AuthService from "@/auth/auth-service";
+const ClassDataTable = () => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedClass, setSelectedClass] = useState(null);
   const [classData, setClassData] = useState([]);
   const [activeDialog, setActiveDialog] = useState(false);
   const [pageSize, setPageSize] = useState(5);
-
+  const [token, setToken] = useState('');
   const API_URL = process.env.SERVER_URL;
 
   useEffect(() => {
-    if (classes.length > 0 && teachers.length > 0) {
-      // Map over the classes and replace createdBy id with fullname
-      const updatedClassData = classes.map((classItem) => {
-        const createdByTeacher = teachers.find(
-          (teacher) => teacher.id === classItem.createdBy
-        );
-        return {
-          ...classItem,
-          createdBy: createdByTeacher ? createdByTeacher.fullname : classItem.createdBy,
-        };
-      });
+    getClasses();
+  }, []);
 
-      setClassData(updatedClassData);
-    }
-  }, [classes, teachers]);
+  const getClasses = async () => {
+    const user = AuthService.getCurrentUser();
+    setToken(user.accessToken);
+    await axios
+      .get(API_URL + "/admin/getClasses", {
+        headers: {
+          token: "Bearer " + user.accessToken,
+        },
+      })
+      .then((res) => {
+        if (res.data) {
+          const clasesData = res.data.map(
+            ({ password, image, role, ...rest }) => rest
+          );
+          setClassData(clasesData);
+        }
+      });
+  };
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -101,7 +107,7 @@ const ClassDataTable = ({ classes, teachers, token }) => {
             ...classData.initialState,
             pagination: { paginationModel: { pageSize: 10 } },
           }}
-          
+
           slots={{
             Toolbar: CustomToolbar,
           }}
