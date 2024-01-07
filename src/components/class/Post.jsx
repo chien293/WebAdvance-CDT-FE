@@ -16,7 +16,7 @@ const Post = ({ postWriter, title, date, comments }) => {
   return (
     <React.Fragment>
       <Grid item xs={12} md={4} lg={10}>
-        <div className="flex-row bg-white cursor-pointer hover:bg-green-100 rounded-lg border">
+        <div className="flex-row bg-white cursor-pointer hover:bg-green-100 rounded-lg border my-5 w-8/12 min-w-80">
           <div className="flex p-2 items-center">
             <div className="p-2 m-1 rounded-3xl bg-green-600">
               <ClassOutlinedIcon
@@ -36,8 +36,7 @@ const Post = ({ postWriter, title, date, comments }) => {
           {comments.length > 0 && (
             <div
               onClick={onOpen}
-              className="px-4 py-2 border-t text-sm hover:underline hover:text-green-600"
-            >
+              className="px-4 py-2 border-t text-sm hover:underline hover:text-green-600">
               {comments.length} comments about the class
             </div>
           )}

@@ -59,7 +59,7 @@ const AvatarDropdown = ({ user, id, img }) => {
       {open && (
         <div className="z-10 absolute divide-y divide-gray-700 rounded-lg shadow-2xl w-44 bg-white dark:bg-black origin-top-right -translate-x-32">
           <div className="px-4 py-3 text-sm">
-            <div className="font-bold text-xl">{user}</div>
+            <div className="font-bold text-xl text-black">{user}</div>
           </div>
           <ul className="py-2 text-sm">
             <DropdownItem
