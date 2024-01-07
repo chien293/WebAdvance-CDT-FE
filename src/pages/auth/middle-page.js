@@ -10,11 +10,8 @@ const MiddlePage = () => {
         const tokenParam = router.query.token;
 
         if (userParam && tokenParam) {
-          const user = JSON.parse(decodeURI(userParam));
-          user.role = "user";
-          const userArray = [user];
-
-          const userSave = { user: userArray, accessToken: tokenParam };
+          const user = JSON.parse(decodeURI(userParam));       
+          const userSave = { user: user, accessToken: tokenParam };
           AuthService.saveUser(userSave);
           router.push("/home-page");
         } else {

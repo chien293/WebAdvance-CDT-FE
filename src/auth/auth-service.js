@@ -58,7 +58,7 @@ class AuthService {
   }
 
   async sentValidateEmail(email) {
-    return axios.get(API_URL + "/auth/verifyAccount", {
+    return axios.get(API_URL + "/verify/verifyAccount", {
       params: {
         email: email,
       },
@@ -66,7 +66,7 @@ class AuthService {
   }
 
   async sentForgotPassword(email) {
-    return axios.get(API_URL + "/auth/forgot-password", {
+    return axios.get(API_URL + "/verify/forgot-password", {
       params: {
         email: email,
       },
@@ -75,7 +75,7 @@ class AuthService {
 
   async sentResetPassword(token, email, password) {
     return await axios.post(
-      API_URL + "/auth/forgot-password",
+      API_URL + "/verify/forgot-password",
       {
         email,
         password,

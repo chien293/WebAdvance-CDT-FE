@@ -41,6 +41,7 @@ function HomePage() {
   useEffect(() => {
     const takeUser = () => {
       const user = AuthService.getCurrentUser();
+      console.log(user, " Homepage")
       if (user) {
         setCurrentUser(user.user[0].fullname);
         setId(user.user[0].id);
