@@ -28,13 +28,13 @@ const Sidebar = ({ onSideBarItemClick }) => {
       <div>
         {/* Admin Info */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '15px' }}>
-          <Avatar src="/path/to/avatar.jpg" alt="Admin Avatar" />
+          <Avatar  alt="Admin Avatar" />
           <p>Admin</p>
         </div>
 
         {/* Sidebar Navigation */}
         <List>
-          <ListItem ButtonBase onClick={() => onSideBarItemClick('teacher')}>
+          <ListItem  onClick={() => onSideBarItemClick('teacher')}>
             <ListItemIcon>
               <SupervisorAccountIcon />
             </ListItemIcon>
@@ -42,7 +42,7 @@ const Sidebar = ({ onSideBarItemClick }) => {
               Thành viên
             </ListItemButton>
           </ListItem>
-          <ListItem ButtonBase onClick={() => onSideBarItemClick('class')}>
+          <ListItem  onClick={() => onSideBarItemClick('class')}>
             <ListItemIcon>
               <ClassIcon />
             </ListItemIcon>
@@ -50,7 +50,7 @@ const Sidebar = ({ onSideBarItemClick }) => {
               Lớp học
             </ListItemButton>
           </ListItem>
-          <ListItem ButtonBase onClick={() => onSideBarItemClick('mapId')}>
+          <ListItem  onClick={() => onSideBarItemClick('mapId')}>
             <ListItemIcon>
               <PlaceIcon />
             </ListItemIcon>
@@ -59,7 +59,6 @@ const Sidebar = ({ onSideBarItemClick }) => {
             </ListItemButton>
           </ListItem>
         </List>
-
 
         <Button
           variant="outlined"

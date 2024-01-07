@@ -20,13 +20,7 @@ import AdminManageStudentID from "@/components/admin/AdminManageStudentID";
 
 const AdminHomePage = () => {
   const router = useRouter();
-
-  const [role, setRole] = useState(0);
   const [selectedSideBarItem, setSelectedSideBarItem] = useState("teacher");
-  const [teachers, setTeachers] = useState([]);
-  const [classes, setClasses] = useState([]);
-  const [studentIds, setStudentIds] = useState([]);
-  const [token, setToken] = useState("");
 
   const API_URL = process.env.SERVER_URL;
 
@@ -49,7 +43,7 @@ const AdminHomePage = () => {
         ) : selectedSideBarItem === "class" ? (
           <ClassDataTable />
         ) : selectedSideBarItem === "mapId" ? (
-          <AdminStudentIdTable />
+          <AdminManageStudentID />
         ) : null}
 
       </Container>

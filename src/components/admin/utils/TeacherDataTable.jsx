@@ -228,7 +228,6 @@ const TeacherDataTable = () => {
           <DialogContentText >
             You want to {selectedTeacher ? (selectedTeacher.active == 1 ? "ban" : "unban") : ''} {selectedTeacher ? selectedTeacher.fullname : ''}
           </DialogContentText>
-          {/* Add more fields as needed */}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseActive}>Cancel</Button>

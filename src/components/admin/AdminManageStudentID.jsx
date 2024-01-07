@@ -2,29 +2,32 @@ import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Collapse from '@mui/material/Collapse';
 import { List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import AdminStudentIdTable from './utils/AdminStudentIdTable';
+import DemoStudentId from './utils/DemoStudentId';
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import EditIcon from '@mui/icons-material/Edit';
 import axios from "axios";
-
-const AdminManageStudentID = ({ token }) => {
+import AuthService from "@/auth/auth-service";
+const AdminManageStudentID = () => {
   const [openCollapse, setOpenCollapse] = useState([]);
   const [uniqueClassIds, setUniqueClassIds] = useState([]);
   const [studentIds, setStudentIds] = useState([]);
+  const [token, setToken] = useState(null);
   const API_URL = process.env.SERVER_URL;
 
   useEffect(() => {
-    if (token) {
-      getStudentIds();
-    }
-  }, [token])
+
+    getStudentIds();
+
+  }, [])
 
   const getStudentIds = async () => {
+    const user = AuthService.getCurrentUser();
+    setToken(user.accessToken);
     await axios
       .get(API_URL + "/admin/getStudentIds", {
         headers: {
-          token: "Bearer " + token,
+          token: "Bearer " + user.accessToken,
         },
       })
       .then((res) => {
@@ -32,6 +35,7 @@ const AdminManageStudentID = ({ token }) => {
           setStudentIds(res.data);
 
           const uniqueIds = [...new Set(res.data.map((data) => data.classId))];
+          uniqueIds.sort();
           setUniqueClassIds(uniqueIds);
           // Initialize openCollapse state with false for each classId
           setOpenCollapse(uniqueIds.map(() => false));
@@ -44,6 +48,15 @@ const AdminManageStudentID = ({ token }) => {
     setOpenCollapse((prev) =>
       prev.map((value, index) => (index === classIndex ? !value : false))
     );
+  };
+
+  const handleUpdateStudentId = (data) => {
+    const updatedStudentIdsData = studentIds.map(item => {
+      const update = data.find(structureItem => structureItem.id === item.id);
+
+      return update || item;
+    });
+    setStudentIds(updatedStudentIdsData)
   };
 
   return (
@@ -59,7 +72,7 @@ const AdminManageStudentID = ({ token }) => {
               </ListItemButton>
               <Collapse in={openCollapse[index]}>
                 <div key={index}>
-                  <AdminStudentIdTable rows={classEnrollments} token={token} index={index}/>
+                  <DemoStudentId rows={classEnrollments} token={token} updateStudentId={handleUpdateStudentId} />
                 </div>
               </Collapse>
             </div>
