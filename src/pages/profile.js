@@ -36,13 +36,11 @@ const Profile = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <div className="grid grid-cols-1">
+      <div className="flex min-h-screen">
         <HeaderBar sharedState={sharedState} />
-        <div className="flex">
-          <div className="w-1/5">
-            <SideBar studentClass={[]} teacherClass={[]} isNotHomePage={true} />
-          </div>
-          <div className="w-4/5 mt-20">
+        <div className="flex grow">
+          <SideBar studentClass={[]} teacherClass={[]} isNotHomePage={true} />
+          <div className="ml-60 grow mt-12 bg-white overflow-y-auto">
             <ProfileBox
               user={currentUser}
               updateSharedState={updateSharedState}

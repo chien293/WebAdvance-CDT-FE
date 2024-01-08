@@ -44,7 +44,7 @@ const ProfileBox = ({ user, onEditClick, updateSharedState }) => {
   };
 
   return (
-    <div className="md:flex no-wrap p-5">
+    <div className="md:flex no-wrap p-8">
       {/* left side */}
       <div className="w-full md:w-1/5 md:mx-2 grid grid-cols-1">
         <div className="bg-white p-3 flex justify-center">
