@@ -63,17 +63,10 @@ const AvatarDropdown = ({ user, id, img }) => {
           </div>
           <ul className="py-2 text-sm">
             <DropdownItem
-              // icon={ClassOutlinedIcon}
               href="/home-page"
-              title="Dashboard"
-            />
-            <DropdownItem
-              // icon={ClassOutlinedIcon}
-              href="/settings"
-              title="Settings"
-            />
-            <DropdownItem
-              // icon={ClassOutlinedIcon}
+              title="Home"
+            />          
+            <DropdownItem          
               href="/profile"
               title="Edit Profile"
             />
