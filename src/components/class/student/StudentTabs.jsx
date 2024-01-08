@@ -17,7 +17,7 @@ import Link from "next/link";
 import StudentIdDataTable from "@/components/admin/utils/StudentIdTable";
 import ParticipantStudent from "./ParticipantStudent";
 const StudentTabs = ({ classId, tabs }) => {
-  const [value, setValue] = React.useState("1");
+  const [value, setValue] = React.useState("3");
 
   useEffect(() => {
     if (tabs) setValue(tabs);
@@ -66,10 +66,10 @@ const StudentTabs = ({ classId, tabs }) => {
               "& button:focus": { color: "green" },
             }}
           >
-            <Tab label="Information" value="1" />
-            <Tab label="Exercise" value="2" />
-            <Tab label="Participant" value="3" />
-            <Tab label="Settings" value="4" />
+            {/* <Tab label="Information" value="1" />
+            <Tab label="Exercise" value="2" /> */}
+            <Tab label="Class Details" value="3" />
+            <Tab label="Participant" value="4" />
             <Tab label="Grade Board" value="5" />
             <Tab label="Map Student ID" value="6" />
             <Tab label="Checking Examination Papers" value="7" />
@@ -82,10 +82,10 @@ const StudentTabs = ({ classId, tabs }) => {
           <TabPanel value="2">
             <Exercise classId={classId} role="student" />
           </TabPanel>
-          <TabPanel value="3">
+          <TabPanel value="4">
             <ParticipantStudent classId={classId} role="student" />
           </TabPanel>
-          <TabPanel value="4">
+          <TabPanel value="3">
             <SettingsContent classId={classId} role="student" />
           </TabPanel>
           <TabPanel value="5">

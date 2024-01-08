@@ -34,11 +34,10 @@ const InviteMailForm = ({ role, classId, notify }) => {
       classId
     );
     if (checkUserInClass) {
-      alert("User already in class");
+      notify("User already in class");
     } else {
       setLoading(true);
       const res = await classService.inviteByEmail(email, classId, role);
-
       setLoading(false);
       onOpenChange(false);
       notify("Invite sent");

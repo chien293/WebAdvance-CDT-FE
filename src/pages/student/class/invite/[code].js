@@ -1,5 +1,6 @@
 import Invitation from "@/components/class/invitation/Invitation";
 import React from "react";
+import withAuth from "@/auth/with-auth";
 
 const InvitePage = () => {
   return (
@@ -9,4 +10,4 @@ const InvitePage = () => {
   );
 };
 
-export default InvitePage;
+export default withAuth(InvitePage);

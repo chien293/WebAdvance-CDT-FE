@@ -1,5 +1,6 @@
 import axios from "axios";
 import AuthService from "@/auth/auth-service";
+import { data } from "autoprefixer";
 
 const API_URL = process.env.SERVER_URL + "/class";
 const token = AuthService.getAccessToken();
@@ -199,6 +200,250 @@ class ClassService {
           token: `Bearer ${token}`,
         },
       });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getEnrollmentForReview(classId, userId) {
+    const data = {};
+    data.classId = classId;
+    data.userId = userId;
+    try {
+      const response = await axios.post(
+        API_URL + "/getIdByUserIdAndClassId",
+        data,
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  //get a grade
+  async getAGrade(classId, userId, type) {
+    const data = {};
+    data.classId = classId;
+    data.userId = userId;
+    data.type = type;
+    try {
+      const response = await axios.post(API_URL + "/getAGrade", data, {
+        headers: {
+          token: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  //insert review grade
+  async insertReviewGrade(
+    enrollmentId,
+    selectGradeId,
+    expectedGrade,
+    explanation,
+    userId,
+    url
+  ) {
+    const data = {};
+    data.enrollmentId = enrollmentId;
+    data.selectGradeId = selectGradeId;
+    data.expectedGrade = expectedGrade;
+    data.explanation = explanation;
+    data.userId = userId;
+    data.url = url;
+    try {
+      const response = await axios.post(API_URL + "/insertReviewGrade", data, {
+        headers: {
+          token: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  //getReviewGrade
+  async getReviewGrade(classId, userId) {
+    const data = {};
+    data.classId = classId;
+    data.userId = userId;
+    try {
+      const response = await axios.post(API_URL + "/getReviewGrade", data, {
+        headers: {
+          token: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  //getCommentByReviewGradeId
+  async getCommentByReviewGradeId(reviewGradeId) {
+    const data = {};
+    data.reviewGradeId = reviewGradeId;
+    try {
+      const response = await axios.post(
+        API_URL + "/getCommentByReviewGradeId",
+        data,
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  //insert comment
+  async insertComment(reviewGradeId, userId, message, role, url) {
+    const data = {};
+    data.reviewGradeId = reviewGradeId;
+    data.userId = userId;
+    data.content = message;
+    data.role = role;
+    data.url = url;
+    try {
+      const response = await axios.post(API_URL + "/insertComment", data, {
+        headers: {
+          token: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async getReviewGradeById(reviewGradeId) {
+    const data = {};
+    data.idReviewGrade = reviewGradeId;
+    try {
+      const response = await axios.post(API_URL + "/getReviewGradeById", data, {
+        headers: {
+          token: `Bearer ${token}`,
+        },
+      });
+      return response.data[0];
+    } catch (error) {
+      throw error;
+    }
+  }
+  //getReviewGradeByClassId
+  async getReviewGradeByClassId(classId) {
+    const data = {};
+    data.classId = classId;
+    try {
+      const response = await axios.post(
+        API_URL + "/getReviewGradeByClassId",
+        data,
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  //getUserIdByReviewGradeId
+  async getUserIdByReviewGradeId(reviewGradeId) {
+    const data = {};
+    data.reviewGradeId = reviewGradeId;
+    try {
+      const response = await axios.post(
+        API_URL + "/getUserIdByReviewGradeId",
+        data,
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data[0].userId;
+    } catch (error) {
+      throw error;
+    }
+  }
+  //getTeacherIdByReviewGradeId
+  async getTeacherIdByReviewGradeId(reviewGradeId) {
+    const data = {};
+    data.reviewGradeId = reviewGradeId;
+    try {
+      const response = await axios.post(
+        API_URL + "/getTeacherIdByReviewGradeId",
+        data,
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data[0].userId;
+    } catch (error) {
+      throw error;
+    }
+  }
+  //updateGradeAndStatusOfReviewGrade
+  async updateGradeAndStatusOfReviewGrade(
+    reviewGradeId,
+    grade,
+    status,
+    userId,
+    role,
+    url
+  ) {
+    const data = {};
+    data.reviewGradeId = reviewGradeId;
+    data.grade = grade;
+    data.status = status;
+    data.userId = userId;
+    data.role = role;
+    data.url = url;
+
+    try {
+      const response = await axios.post(
+        API_URL + "/updateGradeAndStatusOfReviewGrade",
+        data,
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  //getRoleByReviewGradeId
+  async getRoleByReviewGradeId(reviewGradeId, userId) {
+    const data = {};
+    data.reviewGradeId = reviewGradeId;
+    data.userId = userId;
+    try {
+      const response = await axios.post(
+        API_URL + "/getRoleByReviewGradeId",
+        data,
+        {
+          headers: {
+            token: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       throw error;

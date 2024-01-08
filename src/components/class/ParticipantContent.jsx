@@ -97,7 +97,9 @@ const ParticipantContent = ({ classId, role }) => {
           )}
         </ul>
       </div>
-      <TeacherMapStudentId classId={classId} />
+      <div className="flex flex-col w-6/12 ml-40">
+        <TeacherMapStudentId classId={classId} />
+      </div>
     </>
   );
 };

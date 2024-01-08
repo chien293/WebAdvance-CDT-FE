@@ -1,9 +1,9 @@
 import React from "react";
-
-const Comment = ({ userName, date, content }) => {
+import { Avatar } from "@nextui-org/react";
+const Comment = ({ image, userName, date, content }) => {
   return (
     <div className="flex m-2">
-      {/* <img src={avatar} alt={`${userName}'s Avatar`} className="avatar" /> */}
+      <Avatar src={image} />
       <div className="h-10 w-10"></div>
       <div className="flex flex-col">
         <div>

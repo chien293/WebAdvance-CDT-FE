@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Typography, Grid } from "@mui/material";
 import ClassOutlinedIcon from "@mui/icons-material/ClassOutlined";
-import Comment from "../dashboard-page/Comment";
+import Comment from "@/components/dashboard-page/Comment";
 import {
   Modal,
   ModalContent,
@@ -12,6 +12,7 @@ import {
 import { useRouter } from "next/router";
 
 const Post = ({
+  postAuthor,
   type,
   explanation,
   createdDate,
@@ -48,6 +49,7 @@ const Post = ({
             </div>
             <div className="ml-5">
               <Typography>Grade composition: {type}</Typography>
+              <Typography>From: {postAuthor}</Typography>
               <Typography>Explanation: {explanation}</Typography>
 
               <Typography color="text.secondary" sx={{ flex: 1 }}>

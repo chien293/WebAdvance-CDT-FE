@@ -31,7 +31,7 @@ const MainContent = ({
           </NestedList>
         </div>
       )}
-      {currentSelection === "MapID" && <StudentIdDataTable />}
+      {/* {currentSelection === "MapID" && <StudentIdDataTable />} */}
     </Box>
   );
 };

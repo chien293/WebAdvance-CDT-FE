@@ -1,10 +1,8 @@
 import { Container, Grid, Paper, Typography } from "@mui/material";
 import Post from "./Post";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import authService from "@/auth/auth-service";
 import classService from "@/service/class/classService";
-import { set } from "date-fns";
 
 const ReviewExam = ({ classId }) => {
   const [userId, setUserId] = useState(null);
@@ -13,14 +11,13 @@ const ReviewExam = ({ classId }) => {
     const user = authService.getCurrentUser();
 
     if (user) {
-      console.log(user.user[0].id);
       setUserId(user.user[0].id);
     }
   }, [classId]);
   useEffect(() => {
     const fetchData = async () => {
       if (userId) {
-        const result = await classService.getReviewGrade(classId, userId);
+        const result = await classService.getReviewGradeByClassId(classId);
         setRequestsReview(result);
       }
     };
@@ -38,7 +35,7 @@ const ReviewExam = ({ classId }) => {
       <div className="w-8/12 mt-7">
         <div className="flex justify-start w-full">
           <Typography className="text-2xl font-bold text-green-600">
-            Review Exam
+            Review Exam Teacher
           </Typography>
         </div>
         {requestsReview ? (
@@ -46,7 +43,8 @@ const ReviewExam = ({ classId }) => {
             .reverse()
             .map((req) => (
               <Post
-                linkPath="student/review-grade"
+                postAuthor={req.fullname}
+                linkPath="teacher/review-grade"
                 idReviewGrade={req.idReviewGrade}
                 type={req.type}
                 explanation={req.explanation}

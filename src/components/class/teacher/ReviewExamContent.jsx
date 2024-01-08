@@ -8,23 +8,24 @@ import { DataGrid } from "@mui/x-data-grid";
 // import TableContainer from "@mui/material/TableContainer";
 // import TableHead from "@mui/material/TableHead";
 // import TableRow from "@mui/material/TableRow";
-import { Paper, Checkbox, Button } from "@mui/material";
 import Comment from "@/components/dashboard-page/Comment";
 import classService from "@/service/class/classService";
 import authService from "@/auth/auth-service";
-import { set } from "date-fns";
-import { useRouter } from "next/router";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  getKeyValue,
-} from "@nextui-org/react";
-import { useSocket } from "../SocketProvider";
 
+import { useRouter } from "next/router";
+
+import { useSocket } from "../../SocketProvider";
+import { Table, Input, Checkbox, Button } from "antd";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const initialData = [
+  {
+    key: "1",
+    input: "",
+    checkbox: false,
+  },
+];
 const ReviewExamContent = ({}) => {
   const router = useRouter();
   const [newComment, setNewComment] = useState("");
@@ -32,6 +33,10 @@ const ReviewExamContent = ({}) => {
   const [data, setData] = useState(null);
   const [userId, setUserId] = useState(null);
   const [comments, setComments] = useState(null);
+
+  const [checkboxData, setCheckboxData] = useState(false);
+  const [inputData, setInputData] = useState("");
+
   const socket = useSocket();
 
   const [rows, setRows] = useState([
@@ -51,7 +56,9 @@ const ReviewExamContent = ({}) => {
     const fetchData = async () => {
       const newData = await classService.getReviewGradeById(id);
       setData(newData);
-      if (newData.status === "done") setIsDone(true);
+      console.log(newData);
+
+      if (newData.status === "done") setCheckboxData(true);
       const newRows = [
         {
           id: 1,
@@ -60,6 +67,7 @@ const ReviewExamContent = ({}) => {
           finalGrade: newData.grade,
         },
       ];
+      setInputData(newData.grade);
       setRows(newRows);
       setReload(!reload);
     };
@@ -81,65 +89,111 @@ const ReviewExamContent = ({}) => {
   const columns = [
     {
       key: "currentGrade",
-      label: "CURRENT GRADE",
+      dataIndex: "currentGrade",
+      title: "CURRENT GRADE",
     },
     {
       key: "expectedGrade",
-      label: "EXPECTED GRADE",
+      dataIndex: "expectedGrade",
+      title: "EXPECTED GRADE",
     },
     {
       key: "finalGrade",
-      label: "FINAL GRADE",
+      dataIndex: "finalGrade",
+      title: "FINAL GRADE",
+      render: () => <Input value={inputData} onChange={handleInputChange} />,
+    },
+    {
+      key: "markAsFinal",
+      dataIndex: "markAsFinal",
+      title: "MARK AS FINAL",
+      render: () => (
+        <Checkbox checked={checkboxData} onChange={handleCheckboxChange} />
+      ),
+    },
+    {
+      key: "action",
+      dataIndex: "action",
+      title: "ACTION",
+      render: () => <Button onClick={handleButtonClick}>Save</Button>,
     },
   ];
 
-  const [selectedRow, setSelectedRow] = useState(null);
-
-  const handleRowSelection = (rowId) => {
-    setSelectedRow(rowId === selectedRow ? null : rowId);
-    console.log(rowId);
+  const handleInputChange = (e) => {
+    setInputData(e.target.value);
   };
 
-  const handleButtonClick = () => {
-    // Perform your action when the button is clicked
-    // Access the data for the selected row using `data[selectedRow]`
-    if (selectedRow !== null) {
-      console.log("Selected row data:", data[selectedRow]);
-    }
+  const handleCheckboxChange = (e) => {
+    setCheckboxData(e.target.checked);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(data);
-    const url = "/teacher/review-grade/" + data.idReviewGrade;
-    const response = await classService.insertComment(
+  const handleButtonClick = async () => {
+    console.log(inputData);
+    console.log(checkboxData);
+    const status = checkboxData ? "done" : "pending";
+    const url = "/student/review-grade/" + data.idReviewGrade;
+    const res = await classService.updateGradeAndStatusOfReviewGrade(
       data.idReviewGrade,
+      inputData,
+      status,
       userId,
-      newComment,
-      "student",
+      "teacher",
       url
     );
 
-    const receiverId = await classService.getTeacherIdByReviewGradeId(
+    const receiverId = await classService.getUserIdByReviewGradeId(
       data.idReviewGrade
     );
+
+    console.log(receiverId);
+
     socket.emit("sendNotification", {
       senderId: userId,
       receiverId: receiverId,
       type: "user",
     });
+
+    notify("Update grade successfully");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(newComment);
+    const url = "/student/review-grade/" + data.idReviewGrade;
+    const response = await classService.insertComment(
+      data.idReviewGrade,
+      userId,
+      newComment,
+      "teacher",
+      url
+    );
+
+    const receiverId = await classService.getUserIdByReviewGradeId(
+      data.idReviewGrade
+    );
+
+    socket.emit("sendNotification", {
+      senderId: userId,
+      receiverId: receiverId,
+      type: "user",
+    });
+    notify("Comment successfully");
+
     setNewComment("");
     setReload(!reload);
   };
 
+  const notify = (message) => toast(message);
+
   return (
     <>
+      <ToastContainer />
       <Toolbar />
       <div className="flex flex-col items-center justify-center self-center">
         <div className="mt-4 size-full">
           <div className="">
             <span className="text-4xl text-green-600 font-medium">
-              Review Grade
+              Review Grade Teacher
             </span>
             <div className="flex flex-row">
               <span>{data && data.createdDate}</span>
@@ -165,7 +219,7 @@ const ReviewExamContent = ({}) => {
           </div>
 
           <div className="mb-4">
-            <Table aria-label="">
+            {/* <Table aria-label="Review grade">
               <TableHeader columns={columns}>
                 {(column) => (
                   <TableColumn key={column.key}>{column.label}</TableColumn>
@@ -174,13 +228,32 @@ const ReviewExamContent = ({}) => {
               <TableBody items={rows}>
                 {(item) => (
                   <TableRow key={item.key}>
-                    {(columnKey) => (
-                      <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-                    )}
+                    <TableCell>{item.currentGrade}</TableCell>
+                    <TableCell>{item.expectedGrade}</TableCell>
+                    <TableCell>
+                      <Input
+                        value={finalGrade}
+                        onChange={(e) => handleInputChange(e)}
+                      />
+                    </TableCell>
+
+                    <TableCell>
+                      <Checkbox
+                        checked={checkedState["check"]}
+                        onChange={handleCheckboxChange}
+                        name="check"
+                      ></Checkbox>
+                    </TableCell>
+                    <TableCell>
+                      <Button color="default" onClick={handleSave}>
+                        Save
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 )}
               </TableBody>
-            </Table>
+            </Table> */}
+            <Table columns={columns} dataSource={rows}></Table>
           </div>
         </div>
       </div>
@@ -194,6 +267,7 @@ const ReviewExamContent = ({}) => {
       />
       <div className="grid grid-cols-1 justify-items-start">
         <h2 className="text-2xl font-medium">Comments</h2>
+
         <form
           className="w-full max-w-xl bg-white rounded-lg px-4 pt-2"
           onSubmit={handleSubmit}

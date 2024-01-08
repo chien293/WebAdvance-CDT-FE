@@ -10,12 +10,12 @@ import Post from "@/components/class/Post";
 import Exercise from "@/components/class/Exercise";
 import SettingsContent from "@/components/class/SettingsContent";
 import GradeBoard from "@/components/class/GradeBoard";
-import ReviewExam from "@/components/class/ReviewExam";
+import ReviewExam from "@/components/class/teacher/ReviewExamTeacher";
 import GradeStructureBoard from "@/components/class/GradeStructure";
 import GradeBoardStudent from "@/components/class/student/GradeBoardStudent";
 import Link from "next/link";
 const TeacherTabs = ({ classId, tabs }) => {
-  const [value, setValue] = useState("1");
+  const [value, setValue] = useState("3");
   console.log(value, " TEACHER TABS");
   useEffect(() => {
     if (tabs) setValue(tabs);
@@ -64,10 +64,10 @@ const TeacherTabs = ({ classId, tabs }) => {
               "& button:focus": { color: "green" },
             }}
           >
-            <Tab label="Information" value="1" />
-            <Tab label="Exercise" value="2" />
-            <Tab label="Participant" value="3" />
-            <Tab label="Settings" value="4" />
+            {/* <Tab label="Information" value="1" />
+            <Tab label="Exercise" value="2" /> */}
+            <Tab label="Class Details" value="3" />
+            <Tab label="Participant" value="4" />
             <Tab label="Grade Structure" value="5" />
             <Tab label="Grade Board" value="6" />
             <Tab label="Checking Examination Papers" value="7" />
@@ -81,10 +81,10 @@ const TeacherTabs = ({ classId, tabs }) => {
             <Exercise classId={classId} role="teacher" />
           </TabPanel>
           <TabPanel value="3">
-            <ParticipantContent classId={classId} role="teacher" />
+            <SettingsContent classId={classId} role="teacher" />
           </TabPanel>
           <TabPanel value="4">
-            <SettingsContent classId={classId} role="teacher" />
+            <ParticipantContent classId={classId} role="teacher" />
           </TabPanel>
           <TabPanel value="5">
             <GradeStructureBoard classId={classId} role="teacher" />
