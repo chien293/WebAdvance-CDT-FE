@@ -34,7 +34,7 @@ const AdminHomePage = () => {
       <Sidebar onSideBarItemClick={handleSideBarItemClick} />
       <Container style={{marginRight: 100, marginTop: 30}}>
         <h1 style={{marginBottom: 40}}>{selectedSideBarItem === "teacher"
-          ? "Teacher"
+          ? "Accounts"
           : selectedSideBarItem === "class"
             ? "Class"
             : "MapId"}</h1>

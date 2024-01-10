@@ -118,11 +118,11 @@ const ClassDataTable = () => {
         <p>No classes available.</p>
       )}
       <Dialog open={activeDialog} onClose={handleCloseActive}>
-        <DialogTitle>Ban or Unban Teacher</DialogTitle>
+        <DialogTitle>Ban or Unban Class</DialogTitle>
         <DialogContent>
           {/* Edit form fields */}
           <DialogContentText >
-            You want to {selectedClass ? (selectedClass.active == 1 ? "ban" : "unban") : ''} {selectedClass ? selectedClass.fullname : ''}
+            You want to {selectedClass ? (selectedClass.active == 1 ? "ban" : "unban") : ''} {selectedClass ? selectedClass.name : ''}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

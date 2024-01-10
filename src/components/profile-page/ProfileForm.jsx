@@ -54,6 +54,8 @@ const ProfileForm = ({ profileData, handleFormSubmit }) => {
               </div>
               <div className="px-4 pb-4">
                 <input
+                disabled
+
                   type="email"
                   name="email"
                   value={editableData.email}

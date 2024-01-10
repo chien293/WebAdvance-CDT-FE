@@ -66,7 +66,7 @@ export default function FormCreateEnroll({ open, onClose, onCancel }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={onCancel}>Cancel</Button>
-          <Button onClick={onCreate}>Create</Button>
+          <Button onClick={onCreate}>Enroll</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>

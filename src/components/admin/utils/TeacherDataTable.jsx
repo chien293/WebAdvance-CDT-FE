@@ -186,11 +186,11 @@ const TeacherDataTable = () => {
           />
         </div>
       ) : (
-        <p>No teachers available.</p>
+        <p>No accounts available.</p>
       )}
       {/* edit */}
       <Dialog open={editDialogOpen} onClose={handleEditDialogClose}>
-        <DialogTitle>Edit teacher information</DialogTitle>
+        <DialogTitle>Edit account information</DialogTitle>
 
         <Box mt={-1}>
           <DialogContent>
@@ -222,7 +222,7 @@ const TeacherDataTable = () => {
 
       {/* active */}
       <Dialog open={activeDialog} onClose={handleCloseActive}>
-        <DialogTitle>Ban or Unban Teacher</DialogTitle>
+        <DialogTitle>Ban or Unban account</DialogTitle>
         <DialogContent>
           {/* Edit form fields */}
           <DialogContentText >

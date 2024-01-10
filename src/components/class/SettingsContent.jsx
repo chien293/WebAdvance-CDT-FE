@@ -54,7 +54,14 @@ const SettingsContent = (props) => {
           className="grid gap-4 grid-cols-1"
         >
           <div class="relative h-10 w-full min-w-[200px]">
+            {props.role === "student" &&
+            
+            <label class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none !overflow-visible truncate text-[11px] font-normal leading-tight text-gray-500">
+              Class name
+              </label>
+            }
             <input
+            disabled={props.role === "student" ? true : false}
               placeholder=""
               class="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-base font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50 placeholder:opacity-0 focus:placeholder:opacity-100"
               {...register("className", { required: true })}
@@ -64,7 +71,15 @@ const SettingsContent = (props) => {
             </label>
           </div>
           <div class="relative h-10 w-full min-w-[200px]">
+          {props.role === "student" &&
+            
+            <label class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none !overflow-visible truncate text-[11px] font-normal leading-tight text-gray-500">
+              Title
+              </label>
+            }
             <input
+            disabled={props.role === "student" ? true : false}
+
               placeholder=""
               class="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-base font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50 placeholder:opacity-0 focus:placeholder:opacity-100"
               {...register("title")}
@@ -74,7 +89,15 @@ const SettingsContent = (props) => {
             </label>
           </div>
           <div class="relative h-10 w-full min-w-[200px]">
+          {props.role === "student" &&
+            
+            <label class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none !overflow-visible truncate text-[11px] font-normal leading-tight text-gray-500">
+              Topic
+              </label>
+            }
             <input
+            disabled={props.role === "student" ? true : false}
+
               placeholder=""
               class="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-base font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50 placeholder:opacity-0 focus:placeholder:opacity-100"
               {...register("topic")}
@@ -84,7 +107,14 @@ const SettingsContent = (props) => {
             </label>
           </div>
           <div class="relative h-10 w-full min-w-[200px]">
+          {props.role === "student" &&
+            
+            <label class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none !overflow-visible truncate text-[11px] font-normal leading-tight text-gray-500">
+              Room
+              </label>
+            }
             <input
+            disabled={props.role === "student" ? true : false}
               placeholder=""
               class="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-base font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50 placeholder:opacity-0 focus:placeholder:opacity-100"
               {...register("room")}
@@ -94,7 +124,14 @@ const SettingsContent = (props) => {
             </label>
           </div>
           <div class="relative h-20 w-full min-w-[200px]">
+          {props.role === "student" &&
+            
+            <label class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none !overflow-visible truncate text-[11px] font-normal leading-tight text-gray-500">
+              Description
+              </label>
+            }
             <textarea
+            disabled={props.role === "student" ? true : false}
               placeholder=""
               className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-base font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50 placeholder:opacity-0 focus:placeholder:opacity-100 text-left max-w-full flex flex-wrap resize"
               {...register("description")}
@@ -103,7 +140,8 @@ const SettingsContent = (props) => {
               Description
             </label>
           </div>
-
+{
+props.role === "teacher" &&
           <Button
             className="w-auto justify-self-end mb-4 bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded"
             type="submit"
@@ -111,6 +149,7 @@ const SettingsContent = (props) => {
           >
             Save
           </Button>
+}
         </form>
       </div>
       <div class="grid grid-cols-1">

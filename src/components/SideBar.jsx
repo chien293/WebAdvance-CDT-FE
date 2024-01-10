@@ -66,12 +66,12 @@ const SideBar = ({
             <ListItemText primary="Home" />
           </ListItemButton>
         </Link>
-        <ListItemButton onClick={() => setCurrentSelection("MapID")}>
+        {/* <ListItemButton onClick={() => setCurrentSelection("MapID")}>
           <ListItemIcon>
             <CalendarTodayIcon />
           </ListItemIcon>
           <ListItemText primary="MapID" />
-        </ListItemButton>
+        </ListItemButton> */}
         <Divider sx={{ my: 1 }} />
         {!isNotHomePage && (
           <>

@@ -6,7 +6,7 @@ const DropdownItem = ({ href, title }) => {
     <div className="flex-col block">
       <Link
         href={href}
-        className="block px-4 py-2 font-bold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 text-black dark:text-white"
+        className="block px-4 py-2 font-bold rounded-lg hover:bg-gray-100 text-black "
       >
         {title}
       </Link>
