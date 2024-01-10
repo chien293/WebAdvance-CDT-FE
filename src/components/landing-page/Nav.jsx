@@ -83,7 +83,7 @@ export const Nav = () => {
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
-          <SwitchTheme />
+          {/* <SwitchTheme /> */}
         </NavbarItem>
       </NavbarContent>
       {/* <NavbarContent className="basis-1 pl-4" justify="center">
